@@ -1,0 +1,438 @@
+<!doctype html><html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script src="https://telegram.org/js/telegram-web-app.js"></script><style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style></head><body>
+<title>Magic City Mini App</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: desktop = taklif matni chapda + jonli telefon o'ngda; telefonda ilova birinchi, taklif pastda; Telegram ichida faqat ilova */
+:root{
+  --bg:#eef1ef; --surface:#ffffff; --surface-2:#f4f7f5; --fg:#16211d; --muted:#5d6b66; --line:#dbe3df;
+  --accent:#0b6e5f; --accent-2:#0e8a77; --accent-soft:#d8eee9; --on-accent:#ffffff;
+  --free:#1f9d55; --free-bg:#dff3e7; --held:#b7791f; --held-bg:#fbefd6; --sold:#8b9590; --sold-bg:#e7ebe9;
+  --frame:#101614;
+  --f-display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d1311; --surface:#151d1a; --surface-2:#1c2622; --fg:#e7efeb; --muted:#97a6a0; --line:#2a3632;
+  --accent:#2fb39d; --accent-2:#45c7b1; --accent-soft:#163a33; --on-accent:#06201b;
+  --free:#4cc985; --free-bg:#163a26; --held:#e3a94a; --held-bg:#3a2d14; --sold:#6d7873; --sold-bg:#222b28;
+  --frame:#000; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1311; --surface:#151d1a; --surface-2:#1c2622; --fg:#e7efeb; --muted:#97a6a0; --line:#2a3632;
+  --accent:#2fb39d; --accent-2:#45c7b1; --accent-soft:#163a33; --on-accent:#06201b;
+  --free:#4cc985; --free-bg:#163a26; --held:#e3a94a; --held-bg:#3a2d14; --sold:#6d7873; --sold-bg:#222b28;
+  --frame:#000; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.5}
+.page{max-width:1180px;margin:0 auto;padding-block:32px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:48px;align-items:start}
+@media (max-width:900px){.page{grid-template-columns:minmax(0,1fr);gap:32px}.stage{order:-1}}
+/* ---------- Pitch ---------- */
+.pitch{min-width:0;display:flex;flex-direction:column;gap:36px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.pitch h1{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,4vw,44px);line-height:1.1;margin:8px 0 14px;text-wrap:balance}
+.pitch h2{font-family:var(--f-display);font-weight:500;font-size:20px;margin:0 0 14px;text-wrap:balance}
+.lead{font-size:17px;color:var(--muted);max-width:60ch;margin:0}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.compare{grid-template-columns:1fr}}
+.compare div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.compare b{display:block;margin-bottom:6px}
+.compare ul{margin:0;padding-left:18px;color:var(--muted)}
+.compare .now b{color:var(--muted)} .compare .next{border-color:var(--accent)} .compare .next b{color:var(--accent)}
+.feat{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 28px;margin:0;padding:0;list-style:none}
+@media (max-width:560px){.feat{grid-template-columns:1fr}}
+.feat li{padding-top:12px;border-top:1px solid var(--line)}
+.feat li b{display:block}
+.feat li span{color:var(--muted);font-size:14px}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px;margin-left:6px;vertical-align:2px;background:var(--accent-soft);color:var(--accent)}
+.tag.later{background:var(--surface-2);color:var(--muted)}
+.steps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;counter-increment:s}
+.steps li::before{content:counter(s);font-family:var(--f-display);font-size:13px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--on-accent)}
+.steps li span{color:var(--muted)}
+.note{font-size:13px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px;max-width:65ch}
+/* ---------- Phone ---------- */
+.stage{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);display:flex;flex-direction:column;align-items:center;gap:10px}
+.stage-cap{font-size:12px;color:var(--muted)}
+.phone{width:100%;max-width:390px;height:780px;background:var(--frame);border-radius:44px;padding:10px;box-shadow:0 30px 60px -30px rgba(10,40,34,.45)}
+.app{position:relative;height:100%;border-radius:34px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column}
+.tgbar{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;background:var(--surface);border-bottom:1px solid var(--line);flex:none}
+.tgbar .x{font-size:14px;color:var(--accent);font-weight:600}
+.tgbar .t{flex:1;text-align:center;font-weight:700;font-size:15px}
+.tgbar .t small{display:block;font-weight:500;font-size:11px;color:var(--muted)}
+.tgbar .dots{width:44px;text-align:right;color:var(--muted)}
+.scr{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px;display:flex;flex-direction:column;gap:14px}
+.nav{flex:none;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);border-top:1px solid var(--line);padding:6px 4px calc(8px + env(safe-area-inset-bottom,0px))}
+.nav button{background:none;border:0;font:inherit;font-size:10.5px;font-weight:600;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;cursor:pointer;border-radius:10px}
+.nav button svg{width:22px;height:22px}
+.nav button[aria-current="page"]{color:var(--accent)}
+.nav button:focus-visible,.btn:focus-visible,.chip:focus-visible,.cell:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* bits */
+.hero{border-radius:18px;padding:18px;color:#fff;background:
+  linear-gradient(160deg,rgba(6,40,34,.15),rgba(6,40,34,.85)),
+  repeating-linear-gradient(90deg,#3e8f80 0 26px,#2f7a6c 26px 28px),#2f7a6c;min-height:170px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero > *{position:relative}
+.hero h3{font-family:var(--f-display);font-size:22px;margin:0;line-height:1.15}
+.hero p{margin:4px 0 0;font-size:13px;opacity:.9}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.stat b{display:block;font-family:var(--f-display);font-size:15px;font-weight:500}
+.stat span{font-size:11px;color:var(--muted)}
+.sec-t{font-weight:800;font-size:15px;margin:4px 0 0;display:flex;justify-content:space-between;align-items:baseline}
+.sec-t a{font-size:12px;font-weight:600;color:var(--accent);text-decoration:none;cursor:pointer}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;font-size:13px;font-weight:600;padding:6px 12px;border-radius:99px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;grid-template-columns:76px 1fr;gap:12px;align-items:center;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.card svg{width:76px;height:76px;background:var(--surface-2);border-radius:10px}
+.card .ti{font-weight:800}
+.card .meta{font-size:12px;color:var(--muted)}
+.card .pr{font-weight:800;color:var(--accent);margin-top:2px;font-variant-numeric:tabular-nums}
+.card .mo{font-size:12px;color:var(--muted)}
+.btn{display:block;width:100%;border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:800;font-size:15px;background:var(--accent);color:var(--on-accent);cursor:pointer;text-align:center}
+.btn.ghost{background:var(--accent-soft);color:var(--accent)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:var(--muted)}
+label.f .v{color:var(--fg);font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.fl{display:flex;justify-content:space-between;align-items:baseline}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=text],input[type=tel],select{width:100%;font:inherit;font-size:15px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--fg)}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--surface-2);border-radius:10px;padding:3px;gap:3px}
+.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:13px;padding:8px;border-radius:8px;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.res{background:var(--accent);color:var(--on-accent);border-radius:14px;padding:14px 16px}
+.res .big{font-family:var(--f-display);font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2}
+.res .lbl{font-size:12px;opacity:.85}
+.kv{display:flex;flex-direction:column;gap:6px;font-size:13px}
+.kv div{display:flex;justify-content:space-between;gap:10px;font-variant-numeric:tabular-nums}
+.kv div span{color:var(--muted)} .kv div b{text-align:right}
+.sched{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+.sched td,.sched th{padding:5px 4px;border-bottom:1px solid var(--line);text-align:right}
+.sched th{color:var(--muted);font-weight:600}
+.sched td:first-child,.sched th:first-child{text-align:left}
+/* chessboard */
+.legend{display:flex;gap:12px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.board{display:grid;grid-template-columns:28px repeat(4,1fr);gap:5px}
+.board .fl-n{font-size:11px;color:var(--muted);display:grid;place-items:center;font-weight:700}
+.cell{border:0;border-radius:8px;padding:7px 2px;font:inherit;font-size:11px;font-weight:700;cursor:pointer;line-height:1.2;font-variant-numeric:tabular-nums}
+.cell small{display:block;font-weight:500;font-size:10px;opacity:.8}
+.cell.free{background:var(--free-bg);color:var(--free)}
+.cell.held{background:var(--held-bg);color:var(--held)}
+.cell.sold{background:var(--sold-bg);color:var(--sold);cursor:default;text-decoration:line-through}
+.cell.sel{outline:2px solid var(--accent)}
+/* sheet */
+.sheet-bg{position:absolute;inset:0;background:rgba(5,15,12,.45);display:flex;align-items:flex-end;z-index:5}
+.sheet{background:var(--surface);width:100%;max-height:88%;overflow-y:auto;border-radius:20px 20px 0 0;padding:10px 16px 18px;display:flex;flex-direction:column;gap:12px}
+.grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 4px}
+.sheet h4{font-family:var(--f-display);font-weight:500;font-size:18px;margin:0}
+.plan{background:var(--surface-2);border-radius:12px;padding:8px}
+.plan svg{width:100%;height:auto;display:block}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px}
+.pill.free{background:var(--free-bg);color:var(--free)} .pill.held{background:var(--held-bg);color:var(--held)}
+.ok{text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;padding:10px 0}
+.ok .ic{width:56px;height:56px;border-radius:50%;background:var(--free-bg);color:var(--free);display:grid;place-items:center;font-size:28px;font-weight:800}
+.tgmsg{background:var(--surface-2);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;font-size:12.5px;text-align:left;width:100%;white-space:pre-wrap;font-family:ui-monospace,Menlo,Consolas,monospace}
+.muted{color:var(--muted);font-size:12px}
+.ref{border:1px dashed var(--accent);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px;background:var(--accent-soft)}
+.ref code{font-size:12px;word-break:break-all}
+/* Telegram ichida: faqat ilova, to'liq ekran */
+body.tg .pitch,body.tg .stage-cap,body.tg .tgbar{display:none}
+body.tg .page{display:block;padding:0;max-width:none;height:100%}
+body.tg,html:has(body.tg){height:100%}
+body.tg .stage{position:static;height:100%}
+body.tg .phone{max-width:none;height:100%;border-radius:0;padding:0;box-shadow:none;background:none}
+body.tg .app{border-radius:0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="page">
+  <section class="pitch" aria-label="Taklif">
+    <header>
+      <div class="eyebrow">Magic City uchun taklif · Kattaqoʻrgʻon</div>
+      <h1>Kvartirani Telegram ichida tanlab, narxini oʻzi hisoblaydigan bot</h1>
+      <p class="lead">Mijoz videoni koʻrib, savol bilan chiqib ketmaydi. Botni ochadi, boʻsh kvartirani tanlaydi, boshlangʻich va oylik toʻlovni koʻradi va bir tugma bilan sotuv menejeriga ariza qoldiradi.</p>
+    </header>
+
+    <div class="compare">
+      <div class="now"><b>Hozir</b><ul><li>Telegram va Instagramda faqat video</li><li>Koʻruvchi kam, narx soʻrab yozish noqulay</li><li>Qiziqqan odam kontakt qoldirmaydi</li></ul></div>
+      <div class="next"><b>Bot bilan</b><ul><li>Narx, maydon, qavat 24/7 ochiq</li><li>Boʻlib toʻlash hisobi bir zumda</li><li>Har bir qiziqish menejerga ariza boʻlib tushadi</li></ul></div>
+    </div>
+
+    <div>
+      <h2>Ilova ichida nima bor</h2>
+      <ul class="feat">
+        <li><b>Kvartiralar katalogi <span class="tag">demoda</span></b><span>Xonalar soni, maydon, qavat va narx boʻyicha filtr.</span></li>
+        <li><b>Toʻlov kalkulyatori <span class="tag">demoda</span></b><span>Boshlangʻich toʻlov, muddat, oylik toʻlov va toʻlov jadvali. Ipoteka varianti ham bor.</span></li>
+        <li><b>Shaxmatka <span class="tag">demoda</span></b><span>Har bir blok va qavat boʻyicha boʻsh, band va sotilgan xonadonlar.</span></li>
+        <li><b>Planirovka <span class="tag">demoda</span></b><span>Har bir xonadon uchun reja chizmasi va xonalar maydoni.</span></li>
+        <li><b>Ariza va obyektga tashrif <span class="tag">demoda</span></b><span>Ism, telefon va qulay vaqt. Ariza darhol menejerlar guruhiga keladi.</span></li>
+        <li><b>Doʻstni taklif qilish <span class="tag">demoda</span></b><span>Shaxsiy havola. Doʻsti sotib olsa, taklif qilgan odamga bonus.</span></li>
+        <li><b>Admin panel <span class="tag later">2-bosqich</span></b><span>Narx, chegirma va xonadon holatini menejer oʻzi oʻzgartiradi.</span></li>
+        <li><b>Mijozlar bazasi (CRM) <span class="tag later">2-bosqich</span></b><span>Har bir ariza holati: yangi, qoʻngʻiroq qilindi, uchrashuv, shartnoma.</span></li>
+        <li><b>Qurilish jarayoni <span class="tag later">2-bosqich</span></b><span>Har oy foto va videohisobot, topshirish sanasi.</span></li>
+        <li><b>Xabarnomalar <span class="tag later">2-bosqich</span></b><span>Yangi blok, aksiya va chegirma haqida obunachilarga xabar.</span></li>
+        <li><b>Toʻlov eslatmasi <span class="tag later">3-bosqich</span></b><span>Xaridorlarga oylik toʻlov sanasi va qoldiq summa.</span></li>
+        <li><b>Rus tili <span class="tag later">2-bosqich</span></b><span>Ilova oʻzbek va rus tilida.</span></li>
+      </ul>
+    </div>
+
+    <div>
+      <h2>Ishga tushirish</h2>
+      <ol class="steps">
+        <li><div><b>Maʼlumot yigʻish</b><br><span>Bloklar, xonadonlar roʻyxati, narxlar, rejalar va boʻlib toʻlash shartlari.</span></div></li>
+        <li><div><b>Sozlash va sinov</b><br><span>Haqiqiy maʼlumotlar bilan bot va ilovani sozlash, menejerlar guruhini ulash.</span></div></li>
+        <li><div><b>Ishga tushirish</b><br><span>Kanal, Instagram bio va videolarga bot havolasini qoʻyish, QR kod bilan bannerlar.</span></div></li>
+        <li><div><b>Natijani oʻlchash</b><br><span>Haftalik hisobot: nechta odam kirdi, nechta ariza, nechta uchrashuv.</span></div></li>
+      </ol>
+    </div>
+
+    <p class="note">Demodagi narxlar, maydonlar va toʻlov shartlari namuna sifatida olingan. Kompaniyaning haqiqiy narxlari va shartlari kiritilgach, hisob-kitob avtomatik ravishda ularga moslashadi.</p>
+  </section>
+
+  <div class="stage">
+    <div class="phone"><div class="app" id="app">
+      <div class="tgbar"><span class="x">Yopish</span><span class="t">Magic City<small>mini ilova</small></span><span class="dots">⋯</span></div>
+      <main class="scr" id="scr"></main>
+      <nav class="nav" id="nav" aria-label="Boʻlimlar"></nav>
+    </div></div>
+    <div class="stage-cap">Jonli demo: bosib koʻring</div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+const tg = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData !== undefined && window.Telegram.WebApp.platform !== "unknown" ? window.Telegram.WebApp : null;
+if (tg){ document.body.classList.add("tg"); try{ tg.ready(); tg.expand(); }catch(e){} }
+
+/* ===== Namuna maʼlumotlar (haqiqiy narxlar bilan almashtiriladi) ===== */
+const CFG = {
+  pricePerM2: 6500000,          // soʻm / m²
+  minDownPct: 20,               // eng kam boshlangʻich toʻlov, %
+  terms: [ {m:6,markup:0},{m:12,markup:0},{m:18,markup:5},{m:24,markup:8},{m:36,markup:14} ], // ustama qolgan summaga, %
+  mortgage: { rate:17, years:[10,15,20], minDownPct:25 },
+  floors: 9,
+  blocks: ["A","B","C"],
+  managerPhone: "+998 90 000 00 00"
+};
+const TYPES = {
+  1:{area:42.5, rooms:[["Mehmonxona-yotoqxona",18.2],["Oshxona",9.1],["Hammom",4.2],["Dahliz",6.4],["Balkon",4.6]]},
+  2:{area:63.8, rooms:[["Mehmonxona",19.4],["Yotoqxona",13.6],["Oshxona",10.2],["Hammom",4.8],["Dahliz",9.8],["Balkon",6.0]]},
+  3:{area:86.4, rooms:[["Mehmonxona",21.0],["Yotoqxona",15.2],["Bolalar xonasi",12.6],["Oshxona",12.0],["Hammom",5.4],["Dahliz",13.2],["Balkon",7.0]]},
+  4:{area:112.6,rooms:[["Mehmonxona",24.8],["Yotoqxona",16.4],["Yotoqxona",13.8],["Bolalar xonasi",12.4],["Oshxona",13.6],["Hammom",6.8],["Dahliz",17.2],["Balkon",7.6]]}
+};
+const LAYOUT = [2,1,3,4]; // har qavatdagi 4 xonadon turi
+function floorK(f){ return f===1?0.93 : f===CFG.floors?0.96 : (f>=3&&f<=6)?1.03 : 1; }
+let seed = 7; function rnd(){ seed = (seed*16807)%2147483647; return seed/2147483647; }
+const UNITS = [];
+CFG.blocks.forEach((b,bi)=>{
+  for(let f=1; f<=CFG.floors; f++){
+    LAYOUT.forEach((r,i)=>{
+      const x = rnd(); const soldBias = bi===0?0.62:bi===1?0.38:0.12;
+      const status = x<soldBias?"sold": x<soldBias+0.1?"held":"free";
+      const area = TYPES[r].area;
+      const price = Math.round(area*CFG.pricePerM2*floorK(f)/100000)*100000;
+      UNITS.push({id:b+"-"+f+"0"+(i+1), block:b, floor:f, n:i+1, rooms:r, area, price, status});
+    });
+  }
+});
+
+/* ===== yordamchilar ===== */
+const $ = s => document.querySelector(s);
+const fmt = n => Math.round(n).toLocaleString("ru-RU").replace(/ /g," ");
+const som = n => fmt(n)+" soʻm";
+const mln = n => (n/1e6).toLocaleString("ru-RU",{maximumFractionDigits:1})+" mln";
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const statusTxt = {free:"Boʻsh",held:"Band qilingan",sold:"Sotilgan"};
+function haptic(){ try{ tg && tg.HapticFeedback.impactOccurred("light"); }catch(e){} }
+
+function installment(price, downPct, months){
+  const t = CFG.terms.find(t=>t.m===months) || CFG.terms[0];
+  const down = price*downPct/100, rest = price-down, markup = rest*t.markup/100;
+  const total = rest+markup, monthly = months? total/months : 0;
+  return {down, rest, markup, markupPct:t.markup, monthly, total:down+total};
+}
+function annuity(price, downPct, years, rate){
+  const loan = price*(1-downPct/100), i = rate/1200, n = years*12;
+  const m = loan*i/(1-Math.pow(1+i,-n));
+  return {down:price-loan, loan, monthly:m, overpay:m*n-loan};
+}
+
+/* reja chizmasi */
+function planSVG(r, small){
+  const T = TYPES[r].rooms, W = 300, H = 190;
+  const living = T.filter(x=>!/Hammom|Dahliz|Balkon/.test(x[0]));
+  const service = T.filter(x=>/Hammom|Dahliz/.test(x[0]));
+  const balc = T.find(x=>x[0]==="Balkon");
+  let out = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${r} xonali reja">`;
+  const st = 'fill="var(--surface)" stroke="var(--fg)" stroke-width="'+(small?4:2)+'"';
+  // tepa qator: yashash xonalari
+  const lw = living.reduce((a,x)=>a+x[1],0); let x=8;
+  living.forEach(rm=>{ const w=(W-16)*rm[1]/lw; out+=`<rect x="${x}" y="8" width="${w}" height="104" ${st}/>`; if(!small) out+=`<text x="${x+w/2}" y="56" text-anchor="middle" font-size="10" fill="var(--fg)" font-family="Manrope,sans-serif" font-weight="700">${esc(rm[0].replace(" xonasi",""))}</text><text x="${x+w/2}" y="70" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="Manrope,sans-serif">${rm[1]} m²</text>`; x+=w; });
+  // pastki qator: dahliz, hammom, balkon
+  const bot = service.concat(balc?[balc]:[]); const bw = bot.reduce((a,x)=>a+x[1],0); x=8;
+  bot.forEach(rm=>{ const w=(W-16)*rm[1]/bw; const isB=rm[0]==="Balkon"; out+=`<rect x="${x}" y="112" width="${w}" height="${isB?58:70}" ${st} ${isB?'stroke-dasharray="5 4"':''}/>`; if(!small) out+=`<text x="${x+w/2}" y="142" text-anchor="middle" font-size="10" fill="var(--fg)" font-family="Manrope,sans-serif" font-weight="700">${esc(rm[0])}</text><text x="${x+w/2}" y="156" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="Manrope,sans-serif">${rm[1]} m²</text>`; x+=w; });
+  return out+"</svg>";
+}
+
+/* ===== holat ===== */
+const S = { tab:"home", rooms:0, block:"B", calcPrice:null, calcUnit:null, mode:"inst", down:30, term:12, mYears:15, sel:null };
+const NAV = [
+  ["home","Asosiy",'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],
+  ["list","Kvartiralar",'<rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 7h2M14 7h2M8 11h2M14 11h2M8 15h2M14 15h2"/>'],
+  ["board","Shaxmatka",'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'],
+  ["calc","Kalkulyator",'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 11h1M12 11h1M16 11h0M8 15h1M12 15h1M8 18h1M12 18h1M16 15v3"/>'],
+  ["lead","Ariza",'<path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/>']
+];
+function renderNav(){
+  $("#nav").innerHTML = NAV.map(([k,l,p])=>`<button type="button" data-tab="${k}" ${S.tab===k?'aria-current="page"':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${p}</svg>${l}</button>`).join("");
+}
+function go(tab){ S.tab=tab; haptic(); render(); $("#scr").scrollTop=0; }
+
+function unitCard(u){
+  const ins = installment(u.price, CFG.minDownPct+10, 24);
+  return `<button type="button" class="card" data-unit="${u.id}">${planSVG(u.rooms,true)}<div><div class="ti">${u.rooms} xonali · ${u.area} m²</div><div class="meta">${u.block} blok · ${u.floor}-qavat · №${u.id}</div><div class="pr">${som(u.price)}</div><div class="mo">oyiga ${mln(ins.monthly)} soʻmdan</div></div></button>`;
+}
+
+const V = {
+home(){
+  const free = UNITS.filter(u=>u.status==="free"); const minP = Math.min(...free.map(u=>u.price));
+  const picks = [1,2,3].map(r=>free.filter(u=>u.rooms===r).sort((a,b)=>a.price-b.price)[0]).filter(Boolean);
+  return `<div class="hero"><canvas id="sky" aria-hidden="true"></canvas><h3>Magic City</h3><p>Kattaqoʻrgʻon · 9 qavatli turar-joy majmuasi · 3 blok</p></div>
+  <div class="stats"><div class="stat"><b>${free.length}</b><span>boʻsh xonadon</span></div><div class="stat"><b>${Math.round(minP/1e6)} mln</b><span>narx, soʻmdan</span></div><div class="stat"><b>36 oy</b><span>boʻlib toʻlash</span></div></div>
+  <div class="row2"><button type="button" class="btn" data-go="calc">Hisoblash</button><button type="button" class="btn ghost" data-go="lead">Tashrif buyurish</button></div>
+  <div class="sec-t">Eng arzon takliflar <a data-go="list">Barchasi</a></div>
+  ${picks.map(unitCard).join("")}
+  <div class="ref"><b>Doʻstingizni taklif qiling</b><span class="muted">Doʻstingiz shu havola orqali xonadon sotib olsa, sizga bonus beriladi (namuna: 3 000 000 soʻm).</span><code>t.me/MagicCityBot?start=ref_${tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user.id:"123456"}</code></div>`;
+},
+list(){
+  const items = UNITS.filter(u=>u.status!=="sold" && (!S.rooms || u.rooms===S.rooms)).sort((a,b)=>a.price-b.price);
+  return `<div class="chips" role="group" aria-label="Xonalar soni">${[0,1,2,3,4].map(r=>`<button type="button" class="chip" data-rooms="${r}" aria-pressed="${S.rooms===r}">${r?r+" xonali":"Barchasi"}</button>`).join("")}</div>
+  <div class="muted">${items.length} ta xonadon topildi · narx boʻyicha</div>
+  ${items.slice(0,30).map(unitCard).join("")}`;
+},
+board(){
+  const us = UNITS.filter(u=>u.block===S.block); let cells="";
+  for(let f=CFG.floors; f>=1; f--){ cells+=`<div class="fl-n">${f}</div>`; us.filter(u=>u.floor===f).forEach(u=>{ cells+=`<button type="button" class="cell ${u.status}" data-unit="${u.id}" ${u.status==="sold"?'disabled':''} aria-label="${u.id}, ${u.rooms} xonali, ${statusTxt[u.status]}">${u.rooms}x<small>${u.area}</small></button>`; }); }
+  const cnt = s=>us.filter(u=>u.status===s).length;
+  return `<div class="chips" role="group" aria-label="Blok">${CFG.blocks.map(b=>`<button type="button" class="chip" data-block="${b}" aria-pressed="${S.block===b}">${b} blok</button>`).join("")}</div>
+  <div class="legend"><span><i style="background:var(--free)"></i>Boʻsh ${cnt("free")}</span><span><i style="background:var(--held)"></i>Band ${cnt("held")}</span><span><i style="background:var(--sold)"></i>Sotilgan ${cnt("sold")}</span></div>
+  <div class="board">${cells}</div><div class="muted">Katakda: xonalar soni va maydon (m²). Boʻsh xonadonni bosing.</div>`;
+},
+calc(){
+  const u = S.calcUnit ? UNITS.find(x=>x.id===S.calcUnit) : null;
+  const mort = S.mode==="mort"; const minD = mort?CFG.mortgage.minDownPct:CFG.minDownPct; if(S.down<minD) S.down=minD;
+  const terms = mort ? CFG.mortgage.years.map(y=>`<button type="button" class="chip" data-years="${y}" aria-pressed="${S.mYears===y}">${y} yil</button>`).join("")
+                     : CFG.terms.map(t=>`<button type="button" class="chip" data-term="${t.m}" aria-pressed="${S.term===t.m}">${t.m} oy</button>`).join("");
+  return `<div class="panel">
+    <div class="seg" role="group" aria-label="Toʻlov turi"><button type="button" data-mode="inst" aria-pressed="${!mort}">Boʻlib toʻlash</button><button type="button" data-mode="mort" aria-pressed="${mort}">Ipoteka</button></div>
+    <label class="f">Xonadon<select id="pick"><option value="">Turi boʻyicha (2 xonali, 63.8 m²)</option>${[1,2,3,4].map(r=>`<option value="t${r}" ${!u&&S.calcPrice===Math.round(TYPES[r].area*CFG.pricePerM2)?"selected":""}>${r} xonali · ${TYPES[r].area} m² · ${mln(TYPES[r].area*CFG.pricePerM2)}</option>`).join("")}${u?`<option value="u" selected>№${u.id} · ${u.rooms} xonali · ${mln(u.price)}</option>`:""}</select></label>
+    <label class="f"><span class="fl">Boshlangʻich toʻlov <span class="v" id="downv"></span></span><input id="down" type="range" min="${minD}" max="90" step="5" value="${S.down}"></label>
+    <label class="f">${mort?"Kredit muddati":"Muddat"}<div class="chips">${terms}</div></label>
+    <div id="calcres" style="display:flex;flex-direction:column;gap:12px">${calcRes()}</div>
+  </div><button type="button" class="btn" data-go="lead">Shu shartlar bilan ariza qoldirish</button>`;
+},
+lead(){
+  const u = S.calcUnit ? UNITS.find(x=>x.id===S.calcUnit) : null;
+  const name = tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user ? tg.initDataUnsafe.user.first_name : "";
+  return `<div class="panel"><b style="font-size:16px">Menejer siz bilan bogʻlanadi</b>
+  <form id="leadf" class="kv" style="gap:12px" novalidate>
+    <label class="f">Ismingiz<input id="ln" type="text" autocomplete="name" value="${esc(name)}" placeholder="Masalan, Dilshod"></label>
+    <label class="f">Telefon raqamingiz<input id="lp" type="tel" autocomplete="tel" placeholder="+998 __ ___ __ __"></label>
+    <label class="f">Qiziqish<select id="li">${u?`<option>№${u.id} · ${u.rooms} xonali · ${mln(u.price)}</option>`:""}<option>1 xonali</option><option selected>2 xonali</option><option>3 xonali</option><option>4 xonali</option></select></label>
+    <label class="f">Nima qilmoqchisiz<select id="lw"><option>Qoʻngʻiroq qilishsin</option><option>Obyektni koʻrishga boraman</option><option>Ofisga boraman</option></select></label>
+    <label class="f">Qulay vaqt<select id="lt"><option>Bugun</option><option>Ertaga ertalab</option><option>Ertaga kechqurun</option><option>Shanba</option></select></label>
+    <div id="lerr" class="muted" style="color:var(--held)" hidden></div>
+    <button class="btn" type="submit">Ariza yuborish</button>
+  </form></div>
+  <div class="muted" style="text-align:center">Yoki qoʻngʻiroq qiling: <b style="color:var(--fg);user-select:all">${CFG.managerPhone}</b></div>`;
+}
+};
+
+function calcPrice(){ return S.calcPrice || Math.round(63.8*CFG.pricePerM2); }
+function calcRes(){
+  const price = calcPrice();
+  if (S.mode==="inst"){
+    const r = installment(price,S.down,S.term);
+    const rows = []; for(let m=1; m<=Math.min(S.term,3); m++) rows.push(`<tr><td>${m}-oy</td><td>${som(r.monthly)}</td></tr>`);
+    return `<div class="res"><div class="lbl">Oylik toʻlov</div><div class="big">${som(r.monthly)}</div><div class="lbl">${S.term} oy davomida${r.markupPct?" · ustama "+r.markupPct+"%":" · ustamasiz"}</div></div>
+    <div class="kv"><div><span>Xonadon narxi</span><b>${som(price)}</b></div><div><span>Boshlangʻich toʻlov (${S.down}%)</span><b>${som(r.down)}</b></div><div><span>Qolgan summa</span><b>${som(r.rest)}</b></div><div><span>Ustama</span><b>${som(r.markup)}</b></div><div><span>Jami toʻlov</span><b>${som(r.total)}</b></div></div>
+    <table class="sched"><thead><tr><th>Toʻlov jadvali</th><th>Summa</th></tr></thead><tbody><tr><td>Shartnoma kuni</td><td>${som(r.down)}</td></tr>${rows.join("")}${S.term>3?`<tr><td>… ${S.term}-oygacha</td><td>${som(r.monthly)}</td></tr>`:""}</tbody></table>`;
+  }
+  const r = annuity(price,S.down,S.mYears,CFG.mortgage.rate);
+  return `<div class="res"><div class="lbl">Oylik toʻlov (taxminiy)</div><div class="big">${som(r.monthly)}</div><div class="lbl">${S.mYears} yil · yillik ${CFG.mortgage.rate}%</div></div>
+    <div class="kv"><div><span>Xonadon narxi</span><b>${som(price)}</b></div><div><span>Boshlangʻich toʻlov (${S.down}%)</span><b>${som(r.down)}</b></div><div><span>Kredit summasi</span><b>${som(r.loan)}</b></div><div><span>Foizlar jami</span><b>${som(r.overpay)}</b></div></div>
+    <div class="muted">Ipoteka shartlari bankka bogʻliq. Hisob annuitet usulida.</div>`;
+}
+function updCalc(){ const v=$("#downv"); if(v) v.textContent = S.down+"% · "+mln(calcPrice()*S.down/100); const c=$("#calcres"); if(c) c.innerHTML=calcRes(); }
+
+function openUnit(id){
+  const u = UNITS.find(x=>x.id===id); if(!u || u.status==="sold") return; haptic();
+  const ins = installment(u.price, 30, 24);
+  const bg = document.createElement("div"); bg.className="sheet-bg";
+  bg.innerHTML = `<div class="sheet" role="dialog" aria-label="Xonadon ${u.id}"><div class="grab"></div>
+   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h4>${u.rooms} xonali · ${u.area} m²</h4><span class="pill ${u.status}">${statusTxt[u.status]}</span></div>
+   <div class="muted">${u.block} blok · ${u.floor}-qavat · xonadon №${u.id}</div>
+   <div class="plan">${planSVG(u.rooms,false)}</div>
+   <div class="kv"><div><span>Narxi</span><b>${som(u.price)}</b></div><div><span>1 m² narxi</span><b>${som(u.price/u.area)}</b></div><div><span>Boshlangʻich 30%</span><b>${som(ins.down)}</b></div><div><span>24 oyga boʻlib</span><b>oyiga ${som(ins.monthly)}</b></div></div>
+   <div class="row2"><button type="button" class="btn ghost" data-calcunit="${u.id}">Hisoblash</button><button type="button" class="btn" data-leadunit="${u.id}">${u.status==="held"?"Navbatga yozilish":"Band qilish"}</button></div>
+  </div>`;
+  bg.addEventListener("click", e=>{ if(e.target===bg) bg.remove(); });
+  $("#app").appendChild(bg);
+}
+
+function submitLead(e){
+  e.preventDefault();
+  const n=$("#ln").value.trim(), p=$("#lp").value.trim(), err=$("#lerr");
+  if(n.length<2){ err.textContent="Ismingizni yozing."; err.hidden=false; return; }
+  if(p.replace(/\D/g,"").length<9){ err.textContent="Telefon raqamini toʻliq yozing, masalan +998 90 123 45 67."; err.hidden=false; return; }
+  const lead = {type:"lead", name:n, phone:p, interest:$("#li").value, want:$("#lw").value, time:$("#lt").value,
+    calc: S.mode==="inst" ? {down:S.down, term:S.term} : {mortgage:true, down:S.down, years:S.mYears}};
+  const msg = `🏢 Yangi ariza · Magic City\n👤 ${n}\n📞 ${p}\n🏠 ${lead.interest}\n📅 ${lead.want}, ${lead.time}\n🧮 ${S.mode==="inst"?`boshlangʻich ${S.down}%, ${S.term} oy`:`ipoteka, ${S.mYears} yil`}`;
+  if (tg){ try{ tg.sendData(JSON.stringify(lead)); return; }catch(x){} }
+  $("#scr").innerHTML = `<div class="ok"><div class="ic">✓</div><b style="font-size:17px">Arizangiz qabul qilindi</b><div class="muted">Menejer 15 daqiqa ichida qoʻngʻiroq qiladi.</div>
+  <div class="muted" style="margin-top:10px">Menejerlar Telegram guruhiga shunday xabar keladi:</div><div class="tgmsg">${esc(msg)}</div>
+  <button type="button" class="btn ghost" data-go="home">Bosh sahifaga</button></div>`;
+}
+
+function render(){
+  renderNav(); $("#scr").innerHTML = V[S.tab]();
+  if (S.tab==="home") drawSky();
+  const f=$("#leadf"); if(f) f.addEventListener("submit", submitLead);
+  const d=$("#down"); if(d){ updCalc(); d.addEventListener("input", e=>{ S.down=+e.target.value; updCalc(); }); }
+  const pk=$("#pick"); if(pk) pk.addEventListener("change", e=>{ const v=e.target.value; if(v.startsWith("t")){ S.calcUnit=null; S.calcPrice=Math.round(TYPES[+v.slice(1)].area*CFG.pricePerM2); } else if(!v){ S.calcUnit=null; S.calcPrice=null; } render(); });
+}
+
+/* ko'p qavatli bino silueti */
+function drawSky(){
+  const c=$("#sky"); if(!c) return; const r=c.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+  c.width=r.width*dpr; c.height=r.height*dpr; const g=c.getContext("2d"); g.scale(dpr,dpr);
+  const grd=g.createLinearGradient(0,0,0,r.height); grd.addColorStop(0,"#0e5f53"); grd.addColorStop(1,"#063229"); g.fillStyle=grd; g.fillRect(0,0,r.width,r.height);
+  const bs=[[0.52,0.30,0.78],[0.70,0.22,0.62],[0.86,0.18,0.5]];
+  bs.forEach(([x,w,h])=>{ const bx=r.width*x, bw=r.width*w*0.8, bh=r.height*h, by=r.height-bh; g.fillStyle="#d8e9e4"; g.globalAlpha=.16; g.fillRect(bx,by,bw,bh); g.globalAlpha=1;
+    const rows=9, cols=4, ph=bh/rows; for(let i=0;i<rows;i++) for(let j=0;j<cols;j++){ g.fillStyle=((i*7+j*3+x*10)|0)%3===0?"#f3d27a":"rgba(220,240,235,.35)"; g.fillRect(bx+6+j*(bw-12)/cols, by+4+i*ph, (bw-12)/cols-5, ph-6); } });
+}
+
+document.addEventListener("click", e=>{
+  const t = e.target.closest("button,a"); if(!t) return;
+  const ds=t.dataset;
+  if(ds.tab) go(ds.tab);
+  else if(ds.go){ const sh=document.querySelector(".sheet-bg"); if(sh) sh.remove(); go(ds.go); }
+  else if(ds.rooms!==undefined){ S.rooms=+ds.rooms; render(); }
+  else if(ds.block){ S.block=ds.block; render(); }
+  else if(ds.term){ S.term=+ds.term; render(); }
+  else if(ds.years){ S.mYears=+ds.years; render(); }
+  else if(ds.mode){ S.mode=ds.mode; render(); }
+  else if(ds.unit) openUnit(ds.unit);
+  else if(ds.calcunit){ const u=UNITS.find(x=>x.id===ds.calcunit); S.calcUnit=u.id; S.calcPrice=u.price; document.querySelector(".sheet-bg").remove(); go("calc"); }
+  else if(ds.leadunit){ S.calcUnit=ds.leadunit; document.querySelector(".sheet-bg").remove(); go("lead"); }
+});
+window.addEventListener("resize", ()=>{ if(S.tab==="home") drawSky(); });
+render();
+})();
+</script>
+</body></html>

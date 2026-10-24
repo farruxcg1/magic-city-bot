@@ -1,7 +1,8 @@
 """Magic City Telegram bot (demo).
 
 Ikki rejim:
-  * Server (Render va h.k.): BASE_URL (yoki Render bergan RENDER_EXTERNAL_URL) bor boʻlsa,
+  * Server (Railway, Render va h.k.): BASE_URL (yoki Railway bergan RAILWAY_PUBLIC_DOMAIN,
+    Render bergan RENDER_EXTERNAL_URL) bor boʻlsa,
     bot webhook bilan ishlaydi va shu serverning oʻzi Mini App sahifasini "/" da beradi.
   * Lokal: BASE_URL yoʻq boʻlsa, polling rejimi; WEBAPP_URL ni alohida bering.
 
@@ -23,7 +24,10 @@ from aiogram.types import (
 )
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
-BASE_URL = (os.environ.get("BASE_URL") or os.environ.get("RENDER_EXTERNAL_URL") or "").rstrip("/")
+_RAILWAY = os.environ.get("RAILWAY_PUBLIC_DOMAIN")  # Railway domen beradi, "https://" siz
+BASE_URL = (os.environ.get("BASE_URL")
+            or (f"https://{_RAILWAY}" if _RAILWAY else "")
+            or os.environ.get("RENDER_EXTERNAL_URL") or "").rstrip("/")
 WEBAPP_URL = os.environ.get("WEBAPP_URL") or (BASE_URL + "/")
 MANAGER_CHAT_ID = int(os.environ.get("MANAGER_CHAT_ID") or 0)  # 0 = hali ulanmagan
 WEBAPP_FILE = Path(__file__).parent / "webapp" / "index.html"
@@ -148,5 +152,10 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     if BASE_URL:
         run_webhook()
-    else:
+    elif os.environ.get("WEBAPP_URL"):
         asyncio.run(run_polling())
+    else:
+        raise SystemExit(
+            "Server manzili topilmadi. Railway: Settings → Networking → Generate Domain, "
+            "keyin Redeploy. Lokal sinov uchun WEBAPP_URL bering."
+        )

@@ -4,6 +4,16 @@
 - `webapp/index.html` – Mini App (bitta fayl, kutubxonasiz). Telegram ichida ochilganda faqat ilova koʻrinadi; brauzerda taklif matni bilan birga chiqadi.
 - `bot.py` – aiogram 3 asosidagi bot: `/start`, Mini App tugmasi, arizani menejerlar guruhiga yuborish, kontakt, manzil, referal havola.
 
+## Ishga tushirish (Railway)
+Bitta servis ham botni, ham Mini App sahifasini ishlatadi. `railway.json` start buyrugʻini, `.python-version` Python versiyasini belgilaydi.
+1. railway.com ga GitHub orqali kiring → **New Project → Deploy from GitHub repo** → `magic-city-bot`.
+2. Servis → **Variables** → `BOT_TOKEN` (@BotFather bergan token). `MANAGER_CHAT_ID` hozircha shart emas.
+3. Servis → **Settings → Networking → Generate Domain** (port soʻralsa: `8080`). Railway `RAILWAY_PUBLIC_DOMAIN` ni oʻzi beradi, bot shu manzilga webhook oʻrnatadi.
+4. **Deploy** (yoki Deployments → Redeploy). `https://<domen>/health` "ok" qaytarishi kerak, botga `/start` yozing.
+5. Menejerlar guruhi: guruh oching, botni qoʻshing, `/id` yozing → chiqqan raqamni **Variables → `MANAGER_CHAT_ID`** ga qoʻying.
+
+Domen yaratilmasa, bot ishga tushmaydi va logda "Server manzili topilmadi" deb yozadi.
+
 ## Ishga tushirish (Render, bepul, 15–20 daqiqa)
 Bitta server ham botni, ham Mini App sahifasini ishlatadi.
 1. GitHub'da yangi repo oching va shu papkadagi hamma faylni yuklang (`bot.py`, `requirements.txt`, `render.yaml`, `webapp/index.html`).

@@ -95,11 +95,11 @@ body{font-family:var(--f-body);font-size:15px;line-height:1.5}
 .btn.ghost{background:var(--accent-soft);color:var(--accent)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px}
-label.f{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:var(--muted)}
-label.f .v{color:var(--fg);font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+label.f,div.f{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:var(--muted)}
+label.f .v,div.f .v{color:var(--fg);font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
 .fl{display:flex;justify-content:space-between;align-items:baseline}
 input[type=range]{width:100%;accent-color:var(--accent)}
-input[type=text],input[type=tel],select{width:100%;font:inherit;font-size:15px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--fg)}
+input[type=text],input[type=tel],input[type=number],select{width:100%;font:inherit;font-size:15px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--fg)}
 .seg{display:grid;grid-template-columns:1fr 1fr;background:var(--surface-2);border-radius:10px;padding:3px;gap:3px}
 .seg button{border:0;background:none;font:inherit;font-weight:700;font-size:13px;padding:8px;border-radius:8px;color:var(--muted);cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
@@ -213,7 +213,10 @@ if (tg){ document.body.classList.add("tg"); try{ tg.ready(); tg.expand(); }catch
 const CFG = {
   pricePerM2: 6500000,          // soʻm / m²
   minDownPct: 20,               // eng kam boshlangʻich toʻlov, %
-  terms: [ {m:6,markup:0},{m:12,markup:0},{m:18,markup:5},{m:24,markup:8},{m:36,markup:14} ], // ustama qolgan summaga, %
+  terms: [ {m:6,markup:0},{m:12,markup:0},{m:18,markup:5},{m:24,markup:8},{m:36,markup:14} ], // tayyor tugmalar; ustama qolgan summaga, %
+  maxMonths: 120,               // mijoz o'zi yozadigan eng uzun muddat, oy
+  // Jadvalda yo'q muddat (masalan 60 yoki 90 oy) uchun ustama: jadval nuqtalari orasida chiziqli,
+  // 36 oydan keyin oxirgi qadam sur'atida davom etadi. Kompaniyaning haqiqiy shartlari bilan almashtiriladi.
   mortgage: { rate:17, years:[10,15,20], minDownPct:25 },
   floors: 9,
   blocks: ["A","B","C"],
@@ -250,11 +253,17 @@ const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&g
 const statusTxt = {free:"Boʻsh",held:"Band qilingan",sold:"Sotilgan"};
 function haptic(){ try{ tg && tg.HapticFeedback.impactOccurred("light"); }catch(e){} }
 
+function markupFor(months){
+  const T = CFG.terms; const ex = T.find(t=>t.m===months); if (ex) return ex.markup;
+  if (months <= T[0].m) return T[0].markup;
+  for (let i=1; i<T.length; i++) if (months < T[i].m){ const a=T[i-1], b=T[i]; return a.markup+(b.markup-a.markup)*(months-a.m)/(b.m-a.m); }
+  const a=T[T.length-2], b=T[T.length-1]; return b.markup+(b.markup-a.markup)/(b.m-a.m)*(months-b.m);
+}
 function installment(price, downPct, months){
-  const t = CFG.terms.find(t=>t.m===months) || CFG.terms[0];
-  const down = price*downPct/100, rest = price-down, markup = rest*t.markup/100;
+  const pct = Math.round(markupFor(months)*10)/10;
+  const down = price*downPct/100, rest = price-down, markup = rest*pct/100;
   const total = rest+markup, monthly = months? total/months : 0;
-  return {down, rest, markup, markupPct:t.markup, monthly, total:down+total};
+  return {down, rest, markup, markupPct:pct, monthly, total:down+total};
 }
 function annuity(price, downPct, years, rate){
   const loan = price*(1-downPct/100), i = rate/1200, n = years*12;
@@ -303,7 +312,7 @@ home(){
   const free = UNITS.filter(u=>u.status==="free"); const minP = Math.min(...free.map(u=>u.price));
   const picks = [1,2,3].map(r=>free.filter(u=>u.rooms===r).sort((a,b)=>a.price-b.price)[0]).filter(Boolean);
   return `<div class="hero"><canvas id="sky" aria-hidden="true"></canvas><h3>Magic City</h3><p>Kattaqoʻrgʻon · 9 qavatli turar-joy majmuasi · 3 blok</p></div>
-  <div class="stats"><div class="stat"><b>${free.length}</b><span>boʻsh xonadon</span></div><div class="stat"><b>${Math.round(minP/1e6)} mln</b><span>narx, soʻmdan</span></div><div class="stat"><b>36 oy</b><span>boʻlib toʻlash</span></div></div>
+  <div class="stats"><div class="stat"><b>${free.length}</b><span>boʻsh xonadon</span></div><div class="stat"><b>${Math.round(minP/1e6)} mln</b><span>narx, soʻmdan</span></div><div class="stat"><b>${CFG.maxMonths} oy</b><span>gacha boʻlib toʻlash</span></div></div>
   <div class="row2"><button type="button" class="btn" data-go="calc">Hisoblash</button><button type="button" class="btn ghost" data-go="lead">Tashrif buyurish</button></div>
   <div class="sec-t">Eng arzon takliflar <a data-go="list">Barchasi</a></div>
   ${picks.map(unitCard).join("")}
@@ -332,7 +341,7 @@ calc(){
     <div class="seg" role="group" aria-label="Toʻlov turi"><button type="button" data-mode="inst" aria-pressed="${!mort}">Boʻlib toʻlash</button><button type="button" data-mode="mort" aria-pressed="${mort}">Ipoteka</button></div>
     <label class="f">Xonadon<select id="pick"><option value="">Turi boʻyicha (2 xonali, 63.8 m²)</option>${[1,2,3,4].map(r=>`<option value="t${r}" ${!u&&S.calcPrice===Math.round(TYPES[r].area*CFG.pricePerM2)?"selected":""}>${r} xonali · ${TYPES[r].area} m² · ${mln(TYPES[r].area*CFG.pricePerM2)}</option>`).join("")}${u?`<option value="u" selected>№${u.id} · ${u.rooms} xonali · ${mln(u.price)}</option>`:""}</select></label>
     <label class="f"><span class="fl">Boshlangʻich toʻlov <span class="v" id="downv"></span></span><input id="down" type="range" min="${minD}" max="90" step="5" value="${S.down}"></label>
-    <label class="f">${mort?"Kredit muddati":"Muddat"}<div class="chips">${terms}</div></label>
+    <div class="f">${mort?"Kredit muddati":"Muddat"}<div class="chips" role="group" aria-label="Muddat">${terms}</div>${mort?"":`<label class="f" style="margin-top:4px">Yoki oʻzingiz yozing (oy)<input id="termIn" type="number" inputmode="numeric" min="1" max="${CFG.maxMonths}" step="1" placeholder="Masalan, 60" value="${CFG.terms.some(t=>t.m===S.term)?"":S.term}"></label><span class="muted" id="termHint">1 dan ${CFG.maxMonths} oygacha</span>`}</div>
     <div id="calcres" style="display:flex;flex-direction:column;gap:12px">${calcRes()}</div>
   </div><button type="button" class="btn" data-go="lead">Shu shartlar bilan ariza qoldirish</button>`;
 },
@@ -403,6 +412,14 @@ function render(){
   renderNav(); $("#scr").innerHTML = V[S.tab]();
   if (S.tab==="home") drawSky();
   const f=$("#leadf"); if(f) f.addEventListener("submit", submitLead);
+  const ti=$("#termIn"); if(ti){
+    ti.addEventListener("input", e=>{ const h=$("#termHint"); let v=parseInt(e.target.value,10);
+      if(!v || v<1){ h.textContent=`1 dan ${CFG.maxMonths} oygacha`; h.style.color=""; return; }
+      if(v>CFG.maxMonths){ h.textContent=`Eng uzun muddat ${CFG.maxMonths} oy`; h.style.color="var(--held)"; v=CFG.maxMonths; }
+      else { h.textContent=`1 dan ${CFG.maxMonths} oygacha`; h.style.color=""; }
+      S.term=v; document.querySelectorAll("[data-term]").forEach(b=>b.setAttribute("aria-pressed", String(+b.dataset.term===v))); updCalc(); });
+    ti.addEventListener("change", e=>{ if(+e.target.value>CFG.maxMonths) e.target.value=CFG.maxMonths; });
+  }
   const d=$("#down"); if(d){ updCalc(); d.addEventListener("input", e=>{ S.down=+e.target.value; updCalc(); }); }
   const pk=$("#pick"); if(pk) pk.addEventListener("change", e=>{ const v=e.target.value; if(v.startsWith("t")){ S.calcUnit=null; S.calcPrice=Math.round(TYPES[+v.slice(1)].area*CFG.pricePerM2); } else if(!v){ S.calcUnit=null; S.calcPrice=null; } render(); });
 }

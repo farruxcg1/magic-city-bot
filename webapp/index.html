@@ -1,144 +1,194 @@
-<!doctype html><html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script src="https://telegram.org/js/telegram-web-app.js"></script><style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style></head><body>
+<!doctype html><html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Magic City Mini App</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap">
 <style>
-/* Layout: desktop = taklif matni chapda + jonli telefon o'ngda; telefonda ilova birinchi, taklif pastda; Telegram ichida faqat ilova */
+/* Magic City · yorug' va nafis. Asosiy rang: Samarqand koshinlarining lojuvardi; derazalar: oltin nur */
 :root{
-  --bg:#eef1ef; --surface:#ffffff; --surface-2:#f4f7f5; --fg:#16211d; --muted:#5d6b66; --line:#dbe3df;
-  --accent:#0b6e5f; --accent-2:#0e8a77; --accent-soft:#d8eee9; --on-accent:#ffffff;
-  --free:#1f9d55; --free-bg:#dff3e7; --held:#b7791f; --held-bg:#fbefd6; --sold:#8b9590; --sold-bg:#e7ebe9;
-  --frame:#101614;
+  --bg:#f2f4f7; --surface:#ffffff; --surface-2:#f6f8fb; --ink:#18202b; --muted:#687384; --line:#e1e6ec;
+  --lapis:#2448a6; --lapis-2:#3a63c9; --lapis-deep:#17327a; --lapis-soft:#e8eefb; --on-lapis:#ffffff;
+  --gold:#f2b544; --gold-ink:#9a6510; --gold-soft:#fdf2da;
+  --amber:#c97a1e; --amber-soft:#fbecd8;
+  --slate:#8f9aa7; --slate-soft:#eceff3;
+  --sh-1:0 1px 1px rgba(24,32,43,.04),0 2px 6px rgba(24,32,43,.05);
+  --sh-2:0 1px 2px rgba(24,32,43,.05),0 8px 20px -10px rgba(24,32,43,.18);
+  --sh-3:0 1px 2px rgba(24,32,43,.05),0 14px 28px -12px rgba(36,72,166,.28),0 30px 60px -30px rgba(24,32,43,.25);
   --f-display:"Unbounded","Arial Black",system-ui,sans-serif;
   --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0d1311; --surface:#151d1a; --surface-2:#1c2622; --fg:#e7efeb; --muted:#97a6a0; --line:#2a3632;
-  --accent:#2fb39d; --accent-2:#45c7b1; --accent-soft:#163a33; --on-accent:#06201b;
-  --free:#4cc985; --free-bg:#163a26; --held:#e3a94a; --held-bg:#3a2d14; --sold:#6d7873; --sold-bg:#222b28;
-  --frame:#000; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0d1311; --surface:#151d1a; --surface-2:#1c2622; --fg:#e7efeb; --muted:#97a6a0; --line:#2a3632;
-  --accent:#2fb39d; --accent-2:#45c7b1; --accent-soft:#163a33; --on-accent:#06201b;
-  --free:#4cc985; --free-bg:#163a26; --held:#e3a94a; --held-bg:#3a2d14; --sold:#6d7873; --sold-bg:#222b28;
-  --frame:#000; color-scheme:dark}
+[hidden]{display:none!important}
 *{box-sizing:border-box}
-html,body{background:var(--bg);color:var(--fg)}
-body{font-family:var(--f-body);font-size:15px;line-height:1.5}
-.page{max-width:1180px;margin:0 auto;padding-block:32px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:48px;align-items:start}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit}
+.page{max-width:1180px;margin:0 auto;padding-block:36px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:56px;align-items:start}
 @media (max-width:900px){.page{grid-template-columns:minmax(0,1fr);gap:32px}.stage{order:-1}}
-/* ---------- Pitch ---------- */
-.pitch{min-width:0;display:flex;flex-direction:column;gap:36px}
-.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
-.pitch h1{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,4vw,44px);line-height:1.1;margin:8px 0 14px;text-wrap:balance}
-.pitch h2{font-family:var(--f-display);font-weight:500;font-size:20px;margin:0 0 14px;text-wrap:balance}
-.lead{font-size:17px;color:var(--muted);max-width:60ch;margin:0}
+
+/* ---------- Taklif matni (brauzerda) ---------- */
+.pitch{min-width:0;display:flex;flex-direction:column;gap:40px}
+.pitch .kicker{font-size:14px;font-weight:700;color:var(--lapis)}
+.pitch h1{font-family:var(--f-display);font-weight:600;font-size:clamp(28px,3.6vw,42px);line-height:1.12;letter-spacing:-.01em;margin:10px 0 16px;text-wrap:balance;max-width:20ch}
+.pitch h2{font-family:var(--f-display);font-weight:500;font-size:19px;margin:0 0 16px}
+.lead{font-size:17px;color:var(--muted);max-width:58ch;margin:0}
 .compare{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media (max-width:560px){.compare{grid-template-columns:1fr}}
-.compare div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.compare div{background:var(--surface);border-radius:16px;padding:18px 20px;box-shadow:var(--sh-1)}
 .compare b{display:block;margin-bottom:6px}
 .compare ul{margin:0;padding-left:18px;color:var(--muted)}
-.compare .now b{color:var(--muted)} .compare .next{border-color:var(--accent)} .compare .next b{color:var(--accent)}
-.feat{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 28px;margin:0;padding:0;list-style:none}
+.compare .now b{color:var(--muted)}
+.compare .next{box-shadow:inset 0 0 0 1.5px var(--lapis),var(--sh-2)} .compare .next b{color:var(--lapis)}
+.feat{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 32px;margin:0;padding:0;list-style:none}
 @media (max-width:560px){.feat{grid-template-columns:1fr}}
 .feat li{padding-top:12px;border-top:1px solid var(--line)}
 .feat li b{display:block}
 .feat li span{color:var(--muted);font-size:14px}
-.tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px;margin-left:6px;vertical-align:2px;background:var(--accent-soft);color:var(--accent)}
-.tag.later{background:var(--surface-2);color:var(--muted)}
-.steps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;counter-reset:s}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 8px;border-radius:99px;margin-left:6px;vertical-align:2px;background:var(--lapis-soft);color:var(--lapis)}
+.tag.later{background:var(--slate-soft);color:var(--muted)}
+.steps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px;counter-reset:s}
 .steps li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;counter-increment:s}
-.steps li::before{content:counter(s);font-family:var(--f-display);font-size:13px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--on-accent)}
+.steps li::before{content:counter(s);font-family:var(--f-display);font-size:13px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--lapis);color:var(--on-lapis)}
 .steps li span{color:var(--muted)}
-.note{font-size:13px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px;max-width:65ch}
-/* ---------- Phone ---------- */
-.stage{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);display:flex;flex-direction:column;align-items:center;gap:10px}
-.stage-cap{font-size:12px;color:var(--muted)}
-.phone{width:100%;max-width:390px;height:780px;background:var(--frame);border-radius:44px;padding:10px;box-shadow:0 30px 60px -30px rgba(10,40,34,.45)}
-.app{position:relative;height:100%;border-radius:34px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column}
-.tgbar{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;background:var(--surface);border-bottom:1px solid var(--line);flex:none}
-.tgbar .x{font-size:14px;color:var(--accent);font-weight:600}
-.tgbar .t{flex:1;text-align:center;font-weight:700;font-size:15px}
+.note{font-size:13px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px;max-width:65ch;margin:0}
+
+/* ---------- Telefon ramkasi ---------- */
+.stage{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);display:flex;flex-direction:column;align-items:center;gap:12px}
+.stage-cap{font-size:13px;color:var(--muted)}
+.phone{width:100%;max-width:390px;height:800px;background:linear-gradient(145deg,#2a3342,#141a23);border-radius:48px;padding:11px;box-shadow:0 2px 0 1px #3b4555 inset,0 40px 80px -36px rgba(23,50,122,.55),0 18px 36px -18px rgba(24,32,43,.4)}
+.app{position:relative;height:100%;border-radius:38px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column}
+.tgbar{display:flex;align-items:center;gap:10px;padding:16px 18px 10px;background:var(--bg);flex:none}
+.tgbar .x{font-size:14px;color:var(--lapis);font-weight:700}
+.tgbar .t{flex:1;text-align:center;font-weight:800;font-size:15px;line-height:1.2}
 .tgbar .t small{display:block;font-weight:500;font-size:11px;color:var(--muted)}
 .tgbar .dots{width:44px;text-align:right;color:var(--muted)}
-.scr{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px;display:flex;flex-direction:column;gap:14px}
-.nav{flex:none;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);border-top:1px solid var(--line);padding:6px 4px calc(8px + env(safe-area-inset-bottom,0px))}
-.nav button{background:none;border:0;font:inherit;font-size:10.5px;font-weight:600;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;cursor:pointer;border-radius:10px}
+.scr{flex:1;overflow-y:auto;overflow-x:hidden;padding:6px 16px 104px;display:flex;flex-direction:column;gap:16px;scroll-behavior:smooth}
+
+/* shisha navigatsiya */
+.nav{position:absolute;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:repeat(5,1fr);padding:6px;border-radius:24px;background:rgba(255,255,255,.74);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);box-shadow:0 0 0 1px rgba(255,255,255,.7) inset,0 12px 30px -12px rgba(24,32,43,.3),0 2px 6px rgba(24,32,43,.06);z-index:4}
+.nav button{background:none;border:0;font-size:10.5px;font-weight:700;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 0 6px;cursor:pointer;border-radius:18px;transition:background .2s,color .2s}
 .nav button svg{width:22px;height:22px}
-.nav button[aria-current="page"]{color:var(--accent)}
-.nav button:focus-visible,.btn:focus-visible,.chip:focus-visible,.cell:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-/* bits */
-.hero{border-radius:18px;padding:18px;color:#fff;background:
-  linear-gradient(160deg,rgba(6,40,34,.15),rgba(6,40,34,.85)),
-  repeating-linear-gradient(90deg,#3e8f80 0 26px,#2f7a6c 26px 28px),#2f7a6c;min-height:170px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden}
-.hero canvas{position:absolute;inset:0;width:100%;height:100%}
-.hero > *{position:relative}
-.hero h3{font-family:var(--f-display);font-size:22px;margin:0;line-height:1.15}
-.hero p{margin:4px 0 0;font-size:13px;opacity:.9}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
-.stat b{display:block;font-family:var(--f-display);font-size:15px;font-weight:500}
-.stat span{font-size:11px;color:var(--muted)}
-.sec-t{font-weight:800;font-size:15px;margin:4px 0 0;display:flex;justify-content:space-between;align-items:baseline}
-.sec-t a{font-size:12px;font-weight:600;color:var(--accent);text-decoration:none;cursor:pointer}
+.nav button[aria-current="page"]{color:var(--lapis);background:var(--lapis-soft)}
+:focus-visible{outline:2px solid var(--lapis);outline-offset:2px}
+
+/* ---------- Bosh sahifa: 3D bino oynasi ---------- */
+.hero{position:relative;height:268px;border-radius:26px;overflow:hidden;background:linear-gradient(#a9c6e6,#f4e3d0);box-shadow:var(--sh-3);flex:none;touch-action:pan-y;cursor:pointer}
+.hero .gl-host,.view .gl-host{position:absolute;inset:0}
+.gl-host canvas{display:block;width:100%!important;height:100%!important}
+.hero-cap{position:absolute;left:16px;right:16px;bottom:14px;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;pointer-events:none}
+.hero-cap h3{font-family:var(--f-display);font-weight:700;font-size:24px;line-height:1.05;margin:0;color:#fff;text-shadow:0 2px 14px rgba(23,50,122,.45)}
+.hero-cap p{margin:4px 0 0;font-size:12.5px;color:#fff;font-weight:600;text-shadow:0 1px 8px rgba(23,50,122,.5)}
+.hero-cap .go3d{pointer-events:auto;flex:none;border:0;border-radius:14px;padding:9px 12px;font-size:12.5px;font-weight:800;background:rgba(255,255,255,.86);color:var(--lapis-deep);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 6px 16px -6px rgba(23,50,122,.5);cursor:pointer}
+.hero-shade{position:absolute;inset:auto 0 0 0;height:55%;background:linear-gradient(transparent,rgba(23,50,122,.38));pointer-events:none}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--surface);border-radius:16px;padding:12px 8px;text-align:center;box-shadow:var(--sh-1)}
+.stat b{display:block;font-family:var(--f-display);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+.stat span{font-size:11px;color:var(--muted);line-height:1.3;display:block}
+.stat.lit b{color:var(--gold-ink)}
+.sec-t{font-weight:800;font-size:16px;margin:6px 0 -4px;display:flex;justify-content:space-between;align-items:baseline}
+.sec-t button{border:0;background:none;font-size:13px;font-weight:700;color:var(--lapis);cursor:pointer;padding:4px}
+
+/* tugmalar: pastki qirrasi bor, bosilganda cho'kadi */
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:14px 16px;font-weight:800;font-size:15px;background:linear-gradient(180deg,var(--lapis-2),var(--lapis));color:var(--on-lapis);cursor:pointer;text-align:center;box-shadow:0 -2px 0 rgba(0,0,0,.12) inset,0 1px 0 rgba(255,255,255,.25) inset,0 10px 20px -10px rgba(36,72,166,.75);transition:transform .12s,box-shadow .12s}
+.btn:active{transform:translateY(1px) scale(.99);box-shadow:0 -1px 0 rgba(0,0,0,.12) inset,0 4px 10px -6px rgba(36,72,166,.75)}
+.btn.soft{background:var(--surface);color:var(--lapis);box-shadow:0 0 0 1.5px var(--lapis-soft) inset,var(--sh-2)}
+.btn.gold{background:linear-gradient(180deg,#f7c862,#eaa632);color:#4a2f00;box-shadow:0 -2px 0 rgba(0,0,0,.1) inset,0 10px 20px -10px rgba(201,122,30,.8)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
 .chips{display:flex;gap:6px;flex-wrap:wrap}
-.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;font-size:13px;font-weight:600;padding:6px 12px;border-radius:99px;cursor:pointer}
-.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;grid-template-columns:76px 1fr;gap:12px;align-items:center;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
-.card svg{width:76px;height:76px;background:var(--surface-2);border-radius:10px}
+.chip{border:0;background:var(--surface);font-size:13px;font-weight:700;padding:7px 13px;border-radius:99px;cursor:pointer;box-shadow:var(--sh-1);transition:background .15s,color .15s}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff}
+
+/* xonadon kartochkasi: bosilganda biroz egiladi */
+.card{background:var(--surface);border:0;border-radius:20px;padding:12px;display:grid;grid-template-columns:78px 1fr;gap:14px;align-items:center;cursor:pointer;text-align:left;width:100%;box-shadow:var(--sh-2);transform:perspective(700px) rotateX(0);transition:transform .18s,box-shadow .18s}
+.card:active{transform:perspective(700px) rotateX(4deg) scale(.985);box-shadow:var(--sh-1)}
+.card .pl{width:78px;height:78px;background:var(--surface-2);border-radius:14px;display:grid;place-items:center}
+.card .pl svg{width:70px;height:70px}
 .card .ti{font-weight:800}
 .card .meta{font-size:12px;color:var(--muted)}
-.card .pr{font-weight:800;color:var(--accent);margin-top:2px;font-variant-numeric:tabular-nums}
+.card .pr{font-weight:800;color:var(--lapis);margin-top:3px;font-variant-numeric:tabular-nums}
 .card .mo{font-size:12px;color:var(--muted)}
-.btn{display:block;width:100%;border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:800;font-size:15px;background:var(--accent);color:var(--on-accent);cursor:pointer;text-align:center}
-.btn.ghost{background:var(--accent-soft);color:var(--accent)}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px}
-label.f,div.f{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:var(--muted)}
-label.f .v,div.f .v{color:var(--fg);font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:1px}
+.dot.free{background:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)} .dot.held{background:var(--amber);box-shadow:0 0 0 3px var(--amber-soft)} .dot.sold{background:var(--slate)}
+
+/* ---------- Bino (3D) bo'limi ---------- */
+.view{position:relative;height:420px;border-radius:26px;overflow:hidden;background:linear-gradient(#a9c6e6,#f4e3d0);box-shadow:var(--sh-3);flex:none;touch-action:none}
+.view-top{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}
+.view-top>*{pointer-events:auto}
+.seg3{display:flex;gap:3px;padding:3px;border-radius:14px;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 6px 16px -8px rgba(23,50,122,.4)}
+.seg3 button{border:0;background:none;font-size:12.5px;font-weight:800;padding:7px 9px;white-space:nowrap;border-radius:11px;cursor:pointer;color:var(--muted)}
+.seg3-l{align-self:center;font-size:11.5px;font-weight:700;color:var(--muted);padding:0 4px 0 7px}
+.seg3 button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:var(--sh-1)}
+.view-bot{position:absolute;left:10px;right:10px;bottom:10px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px;pointer-events:none}
+.view-bot>*{pointer-events:auto}
+.legend{display:flex;flex-direction:column;gap:3px;font-size:11.5px;font-weight:700;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:12px;height:9px;border-radius:2px;display:inline-block}
+.legend .l-free{background:var(--gold);box-shadow:0 0 6px 1px rgba(242,181,68,.9)} .legend .l-held{background:var(--amber);opacity:.8} .legend .l-sold{background:#3b4654}
+.vbtn{border:0;width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 6px 16px -8px rgba(23,50,122,.5);cursor:pointer;color:var(--ink)}
+.vbtn svg{width:20px;height:20px}
+.vstack{display:flex;flex-direction:column;gap:6px}
+.hint{position:absolute;left:50%;top:60px;transform:translateX(-50%);font-size:12px;font-weight:700;color:var(--ink);background:rgba(255,255,255,.8);padding:6px 11px;border-radius:99px;white-space:nowrap;pointer-events:none;transition:opacity .6s}
+.toast{position:absolute;left:50%;top:56px;transform:translateX(-50%);font-size:12.5px;font-weight:700;color:#fff;background:rgba(24,32,43,.82);padding:7px 12px;border-radius:99px;white-space:nowrap;pointer-events:none}
+.count{font-size:13px;color:var(--muted)} .count b{color:var(--gold-ink)}
+.linkbtn{border:0;background:none;color:var(--lapis);font-weight:700;font-size:13px;padding:4px 0;cursor:pointer;text-align:left}
+
+/* shaxmatka (jadval ko'rinishi) */
+.board{display:grid;grid-template-columns:28px repeat(4,1fr);gap:5px;background:var(--surface);padding:10px;border-radius:18px;box-shadow:var(--sh-1)}
+.board .fl-n{font-size:11px;color:var(--muted);display:grid;place-items:center;font-weight:700}
+.cell{border:0;border-radius:8px;padding:7px 2px;font-size:11px;font-weight:800;cursor:pointer;line-height:1.2;font-variant-numeric:tabular-nums}
+.cell small{display:block;font-weight:500;font-size:10px;opacity:.8}
+.cell.free{background:var(--gold-soft);color:var(--gold-ink)}
+.cell.held{background:var(--amber-soft);color:var(--amber)}
+.cell.sold{background:var(--slate-soft);color:var(--slate);cursor:default;text-decoration:line-through}
+.cell.off{opacity:.35}
+
+/* ---------- Kalkulyator va forma ---------- */
+.panel{background:var(--surface);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--sh-2)}
+label.f,div.f{display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:700;color:var(--muted)}
+label.f .v,div.f .v{color:var(--ink);font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
 .fl{display:flex;justify-content:space-between;align-items:baseline}
-input[type=range]{width:100%;accent-color:var(--accent)}
-input[type=text],input[type=tel],input[type=number],select{width:100%;font:inherit;font-size:15px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--fg)}
-.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--surface-2);border-radius:10px;padding:3px;gap:3px}
-.seg button{border:0;background:none;font:inherit;font-weight:700;font-size:13px;padding:8px;border-radius:8px;color:var(--muted);cursor:pointer}
-.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
-.res{background:var(--accent);color:var(--on-accent);border-radius:14px;padding:14px 16px}
-.res .big{font-family:var(--f-display);font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2}
-.res .lbl{font-size:12px;opacity:.85}
-.kv{display:flex;flex-direction:column;gap:6px;font-size:13px}
+input[type=range]{width:100%;accent-color:var(--lapis)}
+input[type=text],input[type=tel],input[type=number],select{width:100%;font:inherit;font-size:15px;font-weight:600;padding:12px 13px;border-radius:13px;border:1.5px solid var(--line);background:var(--surface-2);color:var(--ink)}
+input:focus,select:focus{border-color:var(--lapis-2);outline:none;box-shadow:0 0 0 4px var(--lapis-soft)}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--surface-2);border-radius:14px;padding:4px;gap:4px;box-shadow:0 1px 2px rgba(24,32,43,.06) inset}
+.seg button{border:0;background:none;font-weight:800;font-size:13px;padding:9px;border-radius:11px;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--sh-2)}
+.res{position:relative;overflow:hidden;background:linear-gradient(150deg,var(--lapis-2),var(--lapis) 55%,var(--lapis-deep));color:var(--on-lapis);border-radius:18px;padding:16px 18px;box-shadow:0 14px 26px -14px rgba(23,50,122,.8)}
+.res::after{content:"";position:absolute;right:-30px;top:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(rgba(242,181,68,.55),transparent 65%)}
+.res .big{font-family:var(--f-display);font-size:25px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.2;position:relative}
+.res .lbl{font-size:12px;opacity:.88;position:relative}
+.kv{display:flex;flex-direction:column;gap:7px;font-size:13px}
 .kv div{display:flex;justify-content:space-between;gap:10px;font-variant-numeric:tabular-nums}
 .kv div span{color:var(--muted)} .kv div b{text-align:right}
 .sched{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
-.sched td,.sched th{padding:5px 4px;border-bottom:1px solid var(--line);text-align:right}
-.sched th{color:var(--muted);font-weight:600}
+.sched td,.sched th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:right}
+.sched th{color:var(--muted);font-weight:700}
 .sched td:first-child,.sched th:first-child{text-align:left}
-/* chessboard */
-.legend{display:flex;gap:12px;font-size:12px;color:var(--muted);flex-wrap:wrap}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
-.board{display:grid;grid-template-columns:28px repeat(4,1fr);gap:5px}
-.board .fl-n{font-size:11px;color:var(--muted);display:grid;place-items:center;font-weight:700}
-.cell{border:0;border-radius:8px;padding:7px 2px;font:inherit;font-size:11px;font-weight:700;cursor:pointer;line-height:1.2;font-variant-numeric:tabular-nums}
-.cell small{display:block;font-weight:500;font-size:10px;opacity:.8}
-.cell.free{background:var(--free-bg);color:var(--free)}
-.cell.held{background:var(--held-bg);color:var(--held)}
-.cell.sold{background:var(--sold-bg);color:var(--sold);cursor:default;text-decoration:line-through}
-.cell.sel{outline:2px solid var(--accent)}
-/* sheet */
-.sheet-bg{position:absolute;inset:0;background:rgba(5,15,12,.45);display:flex;align-items:flex-end;z-index:5}
-.sheet{background:var(--surface);width:100%;max-height:88%;overflow-y:auto;border-radius:20px 20px 0 0;padding:10px 16px 18px;display:flex;flex-direction:column;gap:12px}
-.grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 4px}
-.sheet h4{font-family:var(--f-display);font-weight:500;font-size:18px;margin:0}
-.plan{background:var(--surface-2);border-radius:12px;padding:8px}
-.plan svg{width:100%;height:auto;display:block}
-.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px}
-.pill.free{background:var(--free-bg);color:var(--free)} .pill.held{background:var(--held-bg);color:var(--held)}
-.ok{text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;padding:10px 0}
-.ok .ic{width:56px;height:56px;border-radius:50%;background:var(--free-bg);color:var(--free);display:grid;place-items:center;font-size:28px;font-weight:800}
-.tgmsg{background:var(--surface-2);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;font-size:12.5px;text-align:left;width:100%;white-space:pre-wrap;font-family:ui-monospace,Menlo,Consolas,monospace}
 .muted{color:var(--muted);font-size:12px}
-.ref{border:1px dashed var(--accent);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px;background:var(--accent-soft)}
-.ref code{font-size:12px;word-break:break-all}
+
+/* ---------- Xonadon varaqasi ---------- */
+.sheet-bg{position:absolute;inset:0;background:linear-gradient(rgba(24,32,43,0) 30%,rgba(24,32,43,.35));display:flex;align-items:flex-end;z-index:6;animation:fade .25s ease-out}
+.sheet{background:var(--surface);width:100%;max-height:64%;overflow-y:auto;border-radius:28px 28px 0 0;padding:10px 16px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px;box-shadow:0 -20px 40px -20px rgba(24,32,43,.35);transform-origin:50% 100%;animation:rise .38s cubic-bezier(.2,.9,.25,1)}
+@keyframes rise{from{transform:perspective(900px) rotateX(10deg) translateY(40%);opacity:.4}to{transform:none;opacity:1}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.grab{width:42px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 2px}
+.sheet h4{font-family:var(--f-display);font-weight:600;font-size:19px;margin:0}
+.where{display:grid;grid-template-columns:118px 1fr;gap:12px;align-items:center;background:var(--surface-2);border-radius:16px;padding:10px}
+.where svg{width:118px;height:auto;display:block}
+.where p{margin:0;font-size:13px}
+.where p b{display:block;font-size:14px}
+.plan{background:var(--surface-2);border-radius:16px;padding:8px}
+.plan svg{width:100%;height:auto;display:block}
+.pill{display:inline-flex;align-items:center;font-size:11.5px;font-weight:800;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.pill.free{background:var(--gold-soft);color:var(--gold-ink)} .pill.held{background:var(--amber-soft);color:var(--amber)}
+.ok{text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;padding:12px 0}
+.ok .ic{width:60px;height:60px;border-radius:50%;background:var(--gold-soft);color:var(--gold-ink);display:grid;place-items:center;font-size:28px;font-weight:800;box-shadow:0 0 0 8px rgba(253,242,218,.6),0 0 30px 6px rgba(242,181,68,.45)}
+.tgmsg{background:var(--surface-2);border:1px dashed var(--line);border-radius:14px;padding:10px 12px;font-size:12.5px;text-align:left;width:100%;white-space:pre-wrap;font-family:ui-monospace,Menlo,Consolas,monospace}
+.ref{border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:6px;background:linear-gradient(135deg,var(--gold-soft),#fff 70%);box-shadow:var(--sh-1)}
+.ref code{font-size:12px;word-break:break-all;color:var(--gold-ink)}
+
 /* Telegram ichida: faqat ilova, to'liq ekran */
 body.tg .pitch,body.tg .stage-cap,body.tg .tgbar{display:none}
 body.tg .page{display:block;padding:0;max-width:none;height:100%}
@@ -146,36 +196,36 @@ body.tg,html:has(body.tg){height:100%}
 body.tg .stage{position:static;height:100%}
 body.tg .phone{max-width:none;height:100%;border-radius:0;padding:0;box-shadow:none;background:none}
 body.tg .app{border-radius:0}
+body.tg .scr{padding-top:12px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
+</head><body>
 
 <div class="page">
   <section class="pitch" aria-label="Taklif">
     <header>
-      <div class="eyebrow">Magic City uchun taklif · Kattaqoʻrgʻon</div>
-      <h1>Kvartirani Telegram ichida tanlab, narxini oʻzi hisoblaydigan bot</h1>
-      <p class="lead">Mijoz videoni koʻrib, savol bilan chiqib ketmaydi. Botni ochadi, boʻsh kvartirani tanlaydi, boshlangʻich va oylik toʻlovni koʻradi va bir tugma bilan sotuv menejeriga ariza qoldiradi.</p>
+      <div class="kicker">Magic City uchun taklif, Kattaqoʻrgʻon</div>
+      <h1>Mijoz uyini Telegram ichida, binoning oʻzida tanlaydi</h1>
+      <p class="lead">Bot ochilganda Magic City binosi 3D koʻrinishda chiqadi. Boʻsh uylarning derazasi yonib turadi, sotilganlari oʻchgan. Mijoz binoni aylantiradi, yoniq derazani bosadi, uyning qavati va tomonini koʻradi, narxini hisoblaydi va menejerga ariza qoldiradi.</p>
     </header>
 
     <div class="compare">
-      <div class="now"><b>Hozir</b><ul><li>Telegram va Instagramda faqat video</li><li>Koʻruvchi kam, narx soʻrab yozish noqulay</li><li>Qiziqqan odam kontakt qoldirmaydi</li></ul></div>
-      <div class="next"><b>Bot bilan</b><ul><li>Narx, maydon, qavat 24/7 ochiq</li><li>Boʻlib toʻlash hisobi bir zumda</li><li>Har bir qiziqish menejerga ariza boʻlib tushadi</li></ul></div>
+      <div class="now"><b>Hozir</b><ul><li>Telegram va Instagramda faqat video</li><li>Narx soʻrab yozish noqulay</li><li>Qiziqqan odam kontakt qoldirmaydi</li></ul></div>
+      <div class="next"><b>Bot bilan</b><ul><li>Qancha uy qolgani binoning oʻzida koʻrinadi</li><li>Boʻlib toʻlash hisobi bir zumda</li><li>Har bir qiziqish menejerga ariza boʻlib tushadi</li></ul></div>
     </div>
 
     <div>
       <h2>Ilova ichida nima bor</h2>
       <ul class="feat">
-        <li><b>Kvartiralar katalogi <span class="tag">demoda</span></b><span>Xonalar soni, maydon, qavat va narx boʻyicha filtr.</span></li>
-        <li><b>Toʻlov kalkulyatori <span class="tag">demoda</span></b><span>Boshlangʻich toʻlov, muddat, oylik toʻlov va toʻlov jadvali. Ipoteka varianti ham bor.</span></li>
-        <li><b>Shaxmatka <span class="tag">demoda</span></b><span>Har bir blok va qavat boʻyicha boʻsh, band va sotilgan xonadonlar.</span></li>
-        <li><b>Planirovka <span class="tag">demoda</span></b><span>Har bir xonadon uchun reja chizmasi va xonalar maydoni.</span></li>
+        <li><b>3D bino <span class="tag">demoda</span></b><span>Aylantirsa boʻladi. Yoniq deraza boʻsh uy, xira band qilingan, oʻchgan sotilgan.</span></li>
+        <li><b>Uy qayerda joylashgan <span class="tag">demoda</span></b><span>Blok, qavat, qaysi tomonga qaragani va qavat sxemasida uyning oʻrni.</span></li>
+        <li><b>Toʻlov kalkulyatori <span class="tag">demoda</span></b><span>Boshlangʻich toʻlov, istalgan muddat, oylik toʻlov va jadval. Ipoteka varianti ham bor.</span></li>
+        <li><b>Kvartiralar roʻyxati <span class="tag">demoda</span></b><span>Xonalar soni va narx boʻyicha filtr, har bir uyning rejasi.</span></li>
         <li><b>Ariza va obyektga tashrif <span class="tag">demoda</span></b><span>Ism, telefon va qulay vaqt. Ariza darhol menejerlar guruhiga keladi.</span></li>
         <li><b>Doʻstni taklif qilish <span class="tag">demoda</span></b><span>Shaxsiy havola. Doʻsti sotib olsa, taklif qilgan odamga bonus.</span></li>
-        <li><b>Admin panel <span class="tag later">2-bosqich</span></b><span>Narx, chegirma va xonadon holatini menejer oʻzi oʻzgartiradi.</span></li>
+        <li><b>Haqiqiy bino rasmi <span class="tag later">2-bosqich</span></b><span>Derazalar Magic City rendiri yoki fotosurati ustida yonadi.</span></li>
+        <li><b>Admin panel <span class="tag later">2-bosqich</span></b><span>Menejer uyni “sotildi” desa, hamma mijozlarda oʻsha deraza oʻchadi.</span></li>
         <li><b>Mijozlar bazasi (CRM) <span class="tag later">2-bosqich</span></b><span>Har bir ariza holati: yangi, qoʻngʻiroq qilindi, uchrashuv, shartnoma.</span></li>
-        <li><b>Qurilish jarayoni <span class="tag later">2-bosqich</span></b><span>Har oy foto va videohisobot, topshirish sanasi.</span></li>
-        <li><b>Xabarnomalar <span class="tag later">2-bosqich</span></b><span>Yangi blok, aksiya va chegirma haqida obunachilarga xabar.</span></li>
-        <li><b>Toʻlov eslatmasi <span class="tag later">3-bosqich</span></b><span>Xaridorlarga oylik toʻlov sanasi va qoldiq summa.</span></li>
         <li><b>Rus tili <span class="tag later">2-bosqich</span></b><span>Ilova oʻzbek va rus tilida.</span></li>
       </ul>
     </div>
@@ -183,14 +233,14 @@ body.tg .app{border-radius:0}
     <div>
       <h2>Ishga tushirish</h2>
       <ol class="steps">
-        <li><div><b>Maʼlumot yigʻish</b><br><span>Bloklar, xonadonlar roʻyxati, narxlar, rejalar va boʻlib toʻlash shartlari.</span></div></li>
+        <li><div><b>Maʼlumot yigʻish</b><br><span>Bloklar, qavatlar, har bir uyning tomoni, narxlar, rejalar, bino rendiri va toʻlov shartlari.</span></div></li>
         <li><div><b>Sozlash va sinov</b><br><span>Haqiqiy maʼlumotlar bilan bot va ilovani sozlash, menejerlar guruhini ulash.</span></div></li>
         <li><div><b>Ishga tushirish</b><br><span>Kanal, Instagram bio va videolarga bot havolasini qoʻyish, QR kod bilan bannerlar.</span></div></li>
         <li><div><b>Natijani oʻlchash</b><br><span>Haftalik hisobot: nechta odam kirdi, nechta ariza, nechta uchrashuv.</span></div></li>
       </ol>
     </div>
 
-    <p class="note">Demodagi narxlar, maydonlar va toʻlov shartlari namuna sifatida olingan. Kompaniyaning haqiqiy narxlari va shartlari kiritilgach, hisob-kitob avtomatik ravishda ularga moslashadi.</p>
+    <p class="note">Demodagi bino shakli, narxlar, maydonlar va toʻlov shartlari namuna sifatida olingan. Kompaniyaning haqiqiy maʼlumotlari kiritilgach, bino va hisob-kitob ularga moslashadi.</p>
   </section>
 
   <div class="stage">
@@ -199,15 +249,16 @@ body.tg .app{border-radius:0}
       <main class="scr" id="scr"></main>
       <nav class="nav" id="nav" aria-label="Boʻlimlar"></nav>
     </div></div>
-    <div class="stage-cap">Jonli demo: bosib koʻring</div>
+    <div class="stage-cap">Jonli demo: binoni aylantiring, yoniq derazani bosing</div>
   </div>
 </div>
 
+<script src="vendor/three.min.js"></script>
 <script>
 (function(){
 "use strict";
 const tg = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData !== undefined && window.Telegram.WebApp.platform !== "unknown" ? window.Telegram.WebApp : null;
-if (tg){ document.body.classList.add("tg"); try{ tg.ready(); tg.expand(); }catch(e){} }
+if (tg){ document.body.classList.add("tg"); try{ tg.ready(); tg.expand(); tg.disableVerticalSwipes && tg.disableVerticalSwipes(); tg.setHeaderColor && tg.setHeaderColor("#f2f4f7"); tg.setBackgroundColor && tg.setBackgroundColor("#f2f4f7"); }catch(e){} }
 
 /* ===== Namuna maʼlumotlar (haqiqiy narxlar bilan almashtiriladi) ===== */
 const CFG = {
@@ -228,7 +279,10 @@ const TYPES = {
   3:{area:86.4, rooms:[["Mehmonxona",21.0],["Yotoqxona",15.2],["Bolalar xonasi",12.6],["Oshxona",12.0],["Hammom",5.4],["Dahliz",13.2],["Balkon",7.0]]},
   4:{area:112.6,rooms:[["Mehmonxona",24.8],["Yotoqxona",16.4],["Yotoqxona",13.8],["Bolalar xonasi",12.4],["Oshxona",13.6],["Hammom",6.8],["Dahliz",17.2],["Balkon",7.6]]}
 };
-const LAYOUT = [2,1,3,4]; // har qavatdagi 4 xonadon turi
+/* Har qavatda 4 xonadon: 1 va 2 old tomonda (janub, koʻcha), 3 va 4 orqa tomonda (shimol, hovli).
+   1 va 4 gʻarbiy burchakda, 2 va 3 sharqiy burchakda. Haqiqiy reja bilan almashtiriladi. */
+const LAYOUT = [2,1,3,4];
+const SIDES = {1:{front:true,west:true},2:{front:true,west:false},3:{front:false,west:false},4:{front:false,west:true}};
 function floorK(f){ return f===1?0.93 : f===CFG.floors?0.96 : (f>=3&&f<=6)?1.03 : 1; }
 let seed = 7; function rnd(){ seed = (seed*16807)%2147483647; return seed/2147483647; }
 const UNITS = [];
@@ -243,15 +297,17 @@ CFG.blocks.forEach((b,bi)=>{
     });
   }
 });
+const byId = id => UNITS.find(u=>u.id===id);
 
 /* ===== yordamchilar ===== */
 const $ = s => document.querySelector(s);
-const fmt = n => Math.round(n).toLocaleString("ru-RU").replace(/ /g," ");
+const fmt = n => Math.round(n).toLocaleString("ru-RU").replace(/ /g," ");
 const som = n => fmt(n)+" soʻm";
 const mln = n => (n/1e6).toLocaleString("ru-RU",{maximumFractionDigits:1})+" mln";
 const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const statusTxt = {free:"Boʻsh",held:"Band qilingan",sold:"Sotilgan"};
-function haptic(){ try{ tg && tg.HapticFeedback.impactOccurred("light"); }catch(e){} }
+function haptic(k){ try{ tg && (k==="sel" ? tg.HapticFeedback.selectionChanged() : tg.HapticFeedback.impactOccurred("light")); }catch(e){} }
+function sideTxt(u){ const s=SIDES[u.n]; return { main: s.front?"Janub, koʻcha tomoni":"Shimol, hovli tomoni", corner: s.west?"gʻarb":"sharq", short: s.front?"koʻcha tomoni":"hovli tomoni" }; }
 
 function markupFor(months){
   const T = CFG.terms; const ex = T.find(t=>t.m===months); if (ex) return ex.markup;
@@ -271,94 +327,332 @@ function annuity(price, downPct, years, rate){
   return {down:price-loan, loan, monthly:m, overpay:m*n-loan};
 }
 
-/* reja chizmasi */
+/* xonadon rejasi (SVG) */
 function planSVG(r, small){
   const T = TYPES[r].rooms, W = 300, H = 190;
   const living = T.filter(x=>!/Hammom|Dahliz|Balkon/.test(x[0]));
   const service = T.filter(x=>/Hammom|Dahliz/.test(x[0]));
   const balc = T.find(x=>x[0]==="Balkon");
   let out = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${r} xonali reja">`;
-  const st = 'fill="var(--surface)" stroke="var(--fg)" stroke-width="'+(small?4:2)+'"';
-  // tepa qator: yashash xonalari
+  const st = 'fill="#fff" stroke="#18202b" stroke-width="'+(small?5:2)+'"';
   const lw = living.reduce((a,x)=>a+x[1],0); let x=8;
-  living.forEach(rm=>{ const w=(W-16)*rm[1]/lw; out+=`<rect x="${x}" y="8" width="${w}" height="104" ${st}/>`; if(!small) out+=`<text x="${x+w/2}" y="56" text-anchor="middle" font-size="10" fill="var(--fg)" font-family="Manrope,sans-serif" font-weight="700">${esc(rm[0].replace(" xonasi",""))}</text><text x="${x+w/2}" y="70" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="Manrope,sans-serif">${rm[1]} m²</text>`; x+=w; });
-  // pastki qator: dahliz, hammom, balkon
+  living.forEach(rm=>{ const w=(W-16)*rm[1]/lw; out+=`<rect x="${x}" y="8" width="${w}" height="104" ${st}/>`; if(!small) out+=`<text x="${x+w/2}" y="56" text-anchor="middle" font-size="10" fill="#18202b" font-family="Manrope,sans-serif" font-weight="700">${esc(rm[0].replace(" xonasi",""))}</text><text x="${x+w/2}" y="70" text-anchor="middle" font-size="10" fill="#687384" font-family="Manrope,sans-serif">${rm[1]} m²</text>`; x+=w; });
   const bot = service.concat(balc?[balc]:[]); const bw = bot.reduce((a,x)=>a+x[1],0); x=8;
-  bot.forEach(rm=>{ const w=(W-16)*rm[1]/bw; const isB=rm[0]==="Balkon"; out+=`<rect x="${x}" y="112" width="${w}" height="${isB?58:70}" ${st} ${isB?'stroke-dasharray="5 4"':''}/>`; if(!small) out+=`<text x="${x+w/2}" y="142" text-anchor="middle" font-size="10" fill="var(--fg)" font-family="Manrope,sans-serif" font-weight="700">${esc(rm[0])}</text><text x="${x+w/2}" y="156" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="Manrope,sans-serif">${rm[1]} m²</text>`; x+=w; });
+  bot.forEach(rm=>{ const w=(W-16)*rm[1]/bw; const isB=rm[0]==="Balkon"; out+=`<rect x="${x}" y="112" width="${w}" height="${isB?58:70}" ${st} ${isB?'stroke-dasharray="5 4" fill-opacity=".5"':''}/>`; if(!small) out+=`<text x="${x+w/2}" y="142" text-anchor="middle" font-size="10" fill="#18202b" font-family="Manrope,sans-serif" font-weight="700">${esc(rm[0])}</text><text x="${x+w/2}" y="156" text-anchor="middle" font-size="10" fill="#687384" font-family="Manrope,sans-serif">${rm[1]} m²</text>`; x+=w; });
   return out+"</svg>";
 }
+/* qavat sxemasi: 4 xonadon, tanlangani oltin rangda, kompas bilan */
+function floorSVG(u){
+  const pos = {1:[10,46],2:[60,46],3:[60,10],4:[10,10]};
+  let s = `<svg viewBox="0 0 118 96" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${u.floor}-qavat sxemasi, xonadon ${u.n}">`;
+  s += `<rect x="6" y="6" width="104" height="80" rx="6" fill="#fff" stroke="#c9d1db" stroke-width="1.5"/>`;
+  [1,2,3,4].forEach(n=>{ const [x,y]=pos[n]; const me=n===u.n; s+=`<rect x="${x}" y="${y}" width="46" height="34" rx="4" fill="${me?"#f2b544":"#eef1f5"}" ${me?'stroke="#9a6510" stroke-width="1.5"':''}/><text x="${x+23}" y="${y+21}" text-anchor="middle" font-size="10" font-weight="800" font-family="Manrope,sans-serif" fill="${me?"#4a2f00":"#8f9aa7"}">${u.block}-${u.floor}0${n}</text>`; });
+  s += `<text x="58" y="95" text-anchor="middle" font-size="8" font-weight="700" fill="#687384" font-family="Manrope,sans-serif">koʻcha · janub</text>`;
+  s += `<text x="58" y="4.5" text-anchor="middle" font-size="7" font-weight="700" fill="#687384" font-family="Manrope,sans-serif" dominant-baseline="hanging">hovli</text>`;
+  return s+"</svg>";
+}
+
+/* ======================================================================
+   3D bino (three.js). Har bir deraza bitta xonadonga tegishli.
+   Holat: boʻsh = yoniq, band = xira, sotilgan = oʻchgan. Filtrda mos kelmaganlar xiralashadi.
+   ====================================================================== */
+const Bld = (function(){
+  const T = window.THREE; if(!T) return null;
+  let r; try{ r = new T.WebGLRenderer({antialias:true, powerPreference:"high-performance"}); }catch(e){ return null; }
+  if (!r || !r.getContext()) return null;
+  r.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+  r.outputEncoding = T.sRGBEncoding; r.toneMapping = T.ACESFilmicToneMapping; r.toneMappingExposure = 0.92;
+  r.shadowMap.enabled = true; r.shadowMap.type = T.PCFSoftShadowMap;
+  const el = r.domElement;
+  const scene = new T.Scene();
+
+  // osmon: kechki payt, yorug' (chiroqlar ko'rinadi, lekin sahna yorug')
+  const sc = document.createElement("canvas"); sc.width=2; sc.height=256; const sg=sc.getContext("2d");
+  const gr=sg.createLinearGradient(0,0,0,256); gr.addColorStop(0,"#8fb2dc"); gr.addColorStop(.5,"#cfdcec"); gr.addColorStop(.82,"#f1ddc9"); gr.addColorStop(1,"#f6e6d4");
+  sg.fillStyle=gr; sg.fillRect(0,0,2,256);
+  const sky = new T.CanvasTexture(sc); sky.encoding = T.sRGBEncoding; scene.background = sky;
+  scene.fog = new T.Fog(0xeedfd0, 170, 380);
+
+  scene.add(new T.HemisphereLight(0xd6e2f2, 0xa89c88, 0.6));
+  const sun = new T.DirectionalLight(0xffd7ab, 1.15); sun.position.set(-70, 60, 55); sun.castShadow = true;
+  sun.shadow.mapSize.set(1024,1024); Object.assign(sun.shadow.camera,{left:-90,right:90,top:70,bottom:-50,near:10,far:260}); sun.shadow.bias=-0.0006;
+  scene.add(sun);
+  const fill = new T.DirectionalLight(0xc7d8ff, 0.35); fill.position.set(60, 30, -50); scene.add(fill);
+
+  const M = (c,o)=>new T.MeshStandardMaterial(Object.assign({color:c, roughness:.9, metalness:0}, o||{}));
+  const box = (w,h,d,mat,x,y,z,parent,shadow)=>{ const m=new T.Mesh(new T.BoxGeometry(w,h,d),mat); m.position.set(x,y,z); if(shadow!==false){ m.castShadow=true; m.receiveShadow=true; } (parent||scene).add(m); return m; };
+  const plane = (w,h,mat,x,y,z)=>{ const m=new T.Mesh(new T.PlaneGeometry(w,h),mat); m.rotation.x=-Math.PI/2; m.position.set(x,y,z); m.receiveShadow=true; scene.add(m); return m; };
+
+  // yer, maydon, yo'l
+  plane(800,800, M(0xd6ddcf), 0,0,0);
+  plane(150,64, M(0xeceeea,{roughness:.95}), 0,.02,-3);
+  plane(800,11, M(0x9aa1a8,{roughness:.85}), 0,.03,33);
+  plane(800,2.2, M(0xe4e1da), 0,.04,26.6);
+  const dashG = new T.PlaneGeometry(3,.25), dashM = new T.MeshBasicMaterial({color:0xf4f1ea});
+  const dashes = new T.InstancedMesh(dashG, dashM, 60); const tmp = new T.Object3D();
+  for(let i=0;i<60;i++){ tmp.position.set(-240+i*8,.05,33); tmp.rotation.set(-Math.PI/2,0,0); tmp.updateMatrix(); dashes.setMatrixAt(i,tmp.matrix); } scene.add(dashes);
+
+  // binolar
+  const FH=3.2, W=24, D=12, NF=CFG.floors, BASE=1.1, H=BASE+NF*FH;
+  const BX = b => (CFG.blocks.indexOf(b) - (CFG.blocks.length-1)/2)*40;
+  const wallM = M(0xe2dbcf,{roughness:.9}), wall2M = M(0xcfc6b8,{roughness:.9}), trimM = M(0xbfc4cb,{roughness:.6}), plinthM = M(0x7f8894,{roughness:.7});
+  const glassRail = new T.MeshStandardMaterial({color:0xd2e2f1, transparent:true, opacity:.42, roughness:.1, metalness:.2});
+  const pickables = [];
+  const bandG = new T.BoxGeometry(W+0.5,.24,D+0.5), balcG = new T.BoxGeometry(3.6,.2,1.3), railG = new T.BoxGeometry(3.6,.95,.06);
+  const bands = new T.InstancedMesh(bandG, trimM, CFG.blocks.length*NF); let bi=0;
+  const balcs = new T.InstancedMesh(balcG, trimM, CFG.blocks.length*NF*2); const rails = new T.InstancedMesh(railG, glassRail, CFG.blocks.length*NF*2); let ki=0;
+  bands.castShadow = balcs.castShadow = true; bands.receiveShadow = balcs.receiveShadow = true;
+  CFG.blocks.forEach(b=>{
+    const x0 = BX(b);
+    const body = box(W, H, D, wallM, x0, H/2, 0); pickables.push(body);
+    box(W+0.8, BASE, D+0.8, plinthM, x0, BASE/2, 0);
+    box(W+0.6, .7, D+0.6, trimM, x0, H+.35, 0);                 // parapet
+    box(7, 2.6, 5, wall2M, x0-4, H+1.3, -1);                      // tom ustidagi chiqish
+    box(.7, H, .7, wall2M, x0, H/2, D/2+.2); box(.7, H, .7, wall2M, x0, H/2, -D/2-.2); // markaziy ustunlar
+    box(6, .35, 3, trimM, x0, BASE+2.6, D/2+1.5);                 // kirish soyabon
+    box(2.4, 2.4, .1, M(0x46505c,{roughness:.3,metalness:.3}), x0, BASE+1.2, D/2+.06, null, false); // eshik
+    for(let f=1; f<=NF; f++){ tmp.position.set(x0, BASE+f*FH-.12, 0); tmp.rotation.set(0,0,0); tmp.updateMatrix(); bands.setMatrixAt(bi++, tmp.matrix); }
+    // blok harfi
+    const lc=document.createElement("canvas"); lc.width=lc.height=128; const lg=lc.getContext("2d");
+    lg.fillStyle="#2448a6"; lg.beginPath(); lg.arc(64,64,60,0,7); lg.fill(); lg.fillStyle="#fff"; lg.font="700 76px Unbounded, Arial Black, sans-serif"; lg.textAlign="center"; lg.textBaseline="middle"; lg.fillText(b,64,70);
+    const lt=new T.CanvasTexture(lc); lt.encoding=T.sRGBEncoding;
+    const lm=new T.Mesh(new T.PlaneGeometry(3.2,3.2), new T.MeshBasicMaterial({map:lt, transparent:true}));
+    lm.position.set(x0+8.5, H-1.7, D/2+.05); scene.add(lm);
+    const lm2=lm.clone(); lm2.position.set(x0-8.5, H-1.7, -D/2-.05); lm2.rotation.y=Math.PI; scene.add(lm2);
+  });
+  scene.add(bands);
+
+  // derazalar
+  const WINS = [];  // {u, m(matrix), rank}
+  UNITS.forEach(u=>{
+    const s = SIDES[u.n], x0 = BX(u.block), yb = BASE+(u.floor-1)*FH, yc = yb+FH*.52;
+    const xa = s.west ? -W/2 : 0, cnt = u.rooms+1, span = W/2-2.4;
+    const zf = s.front ? D/2 : -D/2, rot = s.front ? 0 : Math.PI;
+    for(let k=0;k<cnt;k++){ const x = x0 + xa + 1.2 + (k+.5)*span/cnt; add(u, x, yc, zf+(s.front?.04:-.04), rot); }
+    const xs = s.west ? x0-W/2-.04 : x0+W/2+.04, rs = s.west ? -Math.PI/2 : Math.PI/2;
+    [1.9,4.3].forEach(z=>add(u, xs, yc, s.front?z:-z, rs));
+    if (s.front && u.floor>=2){ const bx = x0 + xa + W/4 + (s.west?0:0);
+      tmp.position.set(bx, yb+.1, D/2+.65); tmp.rotation.set(0,0,0); tmp.updateMatrix(); balcs.setMatrixAt(ki, tmp.matrix);
+      tmp.position.set(bx, yb+.62, D/2+1.28); tmp.updateMatrix(); rails.setMatrixAt(ki++, tmp.matrix); }
+  });
+  balcs.count = rails.count = ki; scene.add(balcs); scene.add(rails);
+  function add(u,x,y,z,ry){ tmp.position.set(x,y,z); tmp.rotation.set(0,ry,0); tmp.scale.set(1,1,1); tmp.updateMatrix(); WINS.push({u, m:tmp.matrix.clone(), rank:(u.floor-1)/NF*.75 + rnd()*.25}); }
+
+  const winG = new T.PlaneGeometry(1.55,1.85), frameG = new T.PlaneGeometry(1.95,2.25), haloG = new T.PlaneGeometry(2.3,2.6);
+  const frames = new T.InstancedMesh(frameG, M(0x7d8794,{roughness:.6}), WINS.length);
+  const frameOff = new T.Matrix4().makeTranslation(0,0,-.015);
+  WINS.forEach((w,i)=>frames.setMatrixAt(i, w.m.clone().multiply(frameOff))); scene.add(frames);
+  const MAT = {
+    // yoniq derazalar yorug'likka bog'liq emas: o'zi nur chiqaradi
+    free: new T.MeshBasicMaterial({color:new T.Color(0xffb93e).convertSRGBToLinear(), toneMapped:false}),
+    held: new T.MeshBasicMaterial({color:new T.Color(0xc77a32).convertSRGBToLinear(), toneMapped:false}),
+    sold: new T.MeshStandardMaterial({color:0x34404e, roughness:.12, metalness:.65}),
+    dim:  new T.MeshStandardMaterial({color:0x6f6a60, emissive:0x4a3a1a, emissiveIntensity:.25, roughness:.3, metalness:.3}),
+    sel:  new T.MeshBasicMaterial({color:new T.Color(0x3f7bff).convertSRGBToLinear(), toneMapped:false})
+  };
+  const IM = {}, MAP = {};
+  Object.keys(MAT).forEach(k=>{ IM[k] = new T.InstancedMesh(winG, MAT[k], WINS.length); IM[k].count=0; IM[k].userData.kind=k; MAP[k]=[]; scene.add(IM[k]); pickables.push(IM[k]); });
+  const haloM = new T.MeshBasicMaterial({color:0xffbf55, transparent:true, opacity:.07, blending:T.AdditiveBlending, depthWrite:false});
+  const haloSelM = new T.MeshBasicMaterial({color:0x6f9bff, transparent:true, opacity:.4, blending:T.AdditiveBlending, depthWrite:false});
+  const halo = new T.InstancedMesh(haloG, haloM, WINS.length), haloSel = new T.InstancedMesh(haloG, haloSelM, 60);
+  const haloOff = new T.Matrix4().makeTranslation(0,0,.03);
+  scene.add(halo); scene.add(haloSel);
+
+  // daraxtlar
+  const trunkG = new T.CylinderGeometry(.25,.35,2.4,6), crownG = new T.IcosahedronGeometry(2.1,0);
+  const trunks = new T.InstancedMesh(trunkG, M(0x8a7560), 70), crowns = new T.InstancedMesh(crownG, M(0x8fae7e,{flatShading:true}), 70);
+  trunks.castShadow = crowns.castShadow = true; let ti=0;
+  const tree=(x,z,s)=>{ tmp.rotation.set(0,rnd()*3,0); tmp.scale.set(s,s,s); tmp.position.set(x,1.2*s,z); tmp.updateMatrix(); trunks.setMatrixAt(ti,tmp.matrix); tmp.position.set(x,(2.4+1.4)*s,z); tmp.updateMatrix(); crowns.setMatrixAt(ti++,tmp.matrix); };
+  for(let i=0;i<22;i++) tree(-70+i*6.6+rnd()*2, 24.5+rnd()*.6, .8+rnd()*.35);
+  for(let i=0;i<26;i++) tree(-62+rnd()*124, -16-rnd()*18, .9+rnd()*.5);
+  for(let i=0;i<8;i++) tree((i<4?-1:1)*(66+rnd()*14), -10+rnd()*30, .9+rnd()*.5);
+  trunks.count = crowns.count = ti; scene.add(trunks); scene.add(crowns);
+  tmp.scale.set(1,1,1);
+
+  // holatni derazalarga yoyish
+  let filterRooms = 0, selId = null, lightsP = 0, intro = null, introDone = false;
+  function stateOf(w){
+    const u = w.u;
+    if (u.id === selId) return "sel";
+    if (w.rank > lightsP) return "sold";
+    if (u.status === "sold") return "sold";
+    if (filterRooms && u.rooms !== filterRooms) return "dim";
+    return u.status === "held" ? "held" : "free";
+  }
+  function refresh(){
+    const c = {free:0,held:0,sold:0,dim:0,sel:0}; let h=0, hs=0;
+    Object.keys(MAP).forEach(k=>MAP[k].length=0);
+    WINS.forEach((w,i)=>{ const s = stateOf(w); IM[s].setMatrixAt(c[s], w.m); MAP[s][c[s]++] = i;
+      if (s==="free") halo.setMatrixAt(h++, w.m.clone().multiply(haloOff));
+      if (s==="sel" && hs<60) haloSel.setMatrixAt(hs++, w.m.clone().multiply(haloOff)); });
+    Object.keys(IM).forEach(k=>{ IM[k].count=c[k]; IM[k].instanceMatrix.needsUpdate=true; });
+    halo.count=h; halo.instanceMatrix.needsUpdate=true; haloSel.count=hs; haloSel.instanceMatrix.needsUpdate=true;
+  }
+
+  // kamera
+  const cam = new T.PerspectiveCamera(30, 1, 1, 900);
+  const V = {yaw:.62, pitch:.22, dist:150, tx:0, ty:13, tz:0}, G = {yaw:.62, pitch:.24, dist:128, tx:0, ty:13, tz:0};
+  function place(){ const cp=Math.cos(V.pitch); cam.position.set(V.tx+V.dist*cp*Math.sin(V.yaw), V.ty+V.dist*Math.sin(V.pitch), V.tz+V.dist*cp*Math.cos(V.yaw)); cam.lookAt(V.tx,V.ty,V.tz); }
+  const wrap = a => { a = (a+Math.PI)%(2*Math.PI); if(a<0) a+=2*Math.PI; return a-Math.PI; };
+  function aimYaw(y){ G.yaw = V.yaw + wrap(y - V.yaw); }
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+  // boshqaruv: surish = aylantirish, ikki barmoq/gʻildirak = yaqinlashtirish, bosish = tanlash
+  let host=null, opts={}, auto=false, raf=0, lastT=0, idleAt=0;
+  const ptr = new Map(); let moved=0, pinch0=0, dist0=0;
+  el.style.touchAction = "none";
+  el.addEventListener("pointerdown", e=>{
+    if (!opts.interactive) return;
+    try{ el.setPointerCapture(e.pointerId); }catch(_){}
+    ptr.set(e.pointerId,{x:e.clientX,y:e.clientY}); if (ptr.size===1) moved=0;
+    if (ptr.size===2){ const [a,b]=[...ptr.values()]; pinch0=Math.hypot(a.x-b.x,a.y-b.y)||1; dist0=G.dist; moved=99; }
+    auto=false; idleAt=performance.now(); opts.onTouch && opts.onTouch();
+  });
+  el.addEventListener("pointermove", e=>{
+    if (!ptr.has(e.pointerId)) return; const p=ptr.get(e.pointerId), dx=e.clientX-p.x, dy=e.clientY-p.y; ptr.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if (ptr.size===1){ G.yaw -= dx*.009; G.pitch = clamp(G.pitch + dy*.005, .05, 1.05); moved += Math.abs(dx)+Math.abs(dy); }
+    else if (ptr.size===2){ const [a,b]=[...ptr.values()]; G.dist = clamp(dist0*pinch0/(Math.hypot(a.x-b.x,a.y-b.y)||1), 34, 230); }
+  });
+  const up = e=>{ if (!ptr.has(e.pointerId)) return; ptr.delete(e.pointerId); if (moved<8 && ptr.size===0) pick(e); };
+  el.addEventListener("pointerup", up); el.addEventListener("pointercancel", e=>ptr.delete(e.pointerId));
+  el.addEventListener("wheel", e=>{ if(!opts.interactive) return; e.preventDefault(); G.dist = clamp(G.dist*(1+e.deltaY*.0012), 34, 230); }, {passive:false});
+  el.addEventListener("click", ()=>{ if(!opts.interactive && opts.onTap) opts.onTap(); });
+
+  const ray = new T.Raycaster(), ndc = new T.Vector2();
+  function pick(e){
+    const b = el.getBoundingClientRect(); ndc.set(((e.clientX-b.left)/b.width)*2-1, -((e.clientY-b.top)/b.height)*2+1);
+    ray.setFromCamera(ndc, cam);
+    const hit = ray.intersectObjects(pickables, false)[0];
+    if (!hit || hit.instanceId===undefined || !hit.object.userData.kind){ opts.onPick && opts.onPick(null); return; }
+    const w = WINS[MAP[hit.object.userData.kind][hit.instanceId]]; opts.onPick && opts.onPick(w ? w.u : null);
+  }
+
+  function resize(){ if(!host) return; const w=host.clientWidth, h=host.clientHeight; if(!w||!h) return; r.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix(); }
+  const ro = window.ResizeObserver ? new ResizeObserver(resize) : null;
+  function frame(t){
+    raf = requestAnimationFrame(frame);
+    const dt = Math.min(64, t-(lastT||t)); lastT = t;
+    if (opts.interactive && !auto && !ptr.size && !selId && t-idleAt > 9000) auto = true;
+    if (auto) G.yaw += dt*.00009;
+    const k = 1-Math.pow(.86, dt/16);
+    for (const key in V) V[key] += (G[key]-V[key])*k;
+    place();
+    if (intro!==null){ lightsP = Math.min(1.01, (t-intro)/1700); refresh(); if (lightsP>1){ intro=null; introDone=true; } }
+    const pk = .5+.5*Math.sin(t/230); MAT.sel.color.setRGB(.02+.16*pk, .12+.22*pk, .85+.15*pk); haloSelM.opacity = .16 + .12*pk;
+    r.render(scene, cam);
+  }
+  document.addEventListener("visibilitychange", ()=>{ if (document.hidden){ cancelAnimationFrame(raf); raf=0; } else if (host && !raf){ lastT=0; raf=requestAnimationFrame(frame); } });
+
+  return {
+    mount(container, o){
+      opts = o||{}; host = container; container.appendChild(el); auto = !!opts.auto; idleAt = performance.now();
+      el.style.touchAction = opts.interactive ? "none" : "pan-y"; el.style.cursor = opts.interactive ? "grab" : "pointer";
+      if (ro){ ro.disconnect(); ro.observe(container); } resize();
+      if (!introDone && intro===null){ intro = performance.now(); }
+      if (!raf){ lastT=0; raf = requestAnimationFrame(frame); }
+    },
+    unmount(){ if (raf){ cancelAnimationFrame(raf); raf=0; } if (ro) ro.disconnect(); host=null; ptr.clear(); },
+    overview(){ selId=null; refresh(); Object.assign(G,{tx:0,ty:13,tz:0,dist:175,pitch:.26}); aimYaw(.62); },
+    hero(){ Object.assign(G,{tx:0,ty:11,tz:0,dist:150,pitch:.19}); },
+    block(b, back){ Object.assign(G,{tx:BX(b),ty:14,tz:0,dist:96,pitch:.17}); aimYaw(back ? Math.PI-.5 : .5); },
+    side(back){ aimYaw(back ? Math.PI-.45 : .45); },
+    focus(u){ const s=SIDES[u.n]; selId=u.id; refresh(); Object.assign(G,{tx:BX(u.block)+(s.west?-4:4), ty:BASE+(u.floor-1)*FH-4, tz:0, dist:62, pitch:.14});
+      aimYaw(s.front ? (s.west?-.55:.55) : (s.west?Math.PI+.55:Math.PI-.55)); },
+    clearSel(){ selId=null; refresh(); },
+    filter(rooms){ filterRooms=rooms; refresh(); },
+    // uy derazasining ekrandagi joyi (sinov va kelajakdagi izohlar uchun)
+    screenOf(id){ const w = WINS.find(w=>w.u.id===id); if(!w||!host) return null; const v=new T.Vector3().setFromMatrixPosition(w.m).project(cam); const b=el.getBoundingClientRect(); return {x:b.left+(v.x+1)/2*b.width, y:b.top+(1-v.y)/2*b.height}; }
+  };
+})();
 
 /* ===== holat ===== */
-const S = { tab:"home", rooms:0, block:"B", calcPrice:null, calcUnit:null, mode:"inst", down:30, term:12, mYears:15, sel:null };
+const S = { tab:"home", rooms:0, block:"B", back:false, view:"3d", bRooms:0, calcPrice:null, calcUnit:null, mode:"inst", down:30, term:12, mYears:15, hinted:false };
 const NAV = [
   ["home","Asosiy",'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],
-  ["list","Kvartiralar",'<rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 7h2M14 7h2M8 11h2M14 11h2M8 15h2M14 15h2"/>'],
-  ["board","Shaxmatka",'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'],
-  ["calc","Kalkulyator",'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 11h1M12 11h1M16 11h0M8 15h1M12 15h1M8 18h1M12 18h1M16 15v3"/>'],
+  ["bino","Bino",'<path d="M4 21V7l7-4v18M11 21V9l9 3v9M2 21h20"/><path d="M7 9h1M7 13h1M7 17h1M14 14h2M14 18h2"/>'],
+  ["list","Uylar",'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>'],
+  ["calc","Hisob",'<rect x="5" y="2" width="14" height="20" rx="2.5"/><path d="M8 6h8M8 11h1M12 11h1M16 11h0M8 15h1M12 15h1M8 18h1M12 18h1M16 15v3"/>'],
   ["lead","Ariza",'<path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/>']
 ];
 function renderNav(){
   $("#nav").innerHTML = NAV.map(([k,l,p])=>`<button type="button" data-tab="${k}" ${S.tab===k?'aria-current="page"':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${p}</svg>${l}</button>`).join("");
 }
-function go(tab){ S.tab=tab; haptic(); render(); $("#scr").scrollTop=0; }
+function go(tab){ closeSheet(); S.tab=tab; haptic(); render(); $("#scr").scrollTop=0; }
 
 function unitCard(u){
-  const ins = installment(u.price, CFG.minDownPct+10, 24);
-  return `<button type="button" class="card" data-unit="${u.id}">${planSVG(u.rooms,true)}<div><div class="ti">${u.rooms} xonali · ${u.area} m²</div><div class="meta">${u.block} blok · ${u.floor}-qavat · №${u.id}</div><div class="pr">${som(u.price)}</div><div class="mo">oyiga ${mln(ins.monthly)} soʻmdan</div></div></button>`;
+  const ins = installment(u.price, CFG.minDownPct+10, 24), sd = sideTxt(u);
+  return `<button type="button" class="card" data-unit="${u.id}"><span class="pl">${planSVG(u.rooms,true)}</span><div><div class="ti">${u.rooms} xonali, ${u.area} m²</div><div class="meta"><span class="dot ${u.status}"></span>${u.block} blok, ${u.floor}-qavat, ${sd.short}</div><div class="pr">${som(u.price)}</div><div class="mo">oyiga ${mln(ins.monthly)} soʻmdan</div></div></button>`;
 }
+const IC = {
+  turn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg>',
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>'
+};
 
 const V = {
 home(){
   const free = UNITS.filter(u=>u.status==="free"); const minP = Math.min(...free.map(u=>u.price));
   const picks = [1,2,3].map(r=>free.filter(u=>u.rooms===r).sort((a,b)=>a.price-b.price)[0]).filter(Boolean);
-  return `<div class="hero"><canvas id="sky" aria-hidden="true"></canvas><h3>Magic City</h3><p>Kattaqoʻrgʻon · 9 qavatli turar-joy majmuasi · 3 blok</p></div>
-  <div class="stats"><div class="stat"><b>${free.length}</b><span>boʻsh xonadon</span></div><div class="stat"><b>${Math.round(minP/1e6)} mln</b><span>narx, soʻmdan</span></div><div class="stat"><b>${CFG.maxMonths} oy</b><span>gacha boʻlib toʻlash</span></div></div>
-  <div class="row2"><button type="button" class="btn" data-go="calc">Hisoblash</button><button type="button" class="btn ghost" data-go="lead">Tashrif buyurish</button></div>
-  <div class="sec-t">Eng arzon takliflar <a data-go="list">Barchasi</a></div>
+  return `<div class="hero" id="hero" role="button" tabindex="0" aria-label="3D binoni ochish">${Bld?'<div class="gl-host" id="gl"></div>':'<canvas id="sky" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%"></canvas>'}<div class="hero-shade"></div>
+    <div class="hero-cap"><div><h3>Magic City</h3><p>Kattaqoʻrgʻon, 9 qavatli 3 blok</p></div>${Bld?'<button type="button" class="go3d" data-go="bino">Binoni aylantirish</button>':''}</div></div>
+  <div class="stats"><div class="stat lit"><b>${free.length}</b><span>deraza yoniq, uy boʻsh</span></div><div class="stat"><b>${Math.round(minP/1e6)} mln</b><span>soʻmdan boshlab</span></div><div class="stat"><b>${CFG.maxMonths} oy</b><span>gacha boʻlib toʻlash</span></div></div>
+  <div class="row2"><button type="button" class="btn" data-go="calc">Narxni hisoblash</button><button type="button" class="btn soft" data-go="lead">Tashrifga yozilish</button></div>
+  <div class="sec-t">Eng arzon takliflar <button type="button" data-go="list">Barchasi</button></div>
   ${picks.map(unitCard).join("")}
-  <div class="ref"><b>Doʻstingizni taklif qiling</b><span class="muted">Doʻstingiz shu havola orqali xonadon sotib olsa, sizga bonus beriladi (namuna: 3 000 000 soʻm).</span><code>t.me/MagicCityBot?start=ref_${tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user.id:"123456"}</code></div>`;
+  <div class="ref"><b>Doʻstingizni taklif qiling</b><span class="muted">Doʻstingiz shu havola orqali uy sotib olsa, sizga bonus beriladi (namuna: 3 000 000 soʻm).</span><code>t.me/MagicCityBot?start=ref_${tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user.id:"123456"}</code></div>`;
+},
+bino(){
+  const us = UNITS.filter(u=>u.block===S.block), cnt = s=>us.filter(u=>u.status===s).length;
+  const match = us.filter(u=>u.status==="free" && (!S.bRooms || u.rooms===S.bRooms)).length;
+  const roomChips = `<div class="chips" role="group" aria-label="Xonalar soni">${[0,1,2,3,4].map(r=>`<button type="button" class="chip" data-brooms="${r}" aria-pressed="${S.bRooms===r}">${r?r+" xonali":"Hammasi"}</button>`).join("")}</div>`;
+  const count = `<div class="count">${S.block} blokda <b>${match} ta</b> ${S.bRooms?S.bRooms+" xonali ":""}boʻsh uy. Band: ${cnt("held")}, sotilgan: ${cnt("sold")}.</div>`;
+  const blockSeg = `<div class="seg3" role="group" aria-label="Blok"><span class="seg3-l">Blok</span>${CFG.blocks.map(b=>`<button type="button" data-block="${b}" aria-pressed="${S.block===b}" aria-label="${b} blok">${b}</button>`).join("")}</div>`;
+  if (Bld && S.view==="3d"){
+    return `<div class="view" id="view"><div class="gl-host" id="gl"></div>
+      <div class="view-top">${blockSeg}<div class="seg3" role="group" aria-label="Tomon"><button type="button" data-side="front" aria-pressed="${!S.back}">Koʻcha</button><button type="button" data-side="back" aria-pressed="${S.back}">Hovli</button></div></div>
+      ${S.hinted?"":'<div class="hint" id="hint">Suring: aylanadi. Yoniq derazani bosing.</div>'}
+      <div class="view-bot"><div class="legend" aria-label="Belgilar"><span><i class="l-free"></i>Boʻsh, yoniq</span><span><i class="l-held"></i>Band qilingan</span><span><i class="l-sold"></i>Sotilgan</span></div>
+      <div class="vstack"><button type="button" class="vbtn" data-act="turn" aria-label="Binoni boshqa tomonga burish">${IC.turn}</button><button type="button" class="vbtn" data-act="all" aria-label="Hamma bloklarni koʻrsatish">${IC.home}</button></div></div>
+    </div>${roomChips}${count}<button type="button" class="linkbtn" data-view="grid">Jadval koʻrinishida ochish</button>`;
+  }
+  let cells="";
+  for(let f=CFG.floors; f>=1; f--){ cells+=`<div class="fl-n">${f}</div>`; us.filter(u=>u.floor===f).forEach(u=>{ const off = S.bRooms && u.rooms!==S.bRooms; cells+=`<button type="button" class="cell ${u.status}${off?" off":""}" data-unit="${u.id}" ${u.status==="sold"?'disabled':''} aria-label="${u.id}, ${u.rooms} xonali, ${statusTxt[u.status]}">${u.rooms}x<small>${u.area}</small></button>`; }); }
+  return `<div class="chips" role="group" aria-label="Blok">${CFG.blocks.map(b=>`<button type="button" class="chip" data-block="${b}" aria-pressed="${S.block===b}">${b} blok</button>`).join("")}</div>
+  ${roomChips}${count}<div class="board">${cells}</div><div class="muted">Katakda: xonalar soni va maydon (m²). Chapdagi raqam qavat. Boʻsh uyni bosing.</div>
+  ${Bld?'<button type="button" class="linkbtn" data-view="3d">3D binoga qaytish</button>':''}`;
 },
 list(){
   const items = UNITS.filter(u=>u.status!=="sold" && (!S.rooms || u.rooms===S.rooms)).sort((a,b)=>a.price-b.price);
-  return `<div class="chips" role="group" aria-label="Xonalar soni">${[0,1,2,3,4].map(r=>`<button type="button" class="chip" data-rooms="${r}" aria-pressed="${S.rooms===r}">${r?r+" xonali":"Barchasi"}</button>`).join("")}</div>
-  <div class="muted">${items.length} ta xonadon topildi · narx boʻyicha</div>
+  return `<div class="chips" role="group" aria-label="Xonalar soni">${[0,1,2,3,4].map(r=>`<button type="button" class="chip" data-rooms="${r}" aria-pressed="${S.rooms===r}">${r?r+" xonali":"Hammasi"}</button>`).join("")}</div>
+  <div class="muted">${items.length} ta uy, arzonidan boshlab</div>
   ${items.slice(0,30).map(unitCard).join("")}`;
 },
-board(){
-  const us = UNITS.filter(u=>u.block===S.block); let cells="";
-  for(let f=CFG.floors; f>=1; f--){ cells+=`<div class="fl-n">${f}</div>`; us.filter(u=>u.floor===f).forEach(u=>{ cells+=`<button type="button" class="cell ${u.status}" data-unit="${u.id}" ${u.status==="sold"?'disabled':''} aria-label="${u.id}, ${u.rooms} xonali, ${statusTxt[u.status]}">${u.rooms}x<small>${u.area}</small></button>`; }); }
-  const cnt = s=>us.filter(u=>u.status===s).length;
-  return `<div class="chips" role="group" aria-label="Blok">${CFG.blocks.map(b=>`<button type="button" class="chip" data-block="${b}" aria-pressed="${S.block===b}">${b} blok</button>`).join("")}</div>
-  <div class="legend"><span><i style="background:var(--free)"></i>Boʻsh ${cnt("free")}</span><span><i style="background:var(--held)"></i>Band ${cnt("held")}</span><span><i style="background:var(--sold)"></i>Sotilgan ${cnt("sold")}</span></div>
-  <div class="board">${cells}</div><div class="muted">Katakda: xonalar soni va maydon (m²). Boʻsh xonadonni bosing.</div>`;
-},
 calc(){
-  const u = S.calcUnit ? UNITS.find(x=>x.id===S.calcUnit) : null;
+  const u = S.calcUnit ? byId(S.calcUnit) : null;
   const mort = S.mode==="mort"; const minD = mort?CFG.mortgage.minDownPct:CFG.minDownPct; if(S.down<minD) S.down=minD;
   const terms = mort ? CFG.mortgage.years.map(y=>`<button type="button" class="chip" data-years="${y}" aria-pressed="${S.mYears===y}">${y} yil</button>`).join("")
                      : CFG.terms.map(t=>`<button type="button" class="chip" data-term="${t.m}" aria-pressed="${S.term===t.m}">${t.m} oy</button>`).join("");
   return `<div class="panel">
     <div class="seg" role="group" aria-label="Toʻlov turi"><button type="button" data-mode="inst" aria-pressed="${!mort}">Boʻlib toʻlash</button><button type="button" data-mode="mort" aria-pressed="${mort}">Ipoteka</button></div>
-    <label class="f">Xonadon<select id="pick"><option value="">Turi boʻyicha (2 xonali, 63.8 m²)</option>${[1,2,3,4].map(r=>`<option value="t${r}" ${!u&&S.calcPrice===Math.round(TYPES[r].area*CFG.pricePerM2)?"selected":""}>${r} xonali · ${TYPES[r].area} m² · ${mln(TYPES[r].area*CFG.pricePerM2)}</option>`).join("")}${u?`<option value="u" selected>№${u.id} · ${u.rooms} xonali · ${mln(u.price)}</option>`:""}</select></label>
+    <label class="f">Xonadon<select id="pick"><option value="">Turi boʻyicha (2 xonali, 63.8 m²)</option>${[1,2,3,4].map(r=>`<option value="t${r}" ${!u&&S.calcPrice===Math.round(TYPES[r].area*CFG.pricePerM2)?"selected":""}>${r} xonali, ${TYPES[r].area} m², ${mln(TYPES[r].area*CFG.pricePerM2)}</option>`).join("")}${u?`<option value="u" selected>№${u.id}, ${u.rooms} xonali, ${mln(u.price)}</option>`:""}</select></label>
     <label class="f"><span class="fl">Boshlangʻich toʻlov <span class="v" id="downv"></span></span><input id="down" type="range" min="${minD}" max="90" step="5" value="${S.down}"></label>
     <div class="f">${mort?"Kredit muddati":"Muddat"}<div class="chips" role="group" aria-label="Muddat">${terms}</div>${mort?"":`<label class="f" style="margin-top:4px">Yoki oʻzingiz yozing (oy)<input id="termIn" type="number" inputmode="numeric" min="1" max="${CFG.maxMonths}" step="1" placeholder="Masalan, 60" value="${CFG.terms.some(t=>t.m===S.term)?"":S.term}"></label><span class="muted" id="termHint">1 dan ${CFG.maxMonths} oygacha</span>`}</div>
     <div id="calcres" style="display:flex;flex-direction:column;gap:12px">${calcRes()}</div>
   </div><button type="button" class="btn" data-go="lead">Shu shartlar bilan ariza qoldirish</button>`;
 },
 lead(){
-  const u = S.calcUnit ? UNITS.find(x=>x.id===S.calcUnit) : null;
+  const u = S.calcUnit ? byId(S.calcUnit) : null;
   const name = tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user ? tg.initDataUnsafe.user.first_name : "";
-  return `<div class="panel"><b style="font-size:16px">Menejer siz bilan bogʻlanadi</b>
+  return `<div class="panel"><b style="font-size:17px">Menejer siz bilan bogʻlanadi</b>
   <form id="leadf" class="kv" style="gap:12px" novalidate>
     <label class="f">Ismingiz<input id="ln" type="text" autocomplete="name" value="${esc(name)}" placeholder="Masalan, Dilshod"></label>
     <label class="f">Telefon raqamingiz<input id="lp" type="tel" autocomplete="tel" placeholder="+998 __ ___ __ __"></label>
-    <label class="f">Qiziqish<select id="li">${u?`<option>№${u.id} · ${u.rooms} xonali · ${mln(u.price)}</option>`:""}<option>1 xonali</option><option selected>2 xonali</option><option>3 xonali</option><option>4 xonali</option></select></label>
+    <label class="f">Qiziqish<select id="li">${u?`<option>№${u.id}, ${u.rooms} xonali, ${u.floor}-qavat, ${sideTxt(u).short}, ${mln(u.price)}</option>`:""}<option>1 xonali</option><option ${u?"":"selected"}>2 xonali</option><option>3 xonali</option><option>4 xonali</option></select></label>
     <label class="f">Nima qilmoqchisiz<select id="lw"><option>Qoʻngʻiroq qilishsin</option><option>Obyektni koʻrishga boraman</option><option>Ofisga boraman</option></select></label>
     <label class="f">Qulay vaqt<select id="lt"><option>Bugun</option><option>Ertaga ertalab</option><option>Ertaga kechqurun</option><option>Shanba</option></select></label>
-    <div id="lerr" class="muted" style="color:var(--held)" hidden></div>
+    <div id="lerr" class="muted" style="color:var(--amber);font-weight:700" hidden></div>
     <button class="btn" type="submit">Ariza yuborish</button>
   </form></div>
-  <div class="muted" style="text-align:center">Yoki qoʻngʻiroq qiling: <b style="color:var(--fg);user-select:all">${CFG.managerPhone}</b></div>`;
+  <div class="muted" style="text-align:center">Yoki qoʻngʻiroq qiling: <b style="color:var(--ink);user-select:all">${CFG.managerPhone}</b></div>`;
 }
 };
 
@@ -368,31 +662,36 @@ function calcRes(){
   if (S.mode==="inst"){
     const r = installment(price,S.down,S.term);
     const rows = []; for(let m=1; m<=Math.min(S.term,3); m++) rows.push(`<tr><td>${m}-oy</td><td>${som(r.monthly)}</td></tr>`);
-    return `<div class="res"><div class="lbl">Oylik toʻlov</div><div class="big">${som(r.monthly)}</div><div class="lbl">${S.term} oy davomida${r.markupPct?" · ustama "+r.markupPct+"%":" · ustamasiz"}</div></div>
+    return `<div class="res"><div class="lbl">Oylik toʻlov</div><div class="big">${som(r.monthly)}</div><div class="lbl">${S.term} oy davomida, ${r.markupPct?"ustama "+r.markupPct+"%":"ustamasiz"}</div></div>
     <div class="kv"><div><span>Xonadon narxi</span><b>${som(price)}</b></div><div><span>Boshlangʻich toʻlov (${S.down}%)</span><b>${som(r.down)}</b></div><div><span>Qolgan summa</span><b>${som(r.rest)}</b></div><div><span>Ustama</span><b>${som(r.markup)}</b></div><div><span>Jami toʻlov</span><b>${som(r.total)}</b></div></div>
     <table class="sched"><thead><tr><th>Toʻlov jadvali</th><th>Summa</th></tr></thead><tbody><tr><td>Shartnoma kuni</td><td>${som(r.down)}</td></tr>${rows.join("")}${S.term>3?`<tr><td>… ${S.term}-oygacha</td><td>${som(r.monthly)}</td></tr>`:""}</tbody></table>`;
   }
   const r = annuity(price,S.down,S.mYears,CFG.mortgage.rate);
-  return `<div class="res"><div class="lbl">Oylik toʻlov (taxminiy)</div><div class="big">${som(r.monthly)}</div><div class="lbl">${S.mYears} yil · yillik ${CFG.mortgage.rate}%</div></div>
+  return `<div class="res"><div class="lbl">Oylik toʻlov (taxminiy)</div><div class="big">${som(r.monthly)}</div><div class="lbl">${S.mYears} yil, yillik ${CFG.mortgage.rate}%</div></div>
     <div class="kv"><div><span>Xonadon narxi</span><b>${som(price)}</b></div><div><span>Boshlangʻich toʻlov (${S.down}%)</span><b>${som(r.down)}</b></div><div><span>Kredit summasi</span><b>${som(r.loan)}</b></div><div><span>Foizlar jami</span><b>${som(r.overpay)}</b></div></div>
     <div class="muted">Ipoteka shartlari bankka bogʻliq. Hisob annuitet usulida.</div>`;
 }
-function updCalc(){ const v=$("#downv"); if(v) v.textContent = S.down+"% · "+mln(calcPrice()*S.down/100); const c=$("#calcres"); if(c) c.innerHTML=calcRes(); }
+function updCalc(){ const v=$("#downv"); if(v) v.textContent = S.down+"%, "+mln(calcPrice()*S.down/100); const c=$("#calcres"); if(c) c.innerHTML=calcRes(); }
 
+/* ===== xonadon varaqasi ===== */
+function closeSheet(){ const sh=document.querySelector(".sheet-bg"); if(sh){ sh.remove(); if(Bld){ Bld.clearSel(); if(S.tab==="bino" && S.view==="3d") Bld.block(S.block, S.back); } } }
 function openUnit(id){
-  const u = UNITS.find(x=>x.id===id); if(!u || u.status==="sold") return; haptic();
-  const ins = installment(u.price, 30, 24);
+  const u = byId(id); if(!u || u.status==="sold") return; haptic("sel"); closeSheet();
+  if (Bld && S.tab==="bino" && S.view==="3d"){ if (S.block!==u.block){ S.block=u.block; softRenderBino(); } Bld.focus(u); }
+  const ins = installment(u.price, 30, 24), sd = sideTxt(u);
   const bg = document.createElement("div"); bg.className="sheet-bg";
   bg.innerHTML = `<div class="sheet" role="dialog" aria-label="Xonadon ${u.id}"><div class="grab"></div>
-   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h4>${u.rooms} xonali · ${u.area} m²</h4><span class="pill ${u.status}">${statusTxt[u.status]}</span></div>
-   <div class="muted">${u.block} blok · ${u.floor}-qavat · xonadon №${u.id}</div>
-   <div class="plan">${planSVG(u.rooms,false)}</div>
+   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h4>${u.rooms} xonali, ${u.area} m²</h4><span class="pill ${u.status}">${statusTxt[u.status]}</span></div>
+   <div class="where">${floorSVG(u)}<p><b>${u.block} blok, ${u.floor}-qavat</b>Xonadon №${u.id}<br>Derazalar: ${sd.main.toLowerCase()} va ${sd.corner}ga</p></div>
    <div class="kv"><div><span>Narxi</span><b>${som(u.price)}</b></div><div><span>1 m² narxi</span><b>${som(u.price/u.area)}</b></div><div><span>Boshlangʻich 30%</span><b>${som(ins.down)}</b></div><div><span>24 oyga boʻlib</span><b>oyiga ${som(ins.monthly)}</b></div></div>
-   <div class="row2"><button type="button" class="btn ghost" data-calcunit="${u.id}">Hisoblash</button><button type="button" class="btn" data-leadunit="${u.id}">${u.status==="held"?"Navbatga yozilish":"Band qilish"}</button></div>
+   <div class="plan">${planSVG(u.rooms,false)}</div>
+   <div class="row2"><button type="button" class="btn soft" data-calcunit="${u.id}">Narxni hisoblash</button><button type="button" class="btn ${u.status==="held"?"":"gold"}" data-leadunit="${u.id}">${u.status==="held"?"Navbatga yozilish":"Band qilish"}</button></div>
   </div>`;
-  bg.addEventListener("click", e=>{ if(e.target===bg) bg.remove(); });
+  bg.addEventListener("click", e=>{ if(e.target===bg) closeSheet(); });
   $("#app").appendChild(bg);
 }
+let toastT=0;
+function toast(txt){ const v=$("#view"); if(!v) return; let t=v.querySelector(".toast"); if(!t){ t=document.createElement("div"); t.className="toast"; v.appendChild(t); } t.textContent=txt; clearTimeout(toastT); toastT=setTimeout(()=>t.remove(),1600); }
 
 function submitLead(e){
   e.preventDefault();
@@ -405,17 +704,38 @@ function submitLead(e){
   if (tg){ try{ tg.sendData(JSON.stringify(lead)); return; }catch(x){} }
   $("#scr").innerHTML = `<div class="ok"><div class="ic">✓</div><b style="font-size:17px">Arizangiz qabul qilindi</b><div class="muted">Menejer 15 daqiqa ichida qoʻngʻiroq qiladi.</div>
   <div class="muted" style="margin-top:10px">Menejerlar Telegram guruhiga shunday xabar keladi:</div><div class="tgmsg">${esc(msg)}</div>
-  <button type="button" class="btn ghost" data-go="home">Bosh sahifaga</button></div>`;
+  <button type="button" class="btn soft" data-go="home">Bosh sahifaga</button></div>`;
+}
+
+/* Bino tabida 3D oynani qayta yaratmasdan faqat pastki qismini yangilash */
+function softRenderBino(){
+  const view = $("#view"); if(!view){ render(); return; }
+  const tmpd = document.createElement("div"); tmpd.innerHTML = V.bino();
+  const nv = tmpd.querySelector("#view");
+  view.querySelector(".view-top").replaceWith(nv.querySelector(".view-top"));
+  let el = view.nextElementSibling; while(el){ const nx = el.nextElementSibling; el.remove(); el = nx; }
+  let after = nv.nextElementSibling; const frag=document.createDocumentFragment(); while(after){ const nx=after.nextElementSibling; frag.appendChild(after); after=nx; }
+  view.after(frag);
 }
 
 function render(){
+  if (Bld) Bld.unmount();
   renderNav(); $("#scr").innerHTML = V[S.tab]();
-  if (S.tab==="home") drawSky();
+  const gl = $("#gl");
+  if (gl && S.tab==="home"){ Bld.hero(); Bld.clearSel(); Bld.filter(0); Bld.mount(gl,{interactive:false, auto:true}); }
+  if (gl && S.tab==="bino"){
+    Bld.filter(S.bRooms); Bld.block(S.block, S.back);
+    Bld.mount(gl,{interactive:true, auto:false,
+      onTouch(){ if(!S.hinted){ S.hinted=true; const h=$("#hint"); if(h) h.style.opacity=0; } },
+      onPick(u){ if(!u) return; if(u.status==="sold"){ haptic(); toast(`№${u.id}: bu uy sotilgan`); return; } openUnit(u.id); }});
+  }
+  if (!Bld && S.tab==="home") drawSky();
+  const hero=$("#hero"); if(hero){ hero.addEventListener("click", e=>{ if(!e.target.closest("button")) go("bino"); }); hero.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go("bino"); } }); }
   const f=$("#leadf"); if(f) f.addEventListener("submit", submitLead);
   const ti=$("#termIn"); if(ti){
     ti.addEventListener("input", e=>{ const h=$("#termHint"); let v=parseInt(e.target.value,10);
       if(!v || v<1){ h.textContent=`1 dan ${CFG.maxMonths} oygacha`; h.style.color=""; return; }
-      if(v>CFG.maxMonths){ h.textContent=`Eng uzun muddat ${CFG.maxMonths} oy`; h.style.color="var(--held)"; v=CFG.maxMonths; }
+      if(v>CFG.maxMonths){ h.textContent=`Eng uzun muddat ${CFG.maxMonths} oy`; h.style.color="var(--amber)"; v=CFG.maxMonths; }
       else { h.textContent=`1 dan ${CFG.maxMonths} oygacha`; h.style.color=""; }
       S.term=v; document.querySelectorAll("[data-term]").forEach(b=>b.setAttribute("aria-pressed", String(+b.dataset.term===v))); updCalc(); });
     ti.addEventListener("change", e=>{ if(+e.target.value>CFG.maxMonths) e.target.value=CFG.maxMonths; });
@@ -424,31 +744,36 @@ function render(){
   const pk=$("#pick"); if(pk) pk.addEventListener("change", e=>{ const v=e.target.value; if(v.startsWith("t")){ S.calcUnit=null; S.calcPrice=Math.round(TYPES[+v.slice(1)].area*CFG.pricePerM2); } else if(!v){ S.calcUnit=null; S.calcPrice=null; } render(); });
 }
 
-/* ko'p qavatli bino silueti */
+/* WebGL bo'lmasa: oddiy bino silueti */
 function drawSky(){
   const c=$("#sky"); if(!c) return; const r=c.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
   c.width=r.width*dpr; c.height=r.height*dpr; const g=c.getContext("2d"); g.scale(dpr,dpr);
-  const grd=g.createLinearGradient(0,0,0,r.height); grd.addColorStop(0,"#0e5f53"); grd.addColorStop(1,"#063229"); g.fillStyle=grd; g.fillRect(0,0,r.width,r.height);
-  const bs=[[0.52,0.30,0.78],[0.70,0.22,0.62],[0.86,0.18,0.5]];
-  bs.forEach(([x,w,h])=>{ const bx=r.width*x, bw=r.width*w*0.8, bh=r.height*h, by=r.height-bh; g.fillStyle="#d8e9e4"; g.globalAlpha=.16; g.fillRect(bx,by,bw,bh); g.globalAlpha=1;
-    const rows=9, cols=4, ph=bh/rows; for(let i=0;i<rows;i++) for(let j=0;j<cols;j++){ g.fillStyle=((i*7+j*3+x*10)|0)%3===0?"#f3d27a":"rgba(220,240,235,.35)"; g.fillRect(bx+6+j*(bw-12)/cols, by+4+i*ph, (bw-12)/cols-5, ph-6); } });
+  const grd=g.createLinearGradient(0,0,0,r.height); grd.addColorStop(0,"#8fb2dc"); grd.addColorStop(1,"#f6e6d4"); g.fillStyle=grd; g.fillRect(0,0,r.width,r.height);
+  [[0.46,0.3,0.78],[0.66,0.22,0.62],[0.82,0.17,0.5]].forEach(([x,w,h],bi)=>{ const bx=r.width*x, bw=r.width*w*0.8, bh=r.height*h, by=r.height-bh; g.fillStyle="#f1ede6"; g.fillRect(bx,by,bw,bh);
+    const rows=9, cols=4, ph=bh/rows; for(let i=0;i<rows;i++) for(let j=0;j<cols;j++){ const u=UNITS[bi*36+(8-i)*4+j]; g.fillStyle=!u||u.status==="sold"?"#3a4654":u.status==="held"?"#d79a52":"#ffc65a"; g.fillRect(bx+6+j*(bw-12)/cols, by+5+i*ph, (bw-12)/cols-6, ph-8); } });
 }
 
 document.addEventListener("click", e=>{
   const t = e.target.closest("button,a"); if(!t) return;
   const ds=t.dataset;
   if(ds.tab) go(ds.tab);
-  else if(ds.go){ const sh=document.querySelector(".sheet-bg"); if(sh) sh.remove(); go(ds.go); }
+  else if(ds.go) go(ds.go);
   else if(ds.rooms!==undefined){ S.rooms=+ds.rooms; render(); }
-  else if(ds.block){ S.block=ds.block; render(); }
+  else if(ds.brooms!==undefined){ S.bRooms=+ds.brooms; haptic("sel"); if(Bld && S.view==="3d"){ Bld.filter(S.bRooms); softRenderBino(); } else render(); }
+  else if(ds.block){ S.block=ds.block; haptic("sel"); closeSheet(); if(Bld && S.view==="3d"){ Bld.block(S.block, S.back); softRenderBino(); } else render(); }
+  else if(ds.side){ S.back = ds.side==="back"; haptic("sel"); closeSheet(); Bld && Bld.side(S.back); softRenderBino(); }
+  else if(ds.act==="turn"){ S.back=!S.back; haptic(); closeSheet(); Bld && Bld.side(S.back); softRenderBino(); }
+  else if(ds.act==="all"){ haptic(); closeSheet(); Bld && Bld.overview(); }
+  else if(ds.view){ S.view=ds.view; render(); }
   else if(ds.term){ S.term=+ds.term; render(); }
   else if(ds.years){ S.mYears=+ds.years; render(); }
   else if(ds.mode){ S.mode=ds.mode; render(); }
   else if(ds.unit) openUnit(ds.unit);
-  else if(ds.calcunit){ const u=UNITS.find(x=>x.id===ds.calcunit); S.calcUnit=u.id; S.calcPrice=u.price; document.querySelector(".sheet-bg").remove(); go("calc"); }
-  else if(ds.leadunit){ S.calcUnit=ds.leadunit; document.querySelector(".sheet-bg").remove(); go("lead"); }
+  else if(ds.calcunit){ const u=byId(ds.calcunit); S.calcUnit=u.id; S.calcPrice=u.price; go("calc"); }
+  else if(ds.leadunit){ S.calcUnit=ds.leadunit; go("lead"); }
 });
-window.addEventListener("resize", ()=>{ if(S.tab==="home") drawSky(); });
+window.MagicCity = { screenOf: id => Bld && Bld.screenOf(id), units: UNITS };
+window.addEventListener("resize", ()=>{ if(S.tab==="home" && !Bld) drawSky(); });
 render();
 })();
 </script>

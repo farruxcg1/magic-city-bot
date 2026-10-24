@@ -136,6 +136,8 @@ def run_webhook():
     app = web.Application()
     app.router.add_get("/", index)
     app.router.add_get("/health", health)
+    # three.js va boshqa kutubxonalar (three.min.js.gz bo'lsa, aiohttp siqilgan holda beradi)
+    app.router.add_static("/vendor", WEBAPP_FILE.parent / "vendor")
     SimpleRequestHandler(dispatcher=dp, bot=bot, secret_token=WEBHOOK_SECRET).register(app, path=WEBHOOK_PATH)
     setup_application(app, dp, bot=bot)
     app.on_startup.append(on_startup)

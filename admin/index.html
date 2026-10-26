@@ -1,0 +1,1301 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Magic City · Boshqaruv</title>
+<link rel="icon" href="/rahbar/static/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+  --bg:#f2f4f7; --surface:#fff; --surface-2:#f7f9fb; --ink:#18202b; --muted:#687384; --faint:#8f9aa7; --line:#e3e8ee; --line-2:#d3dae3;
+  --lapis:#2448a6; --lapis-2:#3a63c9; --lapis-deep:#17327a; --lapis-soft:#e8eefb;
+  --gold:#f2b544; --gold-ink:#8a5a0c; --gold-soft:#fdf2da;
+  --ok:#1d7f55; --ok-soft:#e2f3ea; --bad:#b9372f; --bad-soft:#fbe8e6; --warn:#a86414; --warn-soft:#fbefdc;
+  --sh-1:0 1px 1px rgba(24,32,43,.04),0 2px 6px rgba(24,32,43,.05);
+  --sh-2:0 1px 2px rgba(24,32,43,.05),0 10px 30px -12px rgba(24,32,43,.25);
+  --f-display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:12px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:var(--f-body);font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--lapis);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3{margin:0}
+.muted{color:var(--muted)} .faint{color:var(--faint)} .small{font-size:12.5px} .nowrap{white-space:nowrap} .right{text-align:right} .b{font-weight:700}
+.red{color:var(--bad)} .green{color:var(--ok)}
+
+/* ---------- kirish ---------- */
+.login{min-height:100vh;display:grid;place-items:center;padding:24px 16px;background:
+  radial-gradient(900px 500px at 15% 0%,#dfe7fa 0,transparent 60%),radial-gradient(700px 500px at 100% 100%,#fbefd6 0,transparent 55%),var(--bg)}
+.login form{width:100%;max-width:380px;background:var(--surface);border-radius:20px;padding:32px 28px;box-shadow:var(--sh-2);display:grid;gap:14px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .mark{width:40px;height:40px;border-radius:11px;background:linear-gradient(150deg,var(--lapis-2),var(--lapis-deep));display:grid;place-items:center;color:var(--gold);font-family:var(--f-display);font-weight:600;font-size:15px;flex:none}
+.brand b{display:block;font-family:var(--f-display);font-weight:600;font-size:15px;letter-spacing:-.01em}
+.brand span{font-size:12px;color:var(--muted)}
+.login h1{font-family:var(--f-display);font-weight:500;font-size:20px;margin-top:6px}
+
+/* ---------- karkas ---------- */
+.shell{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:100vh}
+.side{background:var(--surface);border-right:1px solid var(--line);padding:18px 12px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:18px;overflow:auto}
+.side .brand{padding:0 8px}
+.nav{display:grid;gap:2px}
+.nav a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;color:var(--ink);font-weight:600;text-decoration:none}
+.nav a svg{width:18px;height:18px;flex:none;color:var(--faint)}
+.nav a:hover{background:var(--surface-2)}
+.nav a.on{background:var(--lapis-soft);color:var(--lapis-deep)}
+.nav a.on svg{color:var(--lapis)}
+.nav .cnt{margin-left:auto;background:var(--bad);color:#fff;font-size:11px;font-weight:800;border-radius:99px;padding:1px 7px}
+.nav .sep{height:1px;background:var(--line);margin:8px 6px}
+.side .me{margin-top:auto;padding:10px;border-radius:10px;background:var(--surface-2);display:grid;gap:2px}
+.side .me b{font-size:13px}
+.side .me .row{display:flex;gap:10px;margin-top:6px}
+.main{min-width:0;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:12px;padding:16px 28px;background:rgba(242,244,247,.88);backdrop-filter:blur(8px);position:sticky;top:0;z-index:5;border-bottom:1px solid transparent}
+.top h1{font-family:var(--f-display);font-weight:500;font-size:19px;letter-spacing:-.01em;margin-right:auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn.menu-btn{display:none}
+.view{padding:8px 28px 48px;display:grid;gap:18px;align-content:start}
+@media (max-width:980px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed;inset:0 auto 0 0;width:260px;z-index:30;transform:translateX(-100%);transition:transform .2s;box-shadow:var(--sh-2)}
+  body.nav-open .side{transform:none}
+  body.nav-open::after{content:"";position:fixed;inset:0;background:rgba(24,32,43,.3);z-index:20}
+  .btn.menu-btn{display:inline-flex}
+  .top{padding:12px 16px}
+  .view{padding:8px 16px 40px}
+  .top .hide-sm{display:none}
+}
+
+/* ---------- elementlar ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line-2);background:var(--surface);border-radius:10px;padding:8px 14px;font-weight:700;cursor:pointer;white-space:nowrap;text-decoration:none;color:var(--ink);min-height:38px}
+.btn:hover{background:var(--surface-2);text-decoration:none}
+.btn svg{width:16px;height:16px}
+.btn.primary{background:var(--lapis);border-color:var(--lapis);color:#fff}
+.btn.primary:hover{background:var(--lapis-deep)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#3d2700}
+.btn.gold:hover{background:#e9a92f}
+.btn.danger{color:var(--bad);border-color:#efc9c5}
+.btn.danger:hover{background:var(--bad-soft)}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.ghost:hover{background:rgba(24,32,43,.05)}
+.btn.sm{padding:5px 10px;min-height:30px;font-size:13px;border-radius:8px}
+.btn:disabled{opacity:.55;cursor:default}
+.btn:focus-visible,.inp:focus-visible,.chip:focus-visible,.nav a:focus-visible{outline:2px solid var(--lapis-2);outline-offset:2px}
+.card{background:var(--surface);border-radius:var(--r);box-shadow:var(--sh-1);padding:18px 20px;min-width:0}
+.card>h2,.sec-title{font-size:15px;font-weight:800;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.card>h2 .act,.sec-title .act{margin-left:auto;font-size:13px;font-weight:700}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g-main{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+@media (max-width:1180px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g-main{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:700px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}}
+.kpi{display:grid;gap:4px;align-content:start}
+.kpi .lbl{font-size:12.5px;font-weight:700;color:var(--muted)}
+.kpi .val{font-family:var(--f-display);font-weight:500;font-size:24px;letter-spacing:-.02em;line-height:1.2}
+.kpi .val small{font-family:var(--f-body);font-size:13px;font-weight:700;color:var(--muted);letter-spacing:0}
+.kpi .sub{font-size:12.5px;color:var(--muted)}
+.kpi.bad .val{color:var(--bad)}
+.bar{height:8px;border-radius:99px;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--lapis);border-radius:99px}
+.bar.ok i{background:var(--ok)}
+.tbl-wrap{overflow:auto;margin:0 -20px;padding:0 20px}
+table.t{width:100%;border-collapse:collapse;font-size:13.5px}
+.t th{text-align:left;font-size:12px;font-weight:700;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface);position:sticky;top:0}
+.t td{padding:10px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.t tr:last-child td{border-bottom:0}
+.t tr.click{cursor:pointer}
+.t tr.click:hover td{background:var(--surface-2)}
+.t td.num,.t th.num{text-align:right;white-space:nowrap}
+.t .strong{font-weight:700}
+.empty{padding:28px 10px;text-align:center;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;border-radius:99px;padding:2px 9px;white-space:nowrap;background:var(--surface-2);color:var(--muted);box-shadow:inset 0 0 0 1px var(--line)}
+.badge.ok{background:var(--ok-soft);color:var(--ok);box-shadow:none}
+.badge.bad{background:var(--bad-soft);color:var(--bad);box-shadow:none}
+.badge.warn{background:var(--warn-soft);color:var(--warn);box-shadow:none}
+.badge.blue{background:var(--lapis-soft);color:var(--lapis-deep);box-shadow:none}
+.badge.gold{background:var(--gold-soft);color:var(--gold-ink);box-shadow:none}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.toolbar .grow{flex:1 1 220px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{color:var(--ink);text-decoration:none!important;border:1px solid var(--line-2);background:var(--surface);border-radius:99px;padding:6px 12px;font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.chip .n{color:var(--faint);font-weight:800}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip.on .n{color:#c8ced6}
+.inp{width:100%;border:1px solid var(--line-2);background:var(--surface);border-radius:10px;padding:8px 11px;min-height:38px;outline:none}
+.inp:focus{border-color:var(--lapis-2);box-shadow:0 0 0 3px rgba(58,99,201,.15)}
+textarea.inp{min-height:76px;resize:vertical}
+.field{display:grid;gap:5px;min-width:0}
+.field>span{font-size:12.5px;font-weight:700;color:var(--muted)}
+.field>span i{font-style:normal;color:var(--bad)}
+.field .hint{font-size:12px;color:var(--faint)}
+.form{display:grid;gap:14px}
+.f2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.f3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:640px){.f2,.f3{grid-template-columns:minmax(0,1fr)}}
+.check{display:flex;gap:9px;align-items:center;font-weight:600;cursor:pointer}
+.check input{width:17px;height:17px;accent-color:var(--lapis)}
+.search{position:relative}
+.search svg{position:absolute;left:11px;top:50%;width:16px;height:16px;transform:translateY(-50%);color:var(--faint);pointer-events:none}
+.search .inp{padding-left:34px}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:7px 18px;font-size:13.5px}
+.kv dt{color:var(--muted);font-weight:600}
+.kv dd{margin:0;font-weight:600;min-width:0;overflow-wrap:anywhere}
+.err{background:var(--bad-soft);color:var(--bad);border-radius:10px;padding:9px 12px;font-weight:600;font-size:13px}
+.note{background:var(--gold-soft);color:var(--gold-ink);border-radius:10px;padding:10px 12px;font-size:13px}
+.info{background:var(--lapis-soft);color:var(--lapis-deep);border-radius:10px;padding:10px 12px;font-size:13px}
+.spin{width:18px;height:18px;border:2.5px solid var(--line-2);border-top-color:var(--lapis);border-radius:50%;animation:sp .7s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+.loading{padding:60px 0;display:grid;place-items:center}
+
+/* modal */
+.mback{position:fixed;inset:0;background:rgba(24,32,43,.38);z-index:50;display:grid;place-items:center;padding:20px;animation:fi .15s}
+.modal{background:var(--surface);border-radius:16px;box-shadow:var(--sh-2);width:100%;max-width:520px;max-height:calc(100vh - 40px);overflow:auto;padding:22px 24px;display:grid;gap:14px}
+.modal.wide{max-width:760px}
+.modal h2{font-size:17px;font-weight:800;display:flex;align-items:center;gap:10px}
+.modal h2 .x{margin-left:auto}
+.modal .acts{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:4px}
+@keyframes fi{from{opacity:0}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;display:grid;gap:8px;width:max-content;max-width:calc(100vw - 32px)}
+.toast div{background:var(--ink);color:#fff;border-radius:10px;padding:10px 16px;font-weight:600;box-shadow:var(--sh-2);animation:fi .2s}
+.toast div.bad{background:var(--bad)}
+
+/* uylar */
+.blocks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+@media (max-width:1100px){.blocks{grid-template-columns:minmax(0,1fr)}}
+.bld{display:grid;gap:4px}
+.bld h3{font-family:var(--f-display);font-weight:500;font-size:15px;margin-bottom:6px;display:flex;align-items:baseline;gap:8px}
+.bld h3 small{font-family:var(--f-body);font-size:12px;color:var(--muted);font-weight:600}
+.fl{display:grid;grid-template-columns:28px repeat(4,minmax(0,1fr));gap:4px;align-items:stretch}
+.fl .fn{font-size:11.5px;color:var(--faint);font-weight:800;display:grid;place-items:center}
+.u{border:0;border-radius:8px;padding:6px 7px;text-align:left;cursor:pointer;display:grid;gap:0;line-height:1.25;min-height:50px;box-shadow:inset 0 0 0 1px rgba(24,32,43,.06)}
+.u b{font-size:12px} .u span{font-size:11px;opacity:.85}
+.u.free{background:var(--gold-soft);color:#5a3a00}
+.u.held{background:var(--warn-soft);color:var(--warn);box-shadow:inset 0 0 0 1.5px #e9b878}
+.u.sold{background:#e9edf2;color:#6a7480}
+.u.dim{opacity:.25}
+.u:hover{outline:2px solid var(--lapis-2)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);font-weight:600}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-1px}
+
+/* grafik */
+.chart svg{width:100%;height:auto;display:block}
+.chart .lg{display:flex;gap:16px;font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:6px}
+.chart .lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+.age{display:grid;gap:10px}
+.age .r{display:grid;grid-template-columns:70px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13px}
+.age .r .bar{margin:0}
+.age .r .bar i{background:var(--bad)}
+
+/* shartnoma */
+.hero{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-start}
+.hero .t1{font-family:var(--f-display);font-weight:500;font-size:20px;letter-spacing:-.01em}
+.hero .acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.sched tr.paid td{color:var(--faint)}
+.sched tr.overdue td{background:#fff7f6}
+.sched tr.today td{background:#fffaf0}
+.steps{counter-reset:s;display:grid;gap:18px}
+.preview-sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:700px){.preview-sum{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.preview-sum div{background:var(--surface-2);border-radius:10px;padding:10px 12px}
+.preview-sum span{display:block;font-size:12px;color:var(--muted);font-weight:700}
+.preview-sum b{font-size:15px}
+.pick{border:1px solid var(--line-2);border-radius:10px;padding:10px 12px;display:flex;gap:10px;align-items:center;background:var(--surface-2)}
+.pick b{display:block}
+.pick .x{margin-left:auto}
+.dd{position:relative}
+.dd .list{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--surface);border-radius:10px;box-shadow:var(--sh-2);max-height:300px;overflow:auto;z-index:10;border:1px solid var(--line)}
+.dd .list button{display:block;width:100%;text-align:left;border:0;background:none;padding:9px 12px;cursor:pointer;border-bottom:1px solid var(--line)}
+.dd .list button:hover,.dd .list button.hl{background:var(--lapis-soft)}
+.dd .list small{color:var(--muted)}
+.qr{display:grid;place-items:center;padding:10px;background:#fff;border-radius:12px;border:1px solid var(--line)}
+@media print{.side,.top,.no-print{display:none!important}.shell{display:block}.view{padding:0}}
+</style>
+</head>
+<body>
+
+<div id="login" class="login" hidden>
+  <form id="loginForm" autocomplete="on">
+    <div class="brand"><div class="mark">MC</div><div><b>Magic City</b><span>Sotuv va to‘lovlar boshqaruvi</span></div></div>
+    <h1>Tizimga kirish</h1>
+    <div id="loginErr" class="err" hidden></div>
+    <label class="field"><span>Login</span><input class="inp" name="login" autocomplete="username" autocapitalize="none" required></label>
+    <label class="field"><span>Parol</span><input class="inp" name="password" type="password" autocomplete="current-password" required></label>
+    <button class="btn primary" type="submit">Kirish</button>
+    <p class="small muted" style="margin:0">Login va parolni administrator beradi.</p>
+  </form>
+</div>
+
+<div id="nodb" class="login" hidden>
+  <div class="card" style="max-width:520px;display:grid;gap:12px">
+    <div class="brand"><div class="mark">MC</div><div><b>Magic City</b><span>Boshqaruv paneli</span></div></div>
+    <h2 style="font-size:17px">Baza hali ulanmagan</h2>
+    <p class="muted" style="margin:0">Railway'da PostgreSQL qo‘shing va bot servisining Variables bo‘limida <b>DATABASE_URL</b> ni ulang, keyin <b>ADMIN_PASSWORD</b> ni yozing. Servis qayta ishga tushgach, shu sahifani yangilang.</p>
+  </div>
+</div>
+
+<div id="app" class="shell" hidden>
+  <aside class="side" id="side">
+    <div class="brand"><div class="mark">MC</div><div><b>Magic City</b><span>Boshqaruv</span></div></div>
+    <nav class="nav" id="nav"></nav>
+    <div class="me" id="meBox"></div>
+  </aside>
+  <div class="main">
+    <header class="top">
+      <button class="btn ghost menu-btn" id="menuBtn" aria-label="Menyu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <h1 id="title">…</h1>
+      <button class="btn gold hide-sm" id="quickPay" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>To‘lov kiritish</button>
+      <a class="btn primary hide-sm" id="quickContract" href="#/contracts/new" hidden>Yangi shartnoma</a>
+    </header>
+    <div class="view" id="view"></div>
+  </div>
+</div>
+<div id="modals"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ===================== yordamchilar ===================== */
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const num = n => Math.round(Number(n)||0).toLocaleString("ru-RU").replace(/ /g," ");
+const som = n => num(n) + " so‘m";
+const mln = n => { n = Number(n)||0; const a=Math.abs(n);
+  if (a >= 1e9) return (n/1e9).toLocaleString("ru-RU",{maximumFractionDigits:2}) + " mlrd";
+  if (a >= 1e6) return (n/1e6).toLocaleString("ru-RU",{maximumFractionDigits:1}) + " mln";
+  return num(n); };
+const dmy = s => { if(!s) return ""; const [y,m,d] = String(s).slice(0,10).split("-"); return `${d}.${m}.${y}`; };
+const dtm = s => { if(!s) return ""; const d = new Date(s); return d.toLocaleDateString("ru-RU") + " " + d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"}); };
+const todayISO = () => { const d = new Date(Date.now() + 5*3600e3); return d.toISOString().slice(0,10); }; // Toshkent vaqti
+const MONTHS = ["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
+const MSHORT = ["yan","fev","mar","apr","may","iyn","iyl","avg","sen","okt","noy","dek"];
+const monthName = ym => { const [y,m]=ym.split("-"); return MONTHS[+m-1] + " " + y; };
+const digits = v => String(v||"").replace(/\D/g,"");
+const plural = (n, w) => `${n} ta ${w}`;
+
+let ME = null, META = null;
+const can = {
+  edit:   () => ["admin","director","manager"].includes(ME?.role),
+  remove: () => ["admin","director"].includes(ME?.role),
+  admin:  () => ME?.role === "admin",
+  audit:  () => ["admin","director"].includes(ME?.role),
+  price:  () => ["admin","director"].includes(ME?.role),
+};
+
+async function api(method, path, body){
+  const opt = {method, headers:{"X-MC":"1"}, credentials:"same-origin"};
+  if (body !== undefined){ opt.headers["Content-Type"]="application/json"; opt.body=JSON.stringify(body); }
+  let r;
+  try { r = await fetch(path, opt); } catch(e){ throw new Error("Internet aloqasi yo‘q yoki server javob bermadi"); }
+  if (r.status === 401){ showLogin(); throw new Error("Qayta kiring"); }
+  const ct = r.headers.get("Content-Type")||"";
+  const data = ct.includes("json") ? await r.json() : await r.text();
+  if (!r.ok) throw new Error((data && data.error) || ("Xato: " + r.status));
+  return data;
+}
+
+function toast(msg, kind){
+  const d = document.createElement("div"); if (kind) d.className = kind; d.textContent = msg;
+  $("#toast").appendChild(d); setTimeout(()=>d.remove(), kind==="bad" ? 5200 : 3200);
+}
+
+function modal(html, {wide=false, onMount}={}){
+  const back = document.createElement("div"); back.className = "mback";
+  back.innerHTML = `<div class="modal ${wide?"wide":""}" role="dialog" aria-modal="true">${html}</div>`;
+  const close = () => { back.remove(); document.removeEventListener("keydown", onKey); };
+  const onKey = e => { if (e.key === "Escape") close(); };
+  back.addEventListener("mousedown", e => { if (e.target === back) close(); });
+  document.addEventListener("keydown", onKey);
+  $("#modals").appendChild(back);
+  $$(".x", back).forEach(b => b.addEventListener("click", close));
+  const m = $(".modal", back);
+  onMount && onMount(m, close);
+  const f = $("input:not([type=hidden]),select,textarea", m); f && setTimeout(()=>f.focus(), 30);
+  return close;
+}
+const X_BTN = `<button class="btn ghost sm x" type="button" aria-label="Yopish">✕</button>`;
+
+function confirmBox(title, text, {ok="Tasdiqlash", danger=false, reason=false}={}){
+  return new Promise(res => {
+    modal(`<h2>${esc(title)}${X_BTN}</h2><p style="margin:0">${text}</p>
+      ${reason?`<label class="field"><span>Sababi <i>*</i></span><textarea class="inp" id="cfReason" maxlength="500"></textarea></label>`:""}
+      <div class="acts"><button class="btn x" type="button">Bekor</button><button class="btn ${danger?"danger":"primary"}" id="cfOk" type="button">${esc(ok)}</button></div>`,
+      {onMount:(m, close)=>{
+        let done = false;
+        $("#cfOk", m).onclick = () => { const r = reason ? $("#cfReason",m).value.trim() : true; if (reason && !r){ $("#cfReason",m).focus(); return; } done = true; close(); res(r); };
+        const obs = new MutationObserver(()=>{ if(!document.body.contains(m)){ obs.disconnect(); if(!done) res(null); } });
+        obs.observe($("#modals"), {childList:true});
+      }});
+  });
+}
+
+/* pul kiritish maydoni: yozilganda 1 000 000 ko'rinishida */
+function moneyInputs(root){
+  $$("input.money", root).forEach(i => {
+    const f = () => { const d = digits(i.value); const pos = i.value.length - i.selectionStart;
+      i.value = d ? num(d) : ""; const p = Math.max(0, i.value.length - pos); try{ i.setSelectionRange(p,p); }catch(e){} };
+    i.addEventListener("input", f); if (i.value) i.value = num(digits(i.value));
+  });
+}
+const moneyVal = el => Number(digits(el.value)) || 0;
+
+function formData(form){
+  const o = {};
+  $$("[name]", form).forEach(el => {
+    if (el.type === "checkbox") o[el.name] = el.checked;
+    else if (el.classList.contains("money")) o[el.name] = moneyVal(el);
+    else o[el.name] = el.value.trim();
+  });
+  return o;
+}
+
+function debounce(fn, ms){ let t; return (...a) => { clearTimeout(t); t = setTimeout(()=>fn(...a), ms); }; }
+
+const ICON = {
+  home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  doc:'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20c-.4-2.6-1.8-4.3-3.9-5"/>',
+  bld:'<path d="M4 21V5l8-3v19M12 21V8l8 3v10M3 21h18"/><path d="M7 8h2M7 12h2M7 16h2M15 13h2M15 17h2"/>',
+  pay:'<rect x="2.5" y="6" width="19" height="13" rx="2"/><path d="M2.5 10.5h19M6.5 15h4"/>',
+  staff:'<circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4.2 4-6.5 8-6.5s7.2 2.3 8 6.5"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  log:'<path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
+  dl:'<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
+  tg:'<path d="M21 4L3 11l6 2 2 6 3-4 5 4z"/><path d="M9 13l12-9"/>',
+};
+const icon = k => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[k]}</svg>`;
+
+const STATE = {
+  paid:["To‘liq to‘langan","ok"], ok:["O‘z vaqtida","blue"], overdue:["Qarzdor","bad"],
+};
+const ISTATE = {
+  paid:["To‘langan","ok"], overdue:["Muddati o‘tgan","bad"], today:["Bugun","warn"], partial:["Qisman","gold"], upcoming:["Kutilmoqda",""],
+};
+const badge = (txt, cls="") => `<span class="badge ${cls}">${esc(txt)}</span>`;
+const stateBadge = c => c.status === "cancelled" ? badge("Bekor qilingan") : badge(...STATE[c.state]);
+const stageBadge = s => badge(META.stages[s]||s, {new:"gold",called:"blue",visited:"blue",contract:"ok",lost:""}[s]);
+
+/* ===================== kirish ===================== */
+function showLogin(){
+  $("#app").hidden = true; $("#nodb").hidden = true; $("#login").hidden = false;
+  setTimeout(()=>$("#loginForm [name=login]").focus(), 30);
+}
+$("#loginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const f = formData(e.target), err = $("#loginErr"), btn = $("button", e.target);
+  err.hidden = true; btn.disabled = true;
+  try { await api("POST", "/api/login", f); e.target.reset(); await boot(); }
+  catch(x){ err.textContent = x.message; err.hidden = false; }
+  btn.disabled = false;
+});
+
+async function boot(){
+  let me;
+  try { me = await api("GET", "/api/me"); } catch(e){ $("#view").innerHTML = `<div class="err">${esc(e.message)}</div>`; return; }
+  if (!me.db){ $("#nodb").hidden = false; $("#login").hidden = true; $("#app").hidden = true; return; }
+  if (!me.user){ showLogin(); return; }
+  ME = me.user; META = me;
+  $("#login").hidden = true; $("#app").hidden = false;
+  buildNav();
+  $("#meBox").innerHTML = `<b>${esc(ME.name)}</b><span class="small muted">${esc(META.roles[ME.role])}</span>
+    <div class="row"><a href="#/profile" class="small">Profil</a><a href="#" class="small" id="logout">Chiqish</a></div>`;
+  $("#logout").onclick = async e => { e.preventDefault(); await api("POST","/api/logout"); location.hash=""; showLogin(); };
+  $("#quickPay").hidden = !can.edit(); $("#quickContract").hidden = !can.edit();
+  route();
+  refreshBadge();
+}
+
+function buildNav(){
+  const items = [
+    ["dashboard","home","Bosh sahifa"],
+    ["calendar","cal","To‘lov kalendari", true],
+    ["contracts","doc","Shartnomalar"],
+    ["clients","users","Mijozlar"],
+    ["units","bld","Uylar"],
+    ["payments","pay","To‘lovlar"],
+  ];
+  const adm = [];
+  if (can.admin()) adm.push(["staff","staff","Xodimlar"], ["settings","gear","Sozlamalar"]);
+  if (can.audit()) adm.push(["audit","log","Amallar jurnali"]);
+  const a = ([k,ic,t,cnt]) => `<a href="#/${k}" data-k="${k}">${icon(ic)}<span>${t}</span>${cnt?'<span class="cnt" id="odCnt" hidden></span>':""}</a>`;
+  $("#nav").innerHTML = items.map(a).join("") + (adm.length ? `<div class="sep"></div>` + adm.map(a).join("") : "");
+}
+async function refreshBadge(){
+  try { const d = await api("GET","/api/dues?kind=overdue"); const n = new Set(d.rows.map(r=>r.contract_id)).size;
+    const el = $("#odCnt"); if (el){ el.textContent = n; el.hidden = !n; } } catch(e){}
+}
+
+$("#menuBtn").onclick = () => document.body.classList.toggle("nav-open");
+$("#quickPay").onclick = () => openPayment();
+
+/* ===================== marshrut ===================== */
+const ROUTES = [
+  [/^#\/?$|^#\/dashboard$/, viewDashboard],
+  [/^#\/calendar$/, viewCalendar],
+  [/^#\/contracts$/, viewContracts],
+  [/^#\/contracts\/new$/, viewNewContract],
+  [/^#\/contracts\/(\d+)$/, viewContract],
+  [/^#\/clients$/, viewClients],
+  [/^#\/clients\/(\d+)$/, viewClient],
+  [/^#\/units$/, viewUnits],
+  [/^#\/payments$/, viewPayments],
+  [/^#\/staff$/, viewStaff],
+  [/^#\/settings$/, viewSettings],
+  [/^#\/audit$/, viewAudit],
+  [/^#\/profile$/, viewProfile],
+];
+const Q = () => new URLSearchParams((location.hash.split("?")[1])||"");
+let routeSeq = 0;
+async function route(){
+  if (!ME) return;
+  document.body.classList.remove("nav-open");
+  const h = location.hash.split("?")[0] || "#/";
+  const seq = ++routeSeq;
+  for (const [re, fn] of ROUTES){
+    const m = h.match(re);
+    if (m){
+      const key = (h.split("/")[1]||"dashboard");
+      $$("#nav a").forEach(a => a.classList.toggle("on", a.dataset.k === key));
+      $("#view").innerHTML = `<div class="loading"><span class="spin"></span></div>`;
+      try { await fn(...m.slice(1), seq); }
+      catch(e){ if (seq === routeSeq) $("#view").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+      window.scrollTo(0,0);
+      return;
+    }
+  }
+  location.hash = "#/dashboard";
+}
+window.addEventListener("hashchange", () => { $("#modals").innerHTML = ""; route(); });
+const setTitle = t => { $("#title").textContent = t; document.title = t + " · Magic City"; };
+const reload = () => route();
+
+/* ===================== bosh sahifa ===================== */
+function barChart(series){
+  const W=720, H=230, P={l:44,r:8,t:10,b:28};
+  const max = Math.max(1, ...series.map(s => Math.max(s.plan, s.paid)));
+  const step = Math.pow(10, Math.floor(Math.log10(max))); const top = Math.ceil(max/step)*step;
+  const cw = (W-P.l-P.r)/series.length, bw = Math.min(16, cw*0.32);
+  const y = v => P.t + (H-P.t-P.b)*(1 - v/top);
+  let g = "";
+  for (let i=0;i<=4;i++){ const v = top*i/4, yy = y(v);
+    g += `<line x1="${P.l}" x2="${W-P.r}" y1="${yy}" y2="${yy}" stroke="var(--line)"/><text x="${P.l-8}" y="${yy+4}" text-anchor="end" font-size="11" fill="var(--faint)">${mln(v).replace(" mln","")}</text>`; }
+  series.forEach((s,i) => {
+    const cx = P.l + cw*i + cw/2, [yy,mm] = s.month.split("-");
+    g += `<g><title>${monthName(s.month)}\nReja: ${som(s.plan)}\nTushdi: ${som(s.paid)}</title>
+      <rect x="${cx-bw-1}" y="${y(s.plan)}" width="${bw}" height="${Math.max(0,y(0)-y(s.plan))}" rx="3" fill="#c9d5f0"/>
+      <rect x="${cx+1}" y="${y(s.paid)}" width="${bw}" height="${Math.max(0,y(0)-y(s.paid))}" rx="3" fill="var(--lapis)"/>
+      <rect x="${cx-cw/2}" y="${P.t}" width="${cw}" height="${H-P.t-P.b}" fill="transparent"/>
+      <text x="${cx}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--muted)" font-weight="600">${MSHORT[+mm-1]}${mm==="01"?" "+yy.slice(2):""}</text></g>`;
+  });
+  return `<div class="chart"><div class="lg"><span><i style="background:#c9d5f0"></i>Reja (grafik bo‘yicha)</span><span><i style="background:var(--lapis)"></i>Amalda tushgan</span><span class="faint">mln so‘m</span></div>
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Oylik reja va tushum">${g}</svg></div>`;
+}
+
+async function viewDashboard(seq){
+  setTitle("Bosh sahifa");
+  const month = Q().get("month") || todayISO().slice(0,7);
+  const d = await api("GET", "/api/dashboard?month=" + month);
+  if (seq !== routeSeq) return;
+  const pct = d.plan ? Math.round(100*d.plan_covered/d.plan) : 0;
+  const ageMax = Math.max(1, ...Object.values(d.overdue_buckets));
+  const u = d.units, uTot = u.free+u.held+u.sold || 1;
+  $("#view").innerHTML = `
+  <div class="toolbar"><label class="field" style="width:200px"><span>Oy</span><input class="inp" type="month" id="mSel" value="${month}"></label>
+    <span class="grow"></span><span class="small muted">Bugun: ${dmy(d.today)}</span></div>
+  <div class="grid g4">
+    <div class="card kpi"><span class="lbl">${monthName(d.month)}: grafik bo‘yicha</span><span class="val">${mln(d.plan)} <small>so‘m</small></span>
+      <div class="bar ${pct>=100?"ok":""}"><i style="width:${Math.min(100,pct)}%"></i></div><span class="sub">To‘landi ${mln(d.plan_covered)} · <b>${pct}%</b></span></div>
+    <div class="card kpi"><span class="lbl">Oy davomida tushum</span><span class="val">${mln(d.collected)} <small>so‘m</small></span><span class="sub">Bugun: ${som(d.today_collected)}</span></div>
+    <div class="card kpi ${d.overdue_total?"bad":""}"><span class="lbl">Muddati o‘tgan qarz</span><span class="val">${mln(d.overdue_total)} <small>so‘m</small></span><span class="sub">${d.overdue_count} ta qarzdor mijoz</span></div>
+    <div class="card kpi"><span class="lbl">Kutilayotgan jami tushum</span><span class="val">${mln(d.receivable)} <small>so‘m</small></span><span class="sub">${d.contracts} ta faol shartnoma · ${d.paid_off} tasi yopilgan</span></div>
+  </div>
+  <div class="grid g-main">
+    <div class="card"><h2>12 oylik tushum</h2>${barChart(d.series)}</div>
+    <div class="card"><h2>Qarz necha kunga kechikkan</h2>
+      <div class="age">${Object.entries(d.overdue_buckets).map(([k,v])=>`<div class="r"><span class="b">${k} kun</span><div class="bar"><i style="width:${100*v/ageMax}%"></i></div><span class="num b">${mln(v)}</span></div>`).join("")}</div>
+      <div style="height:18px"></div>
+      <h2 class="sec-title">Uylar</h2>
+      <div class="bar" style="display:flex;height:12px"><i style="width:${100*u.sold/uTot}%;background:#9aa6b4;border-radius:0"></i><i style="width:${100*u.held/uTot}%;background:#e9b878;border-radius:0"></i><i style="width:${100*u.free/uTot}%;background:var(--gold);border-radius:0"></i></div>
+      <div class="legend" style="margin-top:10px"><span><i style="background:#9aa6b4"></i>Sotilgan ${u.sold}</span><span><i style="background:#e9b878"></i>Band ${u.held}</span><span><i style="background:var(--gold)"></i>Bo‘sh ${u.free}</span></div>
+      <p class="small muted" style="margin:12px 0 0">${monthName(d.month)}: ${d.sales_month.count} ta shartnoma (${mln(d.sales_month.sum)}), ${d.leads_month} ta yangi mijoz.</p>
+    </div>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h2>Qarzdorlar <a class="act" href="#/calendar?kind=overdue">Hammasi →</a></h2>${overdueTable(d.overdue.slice(0,8))}</div>
+    <div class="card"><h2>Yaqin 7 kun ichida to‘lovlar <a class="act" href="#/calendar?kind=week">Hammasi →</a></h2>${dueTable(d.upcoming.slice(0,8), true)}</div>
+  </div>
+  ${d.managers.length ? `<div class="card"><h2>Menejerlar · ${monthName(d.month)}</h2><div class="tbl-wrap"><table class="t">
+    <tr><th>Menejer</th><th class="num">Yangi mijoz</th><th class="num">Shartnoma (oy)</th><th class="num">Sotuv (oy)</th><th class="num">Faol shartnoma</th></tr>
+    ${d.managers.map(m=>`<tr><td class="strong">${esc(m.name)}</td><td class="num">${m.clients_month}</td><td class="num">${m.contracts_month}</td><td class="num">${mln(m.sales_month)}</td><td class="num">${m.contracts_all}</td></tr>`).join("")}</table></div></div>` : ""}`;
+  $("#mSel").onchange = e => { location.hash = "#/dashboard?month=" + e.target.value; };
+  bindRows();
+}
+
+function overdueTable(rows){
+  if (!rows.length) return `<div class="empty">Muddati o‘tgan qarz yo‘q 🎉</div>`;
+  return `<div class="tbl-wrap"><table class="t"><tr><th>Mijoz</th><th>Uy</th><th class="num">Qarz</th><th class="num">Kechikish</th></tr>
+    ${rows.map(r=>`<tr class="click" data-href="#/contracts/${r.contract_id}"><td><div class="strong">${esc(r.client)}</div><div class="small muted">${esc(r.phone||"")}</div></td><td class="nowrap">${esc(r.unit)}</td><td class="num red b">${num(r.amount)}</td><td class="num">${badge(r.days+" kun","bad")}</td></tr>`).join("")}</table></div>`;
+}
+function dueTable(rows, short){
+  if (!rows.length) return `<div class="empty">Bu oraliqda to‘lov yo‘q</div>`;
+  return `<div class="tbl-wrap"><table class="t"><tr><th>Sana</th><th>Mijoz</th><th>Uy</th><th class="num">Summa</th>${short?"":"<th></th>"}</tr>
+    ${rows.map(r=>`<tr class="click" data-href="#/contracts/${r.contract_id}"><td class="nowrap">${dmy(r.due_date)}${r.state==="today"?" "+badge("bugun","warn"):""}</td><td><div class="strong">${esc(r.client)}</div><div class="small muted">${esc(r.phone||"")}</div></td><td class="nowrap">${esc(r.unit)}</td><td class="num b">${num(r.left)}</td>${short?"":`<td class="num"><button class="btn sm" data-pay="${r.contract_id}">To‘lov</button></td>`}</tr>`).join("")}</table></div>`;
+}
+function bindRows(root=document){
+  $$("tr[data-href]", root).forEach(tr => tr.addEventListener("click", e => { if (e.target.closest("a,button")) return; location.hash = tr.dataset.href; }));
+  $$("[data-pay]", root).forEach(b => b.addEventListener("click", e => { e.stopPropagation(); openPayment(+b.dataset.pay); }));
+}
+
+/* ===================== to'lov kalendari ===================== */
+async function viewCalendar(seq){
+  setTitle("To‘lov kalendari");
+  const kind = Q().get("kind") || "overdue";
+  const d = await api("GET", "/api/dues?kind=" + kind);
+  if (seq !== routeSeq) return;
+  const tabs = [["overdue","Muddati o‘tgan"],["today","Bugun"],["week","7 kun"],["month","30 kun"]];
+  const rows = d.rows;
+  const byContract = {};
+  rows.forEach(r => { (byContract[r.contract_id] ||= {...r, items:0, sum:0, first:r.due_date, maxDays:0}); const b = byContract[r.contract_id]; b.items++; b.sum += r.left; b.maxDays = Math.max(b.maxDays, r.days); });
+  const list = kind === "overdue" ? Object.values(byContract).sort((a,b)=>b.maxDays-a.maxDays) : rows;
+  $("#view").innerHTML = `
+  <div class="toolbar"><div class="chips">${tabs.map(([k,t])=>`<a class="chip ${k===kind?"on":""}" href="#/calendar?kind=${k}">${t}</a>`).join("")}</div>
+    <span class="grow"></span>${kind==="overdue"?`<a class="btn sm" href="/api/export/overdue">${icon("dl")}Excel</a>`:""}</div>
+  <div class="card">
+    <h2>${kind==="overdue" ? `${Object.keys(byContract).length} ta qarzdor · <span class="red">${som(d.total)}</span>` : `${rows.length} ta to‘lov · ${som(d.total)}`}</h2>
+    ${!list.length ? `<div class="empty">${kind==="overdue"?"Muddati o‘tgan to‘lov yo‘q 🎉":"Bu oraliqda to‘lov yo‘q"}</div>` :
+    `<div class="tbl-wrap"><table class="t">
+      <tr>${kind==="overdue"?"<th>Birinchi qarz sanasi</th>":"<th>Sana</th>"}<th>Mijoz</th><th>Telefon</th><th>Uy</th><th>Shartnoma</th>${kind==="overdue"?'<th class="num">Oylar</th>':'<th class="num">Oy №</th>'}<th class="num">Summa</th>${kind==="overdue"?'<th class="num">Kechikish</th>':""}<th></th></tr>
+      ${list.map(r=>`<tr class="click" data-href="#/contracts/${r.contract_id}">
+        <td class="nowrap">${dmy(kind==="overdue"?r.first:r.due_date)}</td>
+        <td class="strong">${esc(r.client)}${r.client_tg?' <span title="Telegram ulangan" class="faint">'+icon("tg").replace('<svg','<svg width="13" height="13" style="vertical-align:-2px"')+'</span>':""}</td>
+        <td class="nowrap">${r.phone?`<a href="tel:${esc(digits(r.phone))}">${esc(r.phone)}</a>`:"—"}</td>
+        <td>${esc(r.unit)}</td><td class="nowrap">${esc(r.number)}</td>
+        <td class="num">${kind==="overdue"?r.items:(r.n||"bosh.")}</td>
+        <td class="num b ${kind==="overdue"?"red":""}">${num(kind==="overdue"?r.sum:r.left)}</td>
+        ${kind==="overdue"?`<td class="num">${badge(r.maxDays+" kun", r.maxDays>30?"bad":"warn")}</td>`:""}
+        <td class="num">${can.edit()?`<button class="btn sm" data-pay="${r.contract_id}">To‘lov</button>`:""}</td></tr>`).join("")}
+    </table></div>`}
+  </div>`;
+  bindRows();
+}
+
+/* ===================== shartnomalar ===================== */
+async function viewContracts(seq){
+  setTitle("Shartnomalar");
+  const q = Q(), state = q.get("state") || "all", search = q.get("q") || "";
+  const status = state === "cancelled" ? "cancelled" : "active";
+  const d = await api("GET", `/api/contracts?status=${status}&q=${encodeURIComponent(search)}${["overdue","ok","paid"].includes(state)?"&state="+state:""}`);
+  if (seq !== routeSeq) return;
+  const tabs = [["all","Faol"],["overdue","Qarzdor"],["ok","O‘z vaqtida"],["paid","To‘liq to‘langan"],["cancelled","Bekor qilingan"]];
+  const tot = d.contracts.reduce((a,c)=>(a.t+=c.total,a.p+=Math.min(c.paid,c.total),a.o+=c.overdue_amount,a),{t:0,p:0,o:0});
+  $("#view").innerHTML = `
+  <div class="toolbar">
+    <div class="chips">${tabs.map(([k,t])=>`<a class="chip ${k===state?"on":""}" href="#/contracts?state=${k}${search?"&q="+encodeURIComponent(search):""}">${t}</a>`).join("")}</div>
+    <div class="search grow">${icon("search")}<input class="inp" id="cSearch" placeholder="Raqam, mijoz yoki uy" value="${esc(search)}"></div>
+    <a class="btn sm" href="/api/export/contracts">${icon("dl")}Excel</a>
+  </div>
+  <div class="card">
+    <h2>${d.contracts.length} ta shartnoma <span class="small muted" style="font-weight:600">· jami ${mln(tot.t)}, to‘langan ${mln(tot.p)}${tot.o?`, <span class="red">qarz ${mln(tot.o)}</span>`:""}</span></h2>
+    ${!d.contracts.length ? `<div class="empty">Shartnoma topilmadi</div>` : `<div class="tbl-wrap"><table class="t">
+      <tr><th>Raqam</th><th>Sana</th><th style="min-width:210px">Mijoz</th><th>Uy</th><th class="num">Jami</th><th style="min-width:140px">To‘langan</th><th class="num">Qolgan</th><th>Keyingi to‘lov</th><th>Holat</th></tr>
+      ${d.contracts.map(c=>{ const p = c.total ? Math.min(100, 100*c.paid/c.total) : 0;
+        return `<tr class="click" data-href="#/contracts/${c.id}">
+        <td class="strong nowrap">${esc(c.number)}</td><td class="nowrap">${dmy(c.contract_date)}</td>
+        <td><div class="strong">${esc(c.client_name)}</div><div class="small muted">${esc(c.client_phone||"")}</div></td>
+        <td class="nowrap">${esc(c.unit_id)} <span class="small muted">${c.rooms} xona</span></td>
+        <td class="num">${num(c.total)}</td>
+        <td><div class="small"><b>${num(c.paid)}</b> <span class="muted">${Math.round(p)}%</span></div><div class="bar ${p>=100?"ok":""}" style="margin-top:3px"><i style="width:${p}%"></i></div></td>
+        <td class="num">${num(c.remaining)}</td>
+        <td class="nowrap">${c.status==="cancelled"?"—":c.overdue_amount?`<span class="red b">${num(c.overdue_amount)}</span><div class="small red">${c.overdue_days} kun kechikkan</div>`:c.next_due?`${dmy(c.next_due.due_date)}<div class="small muted">${num(c.next_due.left)}</div>`:"—"}</td>
+        <td>${stateBadge(c)}</td></tr>`; }).join("")}
+    </table></div>`}
+  </div>`;
+  const go = debounce(v => { const p = new URLSearchParams(Q()); v ? p.set("q", v) : p.delete("q"); history.replaceState(null,"","#/contracts?"+p); route().then(()=>{ const i=$("#cSearch"); if(i){ i.focus(); i.setSelectionRange(i.value.length,i.value.length);} }); }, 350);
+  $("#cSearch").addEventListener("input", e => go(e.target.value.trim()));
+  bindRows();
+}
+
+async function viewContract(id, seq){
+  const d = await api("GET", "/api/contracts/" + id);
+  if (seq !== routeSeq) return;
+  const c = d.contract, cl = d.client;
+  setTitle("Shartnoma " + c.number);
+  const p = c.total ? Math.min(100, 100*c.paid/c.total) : 0;
+  const active = c.status === "active";
+  const pays = d.payments;
+  $("#view").innerHTML = `
+  <div class="card hero">
+    <div style="display:grid;gap:6px">
+      <div class="t1">${esc(c.number)} ${stateBadge(c)}</div>
+      <div class="muted">${dmy(c.contract_date)} · uy <b style="color:var(--ink)">${esc(c.unit_id)}</b> (${c.block}-blok, ${c.floor}-qavat, ${c.rooms} xona, ${String(c.area).replace(".",",")} m²)</div>
+      <div><a href="#/clients/${cl.id}" class="b">${esc(cl.full_name)}</a> ${cl.phone?`· <a href="tel:${esc(digits(cl.phone))}">${esc(cl.phone)}</a>`:""} ${cl.tg_id?badge("Telegram ulangan","blue"):""}</div>
+      ${c.status==="cancelled"?`<div class="err">Bekor qilingan: ${esc(c.cancel_reason||"")} (${dtm(c.cancelled_at)})</div>`:""}
+    </div>
+    <div class="acts no-print">
+      ${active && can.edit() ? `<button class="btn gold" id="payBtn">To‘lov kiritish</button>` : ""}
+      <a class="btn" href="/api/contracts/${c.id}/docx">${icon("dl")}Shartnoma (Word)</a>
+      ${!cl.tg_id && can.edit() ? `<button class="btn" id="tgBtn">${icon("tg")}Telegram'ga ulash</button>` : ""}
+      ${active && can.remove() ? `<button class="btn danger" id="cancelBtn">Bekor qilish</button>` : ""}
+    </div>
+  </div>
+  <div class="grid g4">
+    <div class="card kpi"><span class="lbl">Shartnoma summasi</span><span class="val">${mln(c.total)}</span><span class="sub">Narx ${num(c.price)}${c.markup_pct?` + ustama ${String(c.markup_pct).replace(".",",")}%`:""}</span></div>
+    <div class="card kpi"><span class="lbl">To‘langan</span><span class="val">${mln(c.paid)}</span><div class="bar ${p>=100?"ok":""}"><i style="width:${p}%"></i></div><span class="sub">${Math.round(p)}%${c.last_paid_at?` · oxirgisi ${dmy(c.last_paid_at)}`:""}</span></div>
+    <div class="card kpi"><span class="lbl">Qolgan</span><span class="val">${mln(c.remaining)}</span><span class="sub">${c.months ? `${c.months} oy, boshlang‘ich ${num(c.down_payment)}` : "Bir martalik to‘lov"}</span></div>
+    <div class="card kpi ${c.overdue_amount?"bad":""}"><span class="lbl">${c.overdue_amount?"Muddati o‘tgan":"Keyingi to‘lov"}</span>
+      <span class="val">${c.overdue_amount ? mln(c.overdue_amount) : c.next_due ? mln(c.next_due.left) : "—"}</span>
+      <span class="sub">${c.overdue_amount ? `${c.overdue_days} kun kechikkan (${dmy(c.overdue_since)} dan)` : c.next_due ? dmy(c.next_due.due_date) : c.state==="paid"?"To‘liq yopilgan":""}</span></div>
+  </div>
+  <div class="grid g-main">
+    <div class="card"><h2>To‘lov grafigi</h2>
+      <div class="tbl-wrap"><table class="t sched"><tr><th>№</th><th>Sana</th><th class="num">Summa</th><th class="num">To‘langan</th><th class="num">Qolgan</th><th>Holat</th></tr>
+      ${c.schedule.map(i=>`<tr class="${i.state}"><td>${i.n===0?"Boshl.":i.n}</td><td class="nowrap">${dmy(i.due_date)}</td><td class="num">${num(i.amount)}</td><td class="num">${i.covered?num(i.covered):"—"}</td><td class="num ${i.state==="overdue"?"red b":""}">${i.left?num(i.left):"—"}</td><td>${badge(...ISTATE[i.state])}</td></tr>`).join("")}
+      </table></div>
+      ${c.credit?`<p class="note" style="margin:12px 0 0">Ortiqcha to‘langan: ${som(c.credit)}</p>`:""}
+    </div>
+    <div class="grid" style="align-content:start">
+      <div class="card"><h2>To‘lovlar <span class="small muted" style="font-weight:600">${pays.filter(x=>!x.deleted_at).length} ta</span></h2>
+        ${!pays.length ? `<div class="empty">Hali to‘lov kiritilmagan</div>` : `<div class="tbl-wrap"><table class="t">
+        ${pays.map(x=>`<tr style="${x.deleted_at?"opacity:.55":""}"><td><div class="strong ${x.deleted_at?"":""}" style="${x.deleted_at?"text-decoration:line-through":""}">${num(x.amount)}</div>
+          <div class="small muted">${dmy(x.paid_at)} · ${esc(META.methods[x.method]||x.method)}${x.note?" · "+esc(x.note):""}</div>
+          <div class="small faint">№${x.id} · ${esc(x.created_by_name||"")}${x.deleted_at?` · <span class="red">o‘chirilgan: ${esc(x.delete_reason||"")} (${esc(x.deleted_by_name||"")})</span>`:""}</div></td>
+          <td class="num nowrap"><a class="btn sm" href="/api/payments/${x.id}/receipt" target="_blank" rel="noopener">Kvitansiya</a>
+          ${!x.deleted_at && can.remove() ? `<button class="btn sm danger" data-del="${x.id}" title="O‘chirish">✕</button>`:""}</td></tr>`).join("")}
+        </table></div>`}
+      </div>
+      <div class="card"><h2>Ma’lumot</h2><dl class="kv">
+        <dt>Narx</dt><dd>${som(c.price)}</dd>
+        <dt>Boshlang‘ich</dt><dd>${som(c.down_payment)}</dd>
+        <dt>Muddat</dt><dd>${c.months} oy</dd>
+        <dt>Ustama</dt><dd>${String(c.markup_pct).replace(".",",")}%</dd>
+        <dt>Menejer</dt><dd>${esc(c.manager_name||"—")}</dd>
+        ${c.note?`<dt>Izoh</dt><dd>${esc(c.note)}</dd>`:""}
+      </dl></div>
+    </div>
+  </div>`;
+  $("#payBtn") && ($("#payBtn").onclick = () => openPayment(c.id));
+  $("#tgBtn") && ($("#tgBtn").onclick = () => openClientLink(cl));
+  $("#cancelBtn") && ($("#cancelBtn").onclick = async () => {
+    const r = await confirmBox("Shartnomani bekor qilish", `${esc(c.number)} bekor qilinadi, uy <b>${esc(c.unit_id)}</b> yana bo‘sh bo‘ladi. Kiritilgan to‘lovlar tarixda qoladi.`, {ok:"Bekor qilish", danger:true, reason:true});
+    if (!r) return;
+    try { await api("POST", `/api/contracts/${c.id}/cancel`, {reason:r}); toast("Shartnoma bekor qilindi"); reload(); } catch(e){ toast(e.message,"bad"); }
+  });
+  $$("[data-del]").forEach(b => b.onclick = async () => {
+    const x = pays.find(p => p.id === +b.dataset.del);
+    const r = await confirmBox("To‘lovni o‘chirish", `${som(x.amount)} (${dmy(x.paid_at)}) o‘chiriladi. Yozuv jurnalda saqlanib qoladi.`, {ok:"O‘chirish", danger:true, reason:true});
+    if (!r) return;
+    try { await api("POST", `/api/payments/${x.id}/delete`, {reason:r}); toast("To‘lov o‘chirildi"); reload(); refreshBadge(); } catch(e){ toast(e.message,"bad"); }
+  });
+}
+
+/* ----- to'lov kiritish oynasi ----- */
+async function openPayment(contractId){
+  let ct = null;
+  const close = modal(`<h2>To‘lov kiritish${X_BTN}</h2>
+    <div id="pPick"></div>
+    <form class="form" id="pForm" hidden>
+      <div id="pInfo"></div>
+      <div class="f2">
+        <label class="field"><span>Summa, so‘m <i>*</i></span><input class="inp money" name="amount" inputmode="numeric" autocomplete="off" required></label>
+        <label class="field"><span>Sana <i>*</i></span><input class="inp" type="date" name="paid_at" value="${todayISO()}" max="${todayISO()}" required></label>
+      </div>
+      <div class="f2">
+        <label class="field"><span>To‘lov usuli</span><select class="inp" name="method">${Object.entries(META.methods).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select></label>
+        <label class="field"><span>Izoh</span><input class="inp" name="note" maxlength="300" placeholder="ixtiyoriy"></label>
+      </div>
+      <div id="pErr" class="err" hidden></div>
+      <div class="acts"><button class="btn x" type="button">Bekor</button><button class="btn gold" type="submit">Saqlash</button></div>
+    </form>`, {onMount: async (m) => {
+      const form = $("#pForm", m);
+      moneyInputs(m);
+      const show = c => {
+        ct = c; $("#pPick", m).innerHTML = `<div class="pick"><div><b>${esc(c.number)} · ${esc(c.client_name)}</b><span class="small muted">uy ${esc(c.unit_id)}</span></div>${contractId?"":`<button type="button" class="btn ghost sm x2">O‘zgartirish</button>`}</div>`;
+        $(".x2", m) && ($(".x2", m).onclick = () => { form.hidden = true; picker(); });
+        const sug = c.overdue_amount || (c.next_due ? c.next_due.left : 0);
+        $("#pInfo", m).innerHTML = `<div class="${c.overdue_amount?"err":"info"}">Qolgan: <b>${som(c.remaining)}</b>${c.overdue_amount?` · muddati o‘tgan: <b>${som(c.overdue_amount)}</b> (${c.overdue_days} kun)`:c.next_due?` · keyingi: <b>${som(c.next_due.left)}</b>, ${dmy(c.next_due.due_date)}`:""}</div>`;
+        form.amount.value = sug ? num(sug) : "";
+        form.hidden = false; form.amount.focus(); form.amount.select();
+      };
+      const picker = () => {
+        $("#pPick", m).innerHTML = `<label class="field"><span>Shartnoma</span><div class="dd"><div class="search">${icon("search")}<input class="inp" id="pQ" placeholder="Mijoz, raqam yoki uy" autocomplete="off"></div><div class="list" hidden></div></div></label>`;
+        const inp = $("#pQ", m), list = $(".list", m);
+        const run = debounce(async () => {
+          const r = await api("GET", "/api/contracts?status=active&q=" + encodeURIComponent(inp.value.trim()));
+          list.innerHTML = r.contracts.slice(0,12).map(c=>`<button type="button" data-id="${c.id}"><b>${esc(c.client_name)}</b> · ${esc(c.unit_id)}<br><small>${esc(c.number)} · qolgan ${num(c.remaining)}${c.overdue_amount?` · <span class="red">qarz ${num(c.overdue_amount)}</span>`:""}</small></button>`).join("") || `<div class="empty">Topilmadi</div>`;
+          list.hidden = false;
+          $$("button", list).forEach(b => b.onclick = () => show(r.contracts.find(c => c.id === +b.dataset.id)));
+        }, 250);
+        inp.addEventListener("input", run); inp.addEventListener("focus", run); setTimeout(()=>inp.focus(), 30);
+      };
+      if (contractId){ const r = await api("GET", "/api/contracts/" + contractId); show(r.contract); } else picker();
+      form.onsubmit = async e => {
+        e.preventDefault();
+        const f = formData(form), err = $("#pErr", m); err.hidden = true;
+        if (!f.amount){ err.textContent = "Summani kiriting"; err.hidden = false; return; }
+        const btn = $("button[type=submit]", form); btn.disabled = true;
+        try {
+          const r = await api("POST", "/api/payments", {...f, contract_id: ct.id});
+          $(".modal", m.parentNode) && close();
+          toast(`${som(f.amount)} qabul qilindi`);
+          modal(`<h2>To‘lov saqlandi${X_BTN}</h2><p style="margin:0">${esc(ct.client_name)} · ${som(f.amount)}. ${ct.client_tg?"Mijozga Telegram'da kvitansiya yuborildi.":"Mijoz Telegram'ga ulanmagan, kvitansiyani chop etib bering."}</p>
+            <div class="acts"><button class="btn x">Yopish</button><a class="btn primary" href="/api/payments/${r.id}/receipt" target="_blank" rel="noopener">Kvitansiyani ochish</a></div>`);
+          reload(); refreshBadge();
+        } catch(x){ err.textContent = x.message; err.hidden = false; btn.disabled = false; }
+      };
+    }});
+}
+
+/* ----- mijozni Telegram'ga ulash ----- */
+function openClientLink(cl){
+  modal(`<h2>Telegram'ga ulash${X_BTN}</h2>
+    <p style="margin:0" class="muted">Mijoz shu havolani ochib, botda <b>Start</b> ni bossa, shartnomasi uning Telegram'iga ulanadi: kvitansiyalar, to‘lov eslatmalari va «Mening to‘lovlarim» bo‘limi ishlaydi.</p>
+    <div id="lnk"><div class="loading" style="padding:20px"><span class="spin"></span></div></div>
+    <div class="acts"><button class="btn x">Yopish</button></div>`, {onMount: async (m) => {
+      try {
+        const r = await api("POST", `/api/clients/${cl.id}/tg-link`);
+        $("#lnk", m).innerHTML = `<div class="grid" style="grid-template-columns:auto 1fr;gap:16px;align-items:center">
+          <div class="qr" id="qr"></div>
+          <div class="form"><input class="inp" readonly value="${esc(r.url)}" id="lnkI"><div class="toolbar"><button class="btn sm" id="cp">Nusxa olish</button><span class="small muted">QR kodni mijoz telefon kamerasi bilan skanerlaydi</span></div></div></div>`;
+        $("#cp", m).onclick = () => { navigator.clipboard?.writeText(r.url); toast("Nusxa olindi"); };
+        $("#lnkI", m).onclick = e => e.target.select();
+        loadQR().then(() => new window.QRCode($("#qr", m), {text:r.url, width:150, height:150, correctLevel: window.QRCode.CorrectLevel.M})).catch(()=>{ $("#qr", m).remove(); });
+      } catch(e){ $("#lnk", m).innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+    }});
+}
+let qrP = null;
+function loadQR(){
+  return qrP ||= new Promise((res, rej) => { const s = document.createElement("script"); s.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"; s.onload = res; s.onerror = () => { qrP = null; rej(); }; document.head.appendChild(s); });
+}
+
+/* ----- yangi shartnoma ----- */
+async function viewNewContract(seq){
+  setTitle("Yangi shartnoma");
+  if (!can.edit()){ $("#view").innerHTML = `<div class="err">Huquq yo‘q</div>`; return; }
+  const q = Q();
+  const [unitsR, usersR] = await Promise.all([api("GET","/api/units"), api("GET","/api/users")]);
+  if (seq !== routeSeq) return;
+  const st = META.settings;
+  const freeUnits = unitsR.units.filter(u => !u.contract_id);
+  let client = null, unit = null;
+  if (q.get("client")) { try { client = (await api("GET","/api/clients/"+q.get("client"))).client; } catch(e){} }
+  if (q.get("unit")) unit = freeUnits.find(u => u.id === q.get("unit")) || null;
+  const presets = st.terms.map(t => t.m);
+  $("#view").innerHTML = `
+  <form class="grid g-main" id="ncForm" autocomplete="off">
+    <div class="grid" style="align-content:start">
+      <div class="card"><h2>1. Mijoz</h2><div id="clBox"></div></div>
+      <div class="card"><h2>2. Uy</h2><div id="unBox"></div></div>
+      <div class="card"><h2>3. To‘lov shartlari</h2>
+        <div class="form">
+          <div class="f3">
+            <label class="field"><span>Narx, so‘m <i>*</i></span><input class="inp money" name="price" inputmode="numeric" ${can.price()?"":"readonly"}></label>
+            <label class="field"><span>Boshlang‘ich to‘lov, %</span><input class="inp" name="down_pct" type="number" min="0" max="100" step="1" value="${Math.max(st.min_down_pct, 30)}"></label>
+            <label class="field"><span>Boshlang‘ich to‘lov, so‘m</span><input class="inp money" name="down_payment" inputmode="numeric"></label>
+          </div>
+          <div class="field"><span>Muddat, oy</span>
+            <div class="toolbar"><div class="chips" id="termChips">${presets.map(m=>`<button type="button" class="chip" data-m="${m}">${m} oy</button>`).join("")}</div>
+            <input class="inp" name="months" type="number" min="0" max="${st.max_months}" style="width:110px" value="${presets.includes(24)?24:presets[0]}"></div></div>
+          <div class="f3">
+            <label class="field"><span>Ustama, %</span><input class="inp" name="markup_pct" type="number" min="0" max="300" step="0.1"><span class="hint" id="mkHint"></span></label>
+            <label class="field"><span>Shartnoma sanasi</span><input class="inp" type="date" name="contract_date" value="${todayISO()}"></label>
+            <label class="field"><span>Birinchi oylik to‘lov</span><input class="inp" type="date" name="first_due"></label>
+          </div>
+          <div class="f2">
+            <label class="field"><span>Menejer</span><select class="inp" name="manager_id"><option value="">—</option>${usersR.users.filter(u=>u.active).map(u=>`<option value="${u.id}" ${u.id===ME.id&&ME.role==="manager"?"selected":""}>${esc(u.name)}</option>`).join("")}</select></label>
+            <label class="field"><span>Izoh</span><input class="inp" name="note" maxlength="500"></label>
+          </div>
+          <div class="toolbar">
+            <label class="check"><input type="checkbox" name="down_paid" checked> Boshlang‘ich to‘lov shartnoma kuni to‘landi</label>
+            <select class="inp" name="down_method" style="width:auto">${Object.entries(META.methods).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid" style="align-content:start;position:sticky;top:76px">
+      <div class="card"><h2>Hisob</h2><div id="pv"><div class="empty">Uy va shartlarni tanlang</div></div>
+        <div id="ncErr" class="err" hidden style="margin-top:12px"></div>
+        <button class="btn primary" type="submit" style="width:100%;margin-top:14px" id="ncSave" disabled>Shartnoma tuzish</button>
+        <p class="small muted" style="margin:10px 0 0">Saqlangach Word shartnoma yuklab olinadi, uy «sotilgan» bo‘ladi va Mini App'da derazasi o‘chadi.</p>
+      </div>
+    </div>
+  </form>`;
+  const form = $("#ncForm");
+  moneyInputs(form);
+  const F = n => form.elements[n];
+
+  const drawClient = () => {
+    const box = $("#clBox");
+    if (client){
+      box.innerHTML = `<div class="pick"><div><b>${esc(client.full_name)}</b><span class="small muted">${esc(client.phone||"telefon yo‘q")} · pasport ${esc(client.passport||"kiritilmagan")}</span></div><button type="button" class="btn ghost sm x">O‘zgartirish</button></div>
+        ${!client.passport?`<p class="note" style="margin:10px 0 0">Shartnomaga pasport ma’lumoti kerak. <a href="#" id="editCl">Mijoz ma’lumotini to‘ldirish</a></p>`:""}`;
+      $(".x", box).onclick = () => { client = null; drawClient(); };
+      $("#editCl") && ($("#editCl").onclick = e => { e.preventDefault(); openClientForm(client, c => { client = c; drawClient(); }); });
+    } else {
+      box.innerHTML = `<div class="toolbar"><div class="dd grow"><div class="search">${icon("search")}<input class="inp" id="clQ" placeholder="Ism, telefon yoki pasport"></div><div class="list" hidden></div></div>
+        <button type="button" class="btn" id="newCl">+ Yangi mijoz</button></div>`;
+      const inp = $("#clQ"), list = $(".list", box);
+      const run = debounce(async () => {
+        const r = await api("GET", "/api/clients?q=" + encodeURIComponent(inp.value.trim()));
+        list.innerHTML = r.clients.slice(0,12).map(c=>`<button type="button" data-id="${c.id}"><b>${esc(c.full_name)}</b><br><small>${esc(c.phone||"")} · ${esc(META.stages[c.stage]||"")}</small></button>`).join("") || `<div class="empty">Topilmadi</div>`;
+        list.hidden = false;
+        $$("button", list).forEach(b => b.onclick = async () => { client = (await api("GET","/api/clients/"+b.dataset.id)).client; drawClient(); });
+      }, 250);
+      inp.addEventListener("input", run); inp.addEventListener("focus", run);
+      document.addEventListener("click", e => { if (!box.contains(e.target)) list.hidden = true; });
+      $("#newCl").onclick = () => openClientForm(null, c => { client = c; drawClient(); });
+    }
+    calc();
+  };
+  const drawUnit = () => {
+    const box = $("#unBox");
+    if (unit){
+      box.innerHTML = `<div class="pick"><div><b>${esc(unit.id)} · ${unit.rooms} xonali, ${String(unit.area).replace(".",",")} m²</b><span class="small muted">${unit.block}-blok, ${unit.floor}-qavat · narx ${som(unit.price)}${unit.status==="held"?" · band qilingan":""}</span></div><button type="button" class="btn ghost sm x">O‘zgartirish</button></div>`;
+      $(".x", box).onclick = () => { unit = null; drawUnit(); };
+      F("price").value = num(unit.price);
+    } else {
+      const blocks = [...new Set(freeUnits.map(u=>u.block))];
+      box.innerHTML = `<div class="f3">
+        <label class="field"><span>Blok</span><select class="inp" id="uB"><option value="">Hammasi</option>${blocks.map(b=>`<option>${b}</option>`).join("")}</select></label>
+        <label class="field"><span>Xonalar</span><select class="inp" id="uR"><option value="">Hammasi</option>${[1,2,3,4].map(r=>`<option value="${r}">${r} xona</option>`).join("")}</select></label>
+        <label class="field"><span>Uy</span><select class="inp" id="uS"></select></label></div>`;
+      const fill = () => { const b = $("#uB").value, r = $("#uR").value;
+        const list = freeUnits.filter(u => (!b||u.block===b) && (!r||String(u.rooms)===r));
+        $("#uS").innerHTML = `<option value="">Tanlang (${list.length} ta)</option>` + list.map(u=>`<option value="${u.id}">${u.id} · ${u.rooms} xona · ${String(u.area).replace(".",",")} m² · ${mln(u.price)}${u.status==="held"?" · band":""}</option>`).join(""); };
+      $("#uB").onchange = fill; $("#uR").onchange = fill; fill();
+      $("#uS").onchange = e => { unit = freeUnits.find(u=>u.id===e.target.value) || null; drawUnit(); };
+    }
+    syncDown(); calc();
+  };
+  const syncDown = () => { const p = moneyVal(F("price")); const pct = Number(F("down_pct").value)||0; if (p) F("down_payment").value = num(Math.round(p*pct/100/100000)*100000); };
+  F("price").addEventListener("input", () => { syncDown(); calc(); });
+  F("down_pct").addEventListener("input", () => { syncDown(); calc(); });
+  F("down_payment").addEventListener("input", () => { const p = moneyVal(F("price")); if (p) F("down_pct").value = Math.round(1000*moneyVal(F("down_payment"))/p)/10; calc(); });
+  const markTerm = () => $$("#termChips .chip").forEach(c => c.classList.toggle("on", c.dataset.m === F("months").value));
+  $$("#termChips .chip").forEach(c => c.onclick = () => { F("months").value = c.dataset.m; F("markup_pct").value = ""; markTerm(); calc(); });
+  F("months").addEventListener("input", () => { F("markup_pct").value = ""; markTerm(); calc(); });
+  ["markup_pct","contract_date","first_due"].forEach(n => F(n).addEventListener("input", () => calc()));
+  markTerm();
+
+  let lastPlan = null;
+  const calc = debounce(async () => {
+    const pv = $("#pv"), price = moneyVal(F("price"));
+    $("#ncSave").disabled = true;
+    if (!price || !unit){ pv.innerHTML = `<div class="empty">Uy va shartlarni tanlang</div>`; return; }
+    const body = {price, down_payment: moneyVal(F("down_payment")), months: Number(F("months").value)||0,
+      markup_pct: F("markup_pct").value, contract_date: F("contract_date").value, first_due: F("first_due").value};
+    try {
+      const r = await api("POST", "/api/contracts/preview", body);
+      lastPlan = r;
+      F("markup_pct").placeholder = String(r.markup_pct);
+      if (F("markup_pct").value === "") $("#mkHint").textContent = `Sozlamadan: ${String(r.markup_pct).replace(".",",")}%`;
+      else $("#mkHint").textContent = "";
+      const pct = Math.round(100*r.down_payment/r.price);
+      const low = pct < st.min_down_pct;
+      pv.innerHTML = `<div class="preview-sum" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+          <div><span>Jami summa</span><b>${num(r.total)}</b></div>
+          <div><span>Boshlang‘ich (${pct}%)</span><b>${num(r.down_payment)}</b></div>
+          <div><span>Oylik to‘lov</span><b>${r.months?num(r.monthly):"—"}</b></div>
+          <div><span>Muddat / ustama</span><b>${r.months} oy · ${String(r.markup_pct).replace(".",",")}%</b></div></div>
+        ${low?`<p class="note" style="margin:10px 0 0">Boshlang‘ich to‘lov sozlamadagi eng kam ${st.min_down_pct}% dan past.</p>`:""}
+        ${r.months?`<details style="margin-top:12px"><summary class="small b" style="cursor:pointer">To‘lov grafigi (${r.schedule.length} qator)</summary>
+          <div class="tbl-wrap" style="max-height:300px;margin-top:8px"><table class="t"><tr><th>№</th><th>Sana</th><th class="num">Summa</th></tr>
+          ${r.schedule.map(i=>`<tr><td>${i.n||"Boshl."}</td><td>${dmy(i.due_date)}</td><td class="num">${num(i.amount)}</td></tr>`).join("")}</table></div></details>`:""}`;
+      $("#ncSave").disabled = !client;
+      if (!client) pv.insertAdjacentHTML("beforeend", `<p class="small muted" style="margin:10px 0 0">Mijozni tanlang.</p>`);
+    } catch(e){ pv.innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+  }, 250);
+
+  form.onsubmit = async e => {
+    e.preventDefault();
+    const err = $("#ncErr"); err.hidden = true;
+    if (!client || !unit){ err.textContent = "Mijoz va uyni tanlang"; err.hidden = false; return; }
+    const f = formData(form);
+    const btn = $("#ncSave"); btn.disabled = true;
+    try {
+      const r = await api("POST", "/api/contracts", {client_id: client.id, unit_id: unit.id, price: f.price, down_payment: f.down_payment,
+        months: Number(f.months)||0, markup_pct: f.markup_pct, contract_date: f.contract_date, first_due: f.first_due,
+        manager_id: f.manager_id || null, note: f.note, down_paid: f.down_paid, down_method: f.down_method});
+      toast(`Shartnoma ${r.number} tuzildi`);
+      location.hash = "#/contracts/" + r.id;
+      setTimeout(() => { location.href = `/api/contracts/${r.id}/docx`; }, 400);
+    } catch(x){ err.textContent = x.message; err.hidden = false; btn.disabled = false; }
+  };
+  drawClient(); drawUnit();
+}
+
+/* ===================== mijozlar ===================== */
+async function viewClients(seq){
+  setTitle("Mijozlar");
+  const q = Q(), stage = q.get("stage") || "", search = q.get("q") || "";
+  const d = await api("GET", `/api/clients?stage=${stage}&q=${encodeURIComponent(search)}`);
+  if (seq !== routeSeq) return;
+  const total = Object.values(d.counts).reduce((a,b)=>a+b,0);
+  $("#view").innerHTML = `
+  <div class="toolbar">
+    <div class="chips"><a class="chip ${!stage?"on":""}" href="#/clients">Hammasi <span class="n">${total}</span></a>
+      ${Object.entries(META.stages).map(([k,v])=>`<a class="chip ${stage===k?"on":""}" href="#/clients?stage=${k}">${v} <span class="n">${d.counts[k]||0}</span></a>`).join("")}</div>
+    <div class="search grow">${icon("search")}<input class="inp" id="clS" placeholder="Ism, telefon yoki pasport" value="${esc(search)}"></div>
+    <a class="btn sm" href="/api/export/clients">${icon("dl")}Excel</a>
+    ${can.edit()?`<button class="btn primary" id="addCl">+ Yangi mijoz</button>`:""}
+  </div>
+  <div class="card">${!d.clients.length ? `<div class="empty">Mijoz topilmadi</div>` : `<div class="tbl-wrap"><table class="t">
+    <tr><th>Mijoz</th><th>Telefon</th><th>Qiziqish</th><th>Manba</th><th>Bosqich</th><th>Menejer</th><th>Yangilangan</th></tr>
+    ${d.clients.map(c=>`<tr class="click" data-href="#/clients/${c.id}">
+      <td><div class="strong">${esc(c.full_name)}</div>${c.tg_username?`<div class="small muted">@${esc(c.tg_username)}</div>`:""}</td>
+      <td class="nowrap">${c.phone?`<a href="tel:${esc(digits(c.phone))}">${esc(c.phone)}</a>`:"—"}</td>
+      <td class="small" style="max-width:280px">${esc(c.interest||"")}</td>
+      <td class="small">${esc(META.sources[c.source]||c.source)}</td>
+      <td>${stageBadge(c.stage)}${c.contracts>1?` <span class="small muted">${c.contracts} ta</span>`:""}</td>
+      <td class="small">${esc(c.manager_name||"—")}</td>
+      <td class="small muted nowrap">${dtm(c.updated_at)}</td></tr>`).join("")}</table></div>`}</div>`;
+  const go = debounce(v => { const p = new URLSearchParams(Q()); v ? p.set("q", v) : p.delete("q"); history.replaceState(null,"","#/clients?"+p); route().then(()=>{ const i=$("#clS"); if(i){ i.focus(); i.setSelectionRange(i.value.length,i.value.length);} }); }, 350);
+  $("#clS").addEventListener("input", e => go(e.target.value.trim()));
+  $("#addCl") && ($("#addCl").onclick = () => openClientForm(null, c => { location.hash = "#/clients/" + c.id; }));
+  bindRows();
+}
+
+function openClientForm(cl, done){
+  const v = cl || {source:"office", stage:"new"};
+  modal(`<h2>${cl?"Mijozni tahrirlash":"Yangi mijoz"}${X_BTN}</h2>
+    <form class="form" id="clF">
+      <label class="field"><span>F.I.Sh. <i>*</i></span><input class="inp" name="full_name" value="${esc(v.full_name||"")}" required maxlength="200"></label>
+      <div class="f2">
+        <label class="field"><span>Telefon</span><input class="inp" name="phone" type="tel" value="${esc(v.phone||"")}" placeholder="+998 90 123 45 67"></label>
+        <label class="field"><span>Qo‘shimcha telefon</span><input class="inp" name="phone2" type="tel" value="${esc(v.phone2||"")}"></label>
+      </div>
+      <div class="f3">
+        <label class="field"><span>Pasport seriya va raqami</span><input class="inp" name="passport" value="${esc(v.passport||"")}" placeholder="AB1234567" style="text-transform:uppercase"></label>
+        <label class="field"><span>JShShIR</span><input class="inp" name="pinfl" value="${esc(v.pinfl||"")}" inputmode="numeric" maxlength="14"></label>
+        <label class="field"><span>Tug‘ilgan sana</span><input class="inp" type="date" name="birth_date" value="${esc((v.birth_date||"").slice(0,10))}"></label>
+      </div>
+      <label class="field"><span>Pasport kim tomonidan va qachon berilgan</span><input class="inp" name="passport_issued" value="${esc(v.passport_issued||"")}"></label>
+      <label class="field"><span>Yashash manzili</span><input class="inp" name="address" value="${esc(v.address||"")}"></label>
+      <div class="f2">
+        <label class="field"><span>Manba</span><select class="inp" name="source">${Object.entries(META.sources).map(([k,t])=>`<option value="${k}" ${v.source===k?"selected":""}>${t}</option>`).join("")}</select></label>
+        <label class="field"><span>Bosqich</span><select class="inp" name="stage">${Object.entries(META.stages).map(([k,t])=>`<option value="${k}" ${v.stage===k?"selected":""}>${t}</option>`).join("")}</select></label>
+      </div>
+      <label class="field"><span>Qiziqishi</span><input class="inp" name="interest" value="${esc(v.interest||"")}" placeholder="masalan: 3 xonali, 2–5 qavat"></label>
+      <label class="field"><span>Izoh</span><textarea class="inp" name="note">${esc(v.note||"")}</textarea></label>
+      <div id="clErr" class="err" hidden></div>
+      <div class="acts"><button class="btn x" type="button">Bekor</button><button class="btn primary" type="submit">Saqlash</button></div>
+    </form>`, {wide:true, onMount:(m, close) => {
+      $("#clF", m).onsubmit = async e => {
+        e.preventDefault();
+        const f = formData(e.target), err = $("#clErr", m); err.hidden = true;
+        try {
+          let id = cl && cl.id;
+          if (cl) await api("PATCH", "/api/clients/" + id, f); else id = (await api("POST", "/api/clients", f)).id;
+          const fresh = (await api("GET", "/api/clients/" + id)).client;
+          close(); toast("Saqlandi"); done && done(fresh);
+        } catch(x){ err.textContent = x.message; err.hidden = false; }
+      };
+    }});
+}
+
+async function viewClient(id, seq){
+  const d = await api("GET", "/api/clients/" + id);
+  if (seq !== routeSeq) return;
+  const c = d.client;
+  setTitle(c.full_name);
+  $("#view").innerHTML = `
+  <div class="card hero">
+    <div style="display:grid;gap:6px"><div class="t1">${esc(c.full_name)} ${stageBadge(c.stage)}</div>
+      <div class="muted">${c.phone?`<a href="tel:${esc(digits(c.phone))}">${esc(c.phone)}</a>`:"Telefon yo‘q"}${c.tg_username?` · <a href="https://t.me/${esc(c.tg_username)}" target="_blank" rel="noopener">@${esc(c.tg_username)}</a>`:""} ${c.tg_id?badge("Telegram ulangan","blue"):""}</div></div>
+    <div class="acts">${can.edit()?`<button class="btn" id="edCl">Tahrirlash</button>${!c.tg_id?`<button class="btn" id="tgCl">${icon("tg")}Telegram'ga ulash</button>`:""}<a class="btn primary" href="#/contracts/new?client=${c.id}">Shartnoma tuzish</a>`:""}</div>
+  </div>
+  <div class="grid g-main">
+    <div class="card"><h2>Shartnomalar</h2>${!d.contracts.length?`<div class="empty">Shartnoma yo‘q</div>`:`<div class="tbl-wrap"><table class="t">
+      <tr><th>Raqam</th><th>Uy</th><th class="num">Jami</th><th class="num">To‘langan</th><th class="num">Qolgan</th><th>Holat</th></tr>
+      ${d.contracts.map(x=>`<tr class="click" data-href="#/contracts/${x.id}"><td class="strong">${esc(x.number)}</td><td>${esc(x.unit_id)}</td><td class="num">${num(x.total)}</td><td class="num">${num(x.paid)}</td><td class="num">${num(x.remaining)}</td><td>${stateBadge(x)}</td></tr>`).join("")}</table></div>`}</div>
+    <div class="card"><h2>Ma’lumot</h2><dl class="kv">
+      <dt>Pasport</dt><dd>${esc(c.passport||"—")}</dd>
+      <dt>Berilgan</dt><dd>${esc(c.passport_issued||"—")}</dd>
+      <dt>JShShIR</dt><dd>${esc(c.pinfl||"—")}</dd>
+      <dt>Tug‘ilgan</dt><dd>${dmy(c.birth_date)||"—"}</dd>
+      <dt>Manzil</dt><dd>${esc(c.address||"—")}</dd>
+      <dt>Qo‘sh. tel.</dt><dd>${esc(c.phone2||"—")}</dd>
+      <dt>Manba</dt><dd>${esc(META.sources[c.source]||c.source)}${c.ref_by?` (taklif: id ${c.ref_by})`:""}</dd>
+      <dt>Qiziqishi</dt><dd>${esc(c.interest||"—")}</dd>
+      <dt>Menejer</dt><dd>${esc(c.manager_name||"—")}</dd>
+      <dt>Qo‘shilgan</dt><dd>${dtm(c.created_at)}</dd>
+      ${c.note?`<dt>Izoh</dt><dd style="white-space:pre-line">${esc(c.note)}</dd>`:""}
+    </dl>
+    ${can.edit()?`<div class="toolbar" style="margin-top:14px"><span class="small muted">Bosqich:</span>${Object.entries(META.stages).filter(([k])=>k!=="contract").map(([k,v])=>`<button class="chip ${c.stage===k?"on":""}" data-stage="${k}">${v}</button>`).join("")}</div>`:""}
+    </div>
+  </div>`;
+  $("#edCl") && ($("#edCl").onclick = () => openClientForm(c, () => reload()));
+  $("#tgCl") && ($("#tgCl").onclick = () => openClientLink(c));
+  $$("[data-stage]").forEach(b => b.onclick = async () => { try { await api("PATCH", "/api/clients/"+c.id, {stage:b.dataset.stage}); toast("Bosqich o‘zgardi"); reload(); } catch(e){ toast(e.message,"bad"); } });
+  bindRows();
+}
+
+/* ===================== uylar ===================== */
+async function viewUnits(seq){
+  setTitle("Uylar");
+  const d = await api("GET", "/api/units");
+  if (seq !== routeSeq) return;
+  const rooms = Q().get("rooms") || "", status = Q().get("status") || "";
+  const by = {}; d.units.forEach(u => ((by[u.block] ||= {})[u.floor] ||= []).push(u));
+  const cnt = s => d.units.filter(u=>u.status===s).length;
+  $("#view").innerHTML = `
+  <div class="toolbar">
+    <div class="chips"><a class="chip ${!status?"on":""}" href="#/units?rooms=${rooms}">Hammasi <span class="n">${d.units.length}</span></a>
+      ${Object.entries(META.unit_status).map(([k,v])=>`<a class="chip ${status===k?"on":""}" href="#/units?status=${k}&rooms=${rooms}">${v} <span class="n">${cnt(k)}</span></a>`).join("")}</div>
+    <select class="inp" id="uRooms" style="width:auto"><option value="">Barcha xonalar</option>${[1,2,3,4].map(r=>`<option value="${r}" ${rooms==r?"selected":""}>${r} xonali</option>`).join("")}</select>
+    <span class="grow"></span>
+    <div class="legend"><span><i style="background:var(--gold-soft);box-shadow:inset 0 0 0 1px #ecd9a8"></i>Bo‘sh</span><span><i style="background:var(--warn-soft);box-shadow:inset 0 0 0 1.5px #e9b878"></i>Band</span><span><i style="background:#e9edf2"></i>Sotilgan</span></div>
+  </div>
+  <p class="info" style="margin:0">Holat va narx shu yerda o‘zgartiriladi va darhol Mini App'dagi 3D binoga tushadi. Shartnoma tuzilganda uy o‘zi «sotilgan» bo‘ladi.</p>
+  <div class="blocks">${Object.keys(by).sort().map(b => {
+    const floors = Object.keys(by[b]).map(Number).sort((a,b)=>b-a);
+    const all = Object.values(by[b]).flat();
+    return `<div class="card bld"><h3>${b}-blok <small>${all.filter(u=>u.status==="free").length} bo‘sh / ${all.length}</small></h3>
+      ${floors.map(f => `<div class="fl"><span class="fn">${f}</span>${by[b][f].sort((x,y)=>x.n-y.n).map(u => {
+        const dim = (rooms && String(u.rooms)!==rooms) || (status && u.status!==status);
+        return `<button class="u ${u.status} ${dim?"dim":""}" data-u="${u.id}" title="${esc(u.id)} · ${META.unit_status[u.status]}${u.client_name?" · "+esc(u.client_name):""}"><b>${esc(u.id)}</b><span>${u.rooms} xona</span><span>${String(u.area).replace(".",",")} m²</span><span>${mln(u.price)}</span></button>`; }).join("")}</div>`).join("")}
+    </div>`; }).join("")}</div>`;
+  $("#uRooms").onchange = e => { location.hash = `#/units?status=${status}&rooms=${e.target.value}`; };
+  $$("[data-u]").forEach(b => b.onclick = () => openUnit(d.units.find(u => u.id === b.dataset.u)));
+}
+
+function openUnit(u){
+  modal(`<h2>Uy ${esc(u.id)}${X_BTN}</h2>
+    <dl class="kv"><dt>Joylashuv</dt><dd>${u.block}-blok, ${u.floor}-qavat, ${u.n}-xonadon</dd><dt>Xonalar</dt><dd>${u.rooms} xona, ${String(u.area).replace(".",",")} m²</dd>
+    ${u.contract_id?`<dt>Shartnoma</dt><dd><a href="#/contracts/${u.contract_id}" class="x">${esc(u.contract_number)}</a> · ${esc(u.client_name)}</dd>`:""}</dl>
+    <form class="form" id="uF">
+      <div class="f2">
+        <label class="field"><span>Holat</span><select class="inp" name="status" ${u.contract_id||!can.edit()?"disabled":""}>${Object.entries(META.unit_status).map(([k,v])=>`<option value="${k}" ${u.status===k?"selected":""}>${v}</option>`).join("")}</select>
+          ${u.contract_id?`<span class="hint">Faol shartnoma bor: holatni o‘zgartirish uchun shartnomani bekor qiling</span>`:""}</label>
+        <label class="field"><span>Narx, so‘m</span><input class="inp money" name="price" value="${u.price}" inputmode="numeric" ${can.price()?"":"readonly"}>
+          ${can.price()?"":`<span class="hint">Narxni admin yoki rahbar o‘zgartiradi</span>`}</label>
+      </div>
+      <label class="field"><span>Izoh (masalan, kim uchun band qilingan)</span><input class="inp" name="note" value="${esc(u.note||"")}" ${can.edit()?"":"readonly"}></label>
+      <div id="uErr" class="err" hidden></div>
+      <div class="acts">${!u.contract_id && u.status!=="sold" && can.edit()?`<a class="btn x" href="#/contracts/new?unit=${esc(u.id)}">Shartnoma tuzish</a>`:""}<button class="btn x" type="button">Yopish</button>${can.edit()?`<button class="btn primary" type="submit">Saqlash</button>`:""}</div>
+    </form>`, {onMount:(m, close) => {
+      moneyInputs(m);
+      $("#uF", m).onsubmit = async e => {
+        e.preventDefault();
+        const f = formData(e.target), body = {note: f.note};
+        if (!u.contract_id) body.status = f.status;
+        if (can.price()) body.price = f.price;
+        try { await api("PATCH", "/api/units/" + encodeURIComponent(u.id), body); close(); toast("Saqlandi"); reload(); }
+        catch(x){ $("#uErr", m).textContent = x.message; $("#uErr", m).hidden = false; }
+      };
+    }});
+}
+
+/* ===================== to'lovlar ===================== */
+async function viewPayments(seq){
+  setTitle("To‘lovlar");
+  const q = Q(), t = todayISO();
+  const from = q.get("from") || t.slice(0,8)+"01", to = q.get("to") || t;
+  const d = await api("GET", `/api/payments?from=${from}&to=${to}`);
+  if (seq !== routeSeq) return;
+  $("#view").innerHTML = `
+  <div class="toolbar">
+    <label class="field"><span>Dan</span><input class="inp" type="date" id="pFrom" value="${from}"></label>
+    <label class="field"><span>Gacha</span><input class="inp" type="date" id="pTo" value="${to}"></label>
+    <div class="chips" style="align-self:flex-end">
+      <button class="chip" data-r="today">Bugun</button><button class="chip" data-r="month">Shu oy</button><button class="chip" data-r="prev">O‘tgan oy</button><button class="chip" data-r="year">Shu yil</button></div>
+    <span class="grow"></span>
+    <a class="btn sm" style="align-self:flex-end" href="/api/export/payments?from=${from}&to=${to}">${icon("dl")}Excel</a>
+  </div>
+  <div class="grid g4">
+    <div class="card kpi"><span class="lbl">Jami (${dmy(from)} – ${dmy(to)})</span><span class="val">${mln(d.total)}</span><span class="sub">${d.payments.length} ta to‘lov</span></div>
+    ${Object.entries(META.methods).filter(([k])=>d.by_method[k]).slice(0,3).map(([k,v])=>`<div class="card kpi"><span class="lbl">${v}</span><span class="val">${mln(d.by_method[k])}</span></div>`).join("")}
+  </div>
+  <div class="card">${!d.payments.length?`<div class="empty">Bu oraliqda to‘lov yo‘q</div>`:`<div class="tbl-wrap"><table class="t">
+    <tr><th>№</th><th>Sana</th><th>Mijoz</th><th>Shartnoma</th><th>Uy</th><th class="num">Summa</th><th>Usul</th><th>Kiritdi</th><th></th></tr>
+    ${d.payments.map(p=>`<tr class="click" data-href="#/contracts/${p.contract_id}"><td class="muted">${p.id}</td><td class="nowrap">${dmy(p.paid_at)}</td><td class="strong">${esc(p.client)}</td><td class="nowrap">${esc(p.number)}</td><td>${esc(p.unit_id)}</td>
+      <td class="num b">${num(p.amount)}</td><td class="small">${esc(META.methods[p.method]||p.method)}</td><td class="small muted">${esc(p.created_by_name||"")}<br>${dtm(p.created_at)}</td>
+      <td class="num"><a class="btn sm" href="/api/payments/${p.id}/receipt" target="_blank" rel="noopener">Kvitansiya</a></td></tr>`).join("")}</table></div>`}</div>`;
+  const go = (f, t2) => { location.hash = `#/payments?from=${f}&to=${t2}`; };
+  $("#pFrom").onchange = e => go(e.target.value, $("#pTo").value);
+  $("#pTo").onchange = e => go($("#pFrom").value, e.target.value);
+  $$("[data-r]").forEach(b => b.onclick = () => {
+    const [y,m] = t.split("-").map(Number); const pad = n => String(n).padStart(2,"0");
+    const r = b.dataset.r;
+    if (r==="today") go(t,t);
+    if (r==="month") go(t.slice(0,8)+"01", t);
+    if (r==="year") go(`${y}-01-01`, t);
+    if (r==="prev"){ const py = m===1?y-1:y, pm = m===1?12:m-1; const last = new Date(py, pm, 0).getDate(); go(`${py}-${pad(pm)}-01`, `${py}-${pad(pm)}-${last}`); }
+  });
+  bindRows();
+}
+
+/* ===================== xodimlar ===================== */
+async function viewStaff(seq){
+  setTitle("Xodimlar");
+  const d = await api("GET", "/api/users");
+  if (seq !== routeSeq) return;
+  $("#view").innerHTML = `
+  <div class="toolbar"><p class="muted" style="margin:0" class="grow"><b>Admin</b> hammasini boshqaradi. <b>Rahbar</b> hammasini ko‘radi, to‘lovni o‘chira va shartnomani bekor qila oladi. <b>Menejer</b> mijoz, shartnoma va to‘lov kiritadi.</p>
+    <span class="grow"></span><button class="btn primary" id="addU">+ Xodim qo‘shish</button></div>
+  <div class="card"><div class="tbl-wrap"><table class="t">
+    <tr><th>Ism</th><th>Login</th><th>Rol</th><th>Telefon</th><th>Telegram</th><th>Holat</th><th></th></tr>
+    ${d.users.map(u=>`<tr style="${u.active?"":"opacity:.55"}"><td class="strong">${esc(u.name)}</td><td>${esc(u.login)}</td><td>${badge(META.roles[u.role], u.role==="director"?"gold":u.role==="admin"?"blue":"")}</td>
+      <td>${esc(u.phone||"—")}</td><td>${u.tg_linked?badge("ulangan","ok"):"—"}</td><td>${u.active?"Faol":"O‘chirilgan"}</td>
+      <td class="num"><button class="btn sm" data-ed="${u.id}">Tahrirlash</button></td></tr>`).join("")}
+  </table></div></div>`;
+  $("#addU").onclick = () => openUser(null);
+  $$("[data-ed]").forEach(b => b.onclick = () => openUser(d.users.find(u => u.id === +b.dataset.ed)));
+}
+function openUser(u){
+  modal(`<h2>${u?"Xodimni tahrirlash":"Yangi xodim"}${X_BTN}</h2>
+    <form class="form" id="usF" autocomplete="off">
+      <label class="field"><span>Ism-familiya <i>*</i></span><input class="inp" name="name" value="${esc(u?.name||"")}" required></label>
+      <div class="f2">
+        <label class="field"><span>Login <i>*</i></span><input class="inp" name="login" value="${esc(u?.login||"")}" ${u?"readonly":""} autocapitalize="none" pattern="[a-zA-Z0-9._\\-]{3,40}" required><span class="hint">lotin harf va raqam</span></label>
+        <label class="field"><span>Rol</span><select class="inp" name="role">${Object.entries(META.roles).map(([k,v])=>`<option value="${k}" ${(u?.role||"manager")===k?"selected":""}>${v}</option>`).join("")}</select></label>
+      </div>
+      <div class="f2">
+        <label class="field"><span>Telefon</span><input class="inp" name="phone" value="${esc(u?.phone||"")}"></label>
+        <label class="field"><span>${u?"Yangi parol (o‘zgartirish uchun)":"Parol *"}</span><input class="inp" name="password" type="text" minlength="8" ${u?"":"required"} autocomplete="new-password"><span class="hint">kamida 8 belgi</span></label>
+      </div>
+      ${u?`<label class="check"><input type="checkbox" name="active" ${u.active?"checked":""}> Faol (o‘chirilsa tizimga kira olmaydi)</label>
+      ${u.tg_linked?`<label class="check"><input type="checkbox" name="unlink_tg"> Telegram ulanishini uzish</label>`:""}`:""}
+      <div id="usErr" class="err" hidden></div>
+      <div class="acts"><button class="btn x" type="button">Bekor</button><button class="btn primary" type="submit">Saqlash</button></div>
+    </form>`, {onMount:(m, close) => {
+      $("#usF", m).onsubmit = async e => {
+        e.preventDefault(); const f = formData(e.target);
+        if (u && !f.password) delete f.password;
+        if (u) delete f.login;
+        try { u ? await api("PATCH", "/api/users/" + u.id, f) : await api("POST", "/api/users", f); close(); toast("Saqlandi"); reload(); }
+        catch(x){ $("#usErr", m).textContent = x.message; $("#usErr", m).hidden = false; }
+      };
+    }});
+}
+
+/* ===================== sozlamalar ===================== */
+async function viewSettings(seq){
+  setTitle("Sozlamalar");
+  const s = await api("GET", "/api/settings");
+  if (seq !== routeSeq) return;
+  const c = s.company;
+  const fld = (k, t, ph="") => `<label class="field"><span>${t}</span><input class="inp" name="c_${k}" value="${esc(c[k]||"")}" placeholder="${esc(ph)}"></label>`;
+  $("#view").innerHTML = `
+  <form class="grid g2" id="stF">
+    <div class="card"><h2>Kompaniya (shartnoma va kvitansiyaga tushadi)</h2><div class="form">
+      ${fld("name","Nomi")} ${fld("director","Direktor F.I.Sh.")}
+      <div class="f2">${fld("inn","STIR (INN)")}${fld("phone","Telefon")}</div>
+      ${fld("address","Yuridik manzil")}
+      <div class="f3">${fld("account","Hisob raqam")}${fld("bank","Bank")}${fld("mfo","MFO")}</div>
+      <div class="f2">${fld("city","Shahar (shartnoma tuzilgan joy)")}${fld("object","Obyekt nomi")}</div>
+    </div></div>
+    <div class="grid" style="align-content:start">
+      <div class="card"><h2>Bo‘lib to‘lash shartlari</h2><div class="form">
+        <p class="small muted" style="margin:0">Har muddat uchun qolgan summaga qo‘shiladigan ustama. Jadvalda yo‘q muddat oradagi qiymat bo‘yicha hisoblanadi.</p>
+        <table class="t" id="terms"><tr><th>Muddat, oy</th><th>Ustama, %</th><th></th></tr>
+          ${s.terms.map(t=>`<tr><td><input class="inp" type="number" min="1" max="360" value="${t.m}" data-m></td><td><input class="inp" type="number" min="0" step="0.1" value="${t.markup}" data-k></td><td><button type="button" class="btn ghost sm" data-rm>✕</button></td></tr>`).join("")}
+        </table>
+        <button type="button" class="btn sm" id="addTerm" style="justify-self:start">+ Muddat qo‘shish</button>
+        <div class="f3">
+          <label class="field"><span>Eng kam boshlang‘ich, %</span><input class="inp" type="number" name="min_down_pct" value="${s.min_down_pct}" min="0" max="100"></label>
+          <label class="field"><span>Eng uzun muddat, oy</span><input class="inp" type="number" name="max_months" value="${s.max_months}" min="1" max="360"></label>
+          <label class="field"><span>Shartnoma prefiksi</span><input class="inp" name="contract_prefix" value="${esc(s.contract_prefix)}" maxlength="8"></label>
+        </div>
+      </div></div>
+      <div class="card"><h2>Telegram xabarlari</h2><div class="form">
+        <label class="field"><span>Rahbarga kunlik hisobot soati (Toshkent vaqti)</span><input class="inp" type="number" name="report_hour" value="${s.report_hour}" min="0" max="23" style="width:120px"></label>
+        <label class="check"><input type="checkbox" name="client_reminders" ${s.client_reminders?"checked":""}> Mijozlarga to‘lov eslatmasi (3 kun oldin, to‘lov kuni, kechikkanda)</label>
+      </div></div>
+      <div id="stErr" class="err" hidden></div>
+      <button class="btn primary" type="submit" style="justify-self:start">Saqlash</button>
+      ${s.demo_clients ? `<div class="card"><h2>Namuna ma’lumot</h2><p class="muted" style="margin-top:0">Bazada taqdimot uchun ${s.demo_clients} ta namuna mijoz va ularning shartnoma-to‘lovlari bor. Haqiqiy ish boshlashdan oldin o‘chiring.</p>
+        <button type="button" class="btn danger" id="demoClr">Namuna ma’lumotni o‘chirish</button></div>` : ""}
+    </div>
+  </form>`;
+  $("#demoClr") && ($("#demoClr").onclick = async () => {
+    if (!await confirmBox("Namuna ma’lumotni o‘chirish", "Barcha [demo] mijozlar, ularning shartnomalari va to‘lovlari o‘chiriladi, uylari yana bo‘sh bo‘ladi.", {ok:"O‘chirish", danger:true})) return;
+    try { const r = await api("POST", "/api/demo/clear"); toast(`${r.clients} ta namuna mijoz o‘chirildi`); reload(); refreshBadge(); } catch(e){ toast(e.message, "bad"); }
+  });
+  const bindRm = () => $$("[data-rm]").forEach(b => b.onclick = () => b.closest("tr").remove());
+  bindRm();
+  $("#addTerm").onclick = () => { $("#terms tbody").insertAdjacentHTML("beforeend", `<tr><td><input class="inp" type="number" min="1" max="360" data-m></td><td><input class="inp" type="number" min="0" step="0.1" value="0" data-k></td><td><button type="button" class="btn ghost sm" data-rm>✕</button></td></tr>`); bindRm(); };
+  $("#stF").onsubmit = async e => {
+    e.preventDefault();
+    const f = e.target, company = {};
+    Object.keys(c).forEach(k => company[k] = f.elements["c_"+k] ? f.elements["c_"+k].value.trim() : c[k]);
+    const terms = $$("#terms tr").slice(1).map(tr => ({m: $("[data-m]",tr).value, markup: $("[data-k]",tr).value})).filter(t => t.m);
+    try {
+      await api("PUT", "/api/settings", {company, terms, min_down_pct: f.min_down_pct.value, max_months: f.max_months.value,
+        contract_prefix: f.contract_prefix.value, report_hour: f.report_hour.value, client_reminders: f.client_reminders.checked});
+      const me = await api("GET", "/api/me"); META = me;
+      toast("Sozlamalar saqlandi"); reload();
+    } catch(x){ $("#stErr").textContent = x.message; $("#stErr").hidden = false; }
+  };
+}
+
+/* ===================== jurnal ===================== */
+async function viewAudit(seq){
+  setTitle("Amallar jurnali");
+  const act = Q().get("action") || "";
+  const d = await api("GET", "/api/audit" + (act ? "?action=" + act : ""));
+  if (seq !== routeSeq) return;
+  const det = r => { const x = r.details || {}; const p = [];
+    if (x.number) p.push(x.number); if (x.contract) p.push(x.contract); if (x.client) p.push(x.client); if (x.name) p.push(x.name);
+    if (x.unit) p.push("uy " + x.unit); if (x.amount) p.push(som(x.amount)); if (x.paid_at) p.push(dmy(x.paid_at)); if (x.total) p.push("jami " + som(x.total));
+    if (x.before && x.after){ if (x.before.status !== x.after.status) p.push(`${META.unit_status[x.before.status]} → ${META.unit_status[x.after.status]}`); if (x.before.price !== x.after.price) p.push(`${mln(x.before.price)} → ${mln(x.after.price)}`); }
+    if (x.login) p.push(x.login); if (x.reason) p.push("sabab: " + x.reason); if (x.fields) p.push(x.fields.join(", "));
+    return p.map(esc).join(" · "); };
+  $("#view").innerHTML = `
+  <div class="toolbar"><select class="inp" id="aAct" style="width:auto"><option value="">Barcha amallar</option>${Object.entries(d.names).map(([k,v])=>`<option value="${k}" ${act===k?"selected":""}>${v}</option>`).join("")}</select>
+    <span class="small muted">Oxirgi 300 ta yozuv. Yozuvlarni hech kim o‘chira olmaydi.</span></div>
+  <div class="card">${!d.rows.length?`<div class="empty">Yozuv yo‘q</div>`:`<div class="tbl-wrap"><table class="t">
+    <tr><th>Vaqt</th><th>Xodim</th><th>Amal</th><th>Tafsilot</th></tr>
+    ${d.rows.map(r=>`<tr class="${r.entity==="contract"||r.entity==="client"?"click":""}" ${r.entity==="contract"?`data-href="#/contracts/${r.entity_id}"`:r.entity==="client"?`data-href="#/clients/${r.entity_id}"`:""}>
+      <td class="nowrap small">${dtm(r.at)}</td><td class="strong">${esc(r.user_name||"Bot")}</td>
+      <td>${r.action==="payment_delete"||r.action==="contract_cancel"?badge(d.names[r.action]||r.action,"bad"):esc(d.names[r.action]||r.action)}</td><td class="small">${det(r)}</td></tr>`).join("")}</table></div>`}</div>`;
+  $("#aAct").onchange = e => { location.hash = "#/audit" + (e.target.value ? "?action=" + e.target.value : ""); };
+  bindRows();
+}
+
+/* ===================== profil ===================== */
+async function viewProfile(){
+  setTitle("Profil");
+  $("#view").innerHTML = `
+  <div class="grid g2">
+    <div class="card"><h2>Parolni o‘zgartirish</h2>
+      <form class="form" id="pwF">
+        <label class="field"><span>Eski parol</span><input class="inp" type="password" name="old" autocomplete="current-password" required></label>
+        <label class="field"><span>Yangi parol</span><input class="inp" type="password" name="new" minlength="8" autocomplete="new-password" required><span class="hint">kamida 8 belgi</span></label>
+        <div id="pwErr" class="err" hidden></div>
+        <button class="btn primary" style="justify-self:start">Saqlash</button>
+      </form></div>
+    <div class="card"><h2>Telegram</h2>
+      <p class="muted" style="margin-top:0">${ME.tg_id?"Telegram ulangan.":"Telegram'ni ulasangiz,"} ${["director","admin"].includes(ME.role)?"har kuni ertalab bot orqali qisqa hisobot keladi (tushum, qarzdorlar, bugungi to‘lovlar). Botga /hisobot yozib istalgan vaqtda olish mumkin.":"botga /hisobot yozib qisqa hisobot olasiz."}</p>
+      <button class="btn" id="tgMe">${icon("tg")}${ME.tg_id?"Boshqa Telegram'ga ulash":"Telegram'ni ulash"}</button>
+      <div id="tgOut" style="margin-top:12px"></div>
+    </div>
+  </div>`;
+  $("#pwF").onsubmit = async e => {
+    e.preventDefault(); const f = formData(e.target);
+    try { await api("POST","/api/me/password", f); e.target.reset(); toast("Parol o‘zgartirildi"); }
+    catch(x){ $("#pwErr").textContent = x.message; $("#pwErr").hidden = false; }
+  };
+  $("#tgMe").onclick = async () => {
+    try { const r = await api("POST","/api/me/tg-link"); $("#tgOut").innerHTML = `<a class="btn primary" href="${esc(r.url)}" target="_blank" rel="noopener">Telegram'da ochish</a><p class="small muted">Havola 30 daqiqa amal qiladi. Botda <b>Start</b> ni bosing.</p>`; }
+    catch(x){ $("#tgOut").innerHTML = `<div class="err">${esc(x.message)}</div>`; }
+  };
+}
+
+boot();
+})();
+</script>
+</body>
+</html>

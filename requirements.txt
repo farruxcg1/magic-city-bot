@@ -1,2 +1,6 @@
 aiogram==3.13.1
 aiohttp>=3.9,<3.11
+asyncpg==0.30.0
+docxtpl==0.19.1
+openpyxl==3.1.5
+tzdata>=2024.1

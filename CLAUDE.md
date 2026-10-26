@@ -1,12 +1,11 @@
-# Magic City bot: vazifa (Claude uchun)
+# Magic City: Claude uchun eslatma
 
-Bu papkada tayyor loyiha bor: Telegram bot (`bot.py`, aiogram 3) va Mini App (`webapp/index.html`). Bitta server ikkalasini ham ishlatadi.
+Foydalanuvchi bilan oʻzbek tilida gaplash.
 
-Qilish kerak:
-1. Shu fayllarni GitHub repo `farruxcg1/magic-city-bot` ga yuklash (repo bo'sh, `main` branch).
-2. Foydalanuvchiga Render'da deploy qilishda yordam berish: render.com → GitHub bilan kirish → New → Blueprint → shu repo. `render.yaml` hammasini sozlaydi.
-3. `BOT_TOKEN` ni foydalanuvchi O'ZI Render formasiga kiritadi. Tokenni so'rama, chatga yozdirma.
-4. Deploy tugagach: `https://...onrender.com/health` "ok" qaytarishi kerak, botga /start yozilganda Mini App tugmasi chiqadi.
-5. Menejerlar guruhi: guruh ochish, botni qo'shish, guruhda `/id` yozish, chiqqan raqamni Render → Environment → `MANAGER_CHAT_ID` ga qo'yish.
-
-Batafsil: README.md. Foydalanuvchi bilan o'zbek tilida gaplash.
+- Deploy: Railway (`main` ga push → avtomatik deploy). Render ishlatilmaydi (`render.yaml` eski).
+- Bitta servis: bot (webhook), Mini App (`/`), admin panel (`/admin`), rahbar PWA (`/rahbar`), API (`/api/...`).
+- Baza: Railway PostgreSQL, `DATABASE_URL`. Jadvallar `mc/db.py` da, ishga tushganda oʻzi yaratiladi (`CREATE ... IF NOT EXISTS`, ustun qoʻshish `ALTER TABLE ... ADD COLUMN IF NOT EXISTS`).
+- Maxfiy qiymatlarni (`BOT_TOKEN`, `ADMIN_PASSWORD`, `DATABASE_URL`) foydalanuvchi Railway Variables'ga OʻZI kiritadi. Ularni chatda soʻrama.
+- Baza ulanmasa ham bot va Mini App ishlashi shart (`safe()` va `db.pool is None` tekshiruvlari).
+- Pul hamma joyda butun soʻm (int). Toʻlovlar grafikdagi eng eski qarzdan boshlab yopiladi (`mc/finance.py: allocate`).
+- Sinov: `scripts/dev_server.py` (Telegram'siz). Batafsil: README.md.

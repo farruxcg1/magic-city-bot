@@ -559,6 +559,7 @@ const Bld = (function(){
     focus(u){ const s=SIDES[u.n]; selId=u.id; refresh(); Object.assign(G,{tx:BX(u.block)+(s.west?-4:4), ty:BASE+(u.floor-1)*FH-4, tz:0, dist:62, pitch:.14});
       aimYaw(s.front ? (s.west?-.55:.55) : (s.west?Math.PI+.55:Math.PI-.55)); },
     clearSel(){ selId=null; refresh(); },
+    sync(){ refresh(); },  // uylar holati bazadan yangilanganda derazalarni qayta yoqadi
     filter(rooms){ filterRooms=rooms; refresh(); },
     // uy derazasining ekrandagi joyi (sinov va kelajakdagi izohlar uchun)
     screenOf(id){ const w = WINS.find(w=>w.u.id===id); if(!w||!host) return null; const v=new T.Vector3().setFromMatrixPosition(w.m).project(cam); const b=el.getBoundingClientRect(); return {x:b.left+(v.x+1)/2*b.width, y:b.top+(1-v.y)/2*b.height}; }
@@ -772,6 +773,24 @@ document.addEventListener("click", e=>{
   else if(ds.calcunit){ const u=byId(ds.calcunit); S.calcUnit=u.id; S.calcPrice=u.price; go("calc"); }
   else if(ds.leadunit){ S.calcUnit=ds.leadunit; go("lead"); }
 });
+/* Haqiqiy holat va narxlar admin paneldan (bazadan) olinadi; server javob bermasa namuna qoladi */
+fetch("/api/public/units", {cache:"no-store"}).then(r => r.ok ? r.json() : null).then(d => {
+  if (!d || !d.units) return;
+  let ch = 0;
+  const c = d.config;
+  if (c && c.terms && c.terms.length){  // bo'lib to'lash shartlari admin paneldagi Sozlamalardan
+    CFG.terms = c.terms; CFG.minDownPct = c.min_down_pct; CFG.maxMonths = c.max_months;
+    if (c.phone) CFG.managerPhone = c.phone;
+    if (S.down < CFG.minDownPct) S.down = CFG.minDownPct;
+    if (S.term > CFG.maxMonths) S.term = CFG.maxMonths;
+    ch++;
+  }
+  const m = new Map(d.units.map(x => [x.id, x]));
+  UNITS.forEach(u => { const x = m.get(u.id); if (x && (x.status !== u.status || x.price !== u.price)){ u.status = x.status; u.price = x.price; ch++; } });
+  if (!ch) return;
+  Bld && Bld.sync();
+  if (S.tab === "home" || S.tab === "list") render(); else if (S.tab === "bino") softRenderBino();
+}).catch(() => {});
 window.MagicCity = { screenOf: id => Bld && Bld.screenOf(id), units: UNITS };
 window.addEventListener("resize", ()=>{ if(S.tab==="home" && !Bld) drawSky(); });
 render();

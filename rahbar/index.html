@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f2f4f7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Magic City">
+<meta name="format-detection" content="telephone=no">
+<title>Magic City · Rahbar</title>
+<link rel="manifest" href="/rahbar/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/rahbar/static/apple-touch-icon.png">
+<link rel="icon" href="/rahbar/static/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600&family=Manrope:wght@500;600;700;800&display=swap">
+<style>
+:root{
+  --bg:#f2f4f7; --surface:#fff; --surface-2:#f6f8fb; --ink:#18202b; --muted:#687384; --faint:#97a1ad; --line:#e3e8ee;
+  --lapis:#2448a6; --lapis-2:#3a63c9; --lapis-deep:#17327a; --lapis-soft:#e8eefb;
+  --gold:#f2b544; --gold-soft:#fdf2da; --gold-ink:#8a5a0c;
+  --ok:#1d7f55; --ok-soft:#e2f3ea; --bad:#b9372f; --bad-soft:#fbe8e6; --warn:#a86414; --warn-soft:#fbefdc;
+  --sh:0 1px 1px rgba(24,32,43,.04),0 3px 10px rgba(24,32,43,.05);
+  --f-display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --f-body:"Manrope",-apple-system,system-ui,"Segoe UI",sans-serif;
+  --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.45;font-variant-numeric:tabular-nums;overscroll-behavior-y:contain;-webkit-text-size-adjust:100%}
+button,input{font:inherit;color:inherit}
+a{color:var(--lapis);text-decoration:none}
+.muted{color:var(--muted)} .faint{color:var(--faint)} .red{color:var(--bad)} .b{font-weight:800}
+.wrap{max-width:560px;margin:0 auto;padding:calc(10px + var(--safe-t)) 16px calc(96px + var(--safe-b))}
+
+/* sarlavha */
+.head{display:flex;align-items:center;gap:10px;padding:6px 2px 14px}
+.head h1{font-family:var(--f-display);font-weight:500;font-size:22px;letter-spacing:-.02em;margin:0}
+.head .sub{font-size:13px;color:var(--muted);font-weight:600}
+.head .sp{flex:1}
+.iconbtn{width:40px;height:40px;border-radius:12px;border:0;background:var(--surface);box-shadow:var(--sh);display:grid;place-items:center;cursor:pointer;flex:none}
+.iconbtn svg{width:20px;height:20px;color:var(--ink)}
+.iconbtn.spin svg{animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* kartalar */
+.stack{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+.card{background:var(--surface);border-radius:18px;box-shadow:var(--sh);padding:16px}
+.card h2{font-size:15px;font-weight:800;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.card h2 .r{margin-left:auto;font-size:13px;font-weight:700;color:var(--lapis)}
+.hero{background:linear-gradient(155deg,var(--lapis-2) 0%,var(--lapis-deep) 85%);color:#fff;border-radius:22px;padding:18px;box-shadow:0 14px 30px -14px rgba(23,50,122,.6);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;width:220px;height:220px;right:-70px;top:-90px;border-radius:50%;background:radial-gradient(circle,rgba(242,181,68,.42),transparent 65%)}
+.hero .m{display:flex;align-items:center;gap:6px;font-weight:700;font-size:14px;opacity:.92;position:relative;z-index:1}
+.hero .m button{border:0;background:rgba(255,255,255,.14);color:#fff;width:30px;height:30px;border-radius:9px;cursor:pointer;font-size:16px}
+.hero .m span{flex:1;text-align:center}
+.hero .lbl{font-size:13px;opacity:.8;font-weight:600;margin-top:14px}
+.hero .big{font-family:var(--f-display);font-weight:500;font-size:34px;letter-spacing:-.03em;line-height:1.15}
+.hero .big small{font-family:var(--f-body);font-size:15px;font-weight:700;opacity:.75;letter-spacing:0}
+.hero .pbar{height:8px;border-radius:99px;background:rgba(255,255,255,.2);margin:14px 0 8px;overflow:hidden}
+.hero .pbar i{display:block;height:100%;border-radius:99px;background:var(--gold)}
+.hero .pl{display:flex;justify-content:space-between;font-size:13px;font-weight:600;opacity:.9;gap:10px}
+.tiles{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.tile{background:var(--surface);border-radius:16px;box-shadow:var(--sh);padding:14px;display:grid;gap:2px;border:0;text-align:left;cursor:pointer;width:100%}
+.tile .l{font-size:12.5px;color:var(--muted);font-weight:700}
+.tile .v{font-family:var(--f-display);font-weight:500;font-size:21px;letter-spacing:-.02em}
+.tile .s{font-size:12px;color:var(--muted);font-weight:600}
+.tile.bad{background:var(--bad-soft)} .tile.bad .v,.tile.bad .l{color:var(--bad)}
+
+/* ro'yxat */
+.list{display:grid}
+.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left}
+.row:last-child{border-bottom:0}
+.row .main{flex:1;min-width:0}
+.row .t{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .d{font-size:12.5px;color:var(--muted);font-weight:600}
+.row .amt{text-align:right;font-weight:800;white-space:nowrap}
+.row .amt small{display:block;font-size:12px;font-weight:700}
+.call{width:38px;height:38px;border-radius:12px;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center;flex:none}
+.call svg{width:18px;height:18px}
+.badge{display:inline-block;font-size:11.5px;font-weight:800;border-radius:99px;padding:2px 8px;background:var(--surface-2);color:var(--muted)}
+.badge.bad{background:var(--bad-soft);color:var(--bad)} .badge.warn{background:var(--warn-soft);color:var(--warn)} .badge.ok{background:var(--ok-soft);color:var(--ok)}
+.empty{padding:24px 6px;text-align:center;color:var(--muted);font-weight:600}
+.seg{display:flex;background:#e6eaf0;border-radius:12px;padding:3px;gap:2px}
+.seg button{flex:1;min-width:0;white-space:nowrap;border:0;background:none;border-radius:9px;padding:7px 4px;font-weight:700;font-size:13.5px;color:var(--muted);cursor:pointer}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(24,32,43,.12)}
+.sum-line{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.sum-line .v{font-family:var(--f-display);font-weight:500;font-size:24px;letter-spacing:-.02em}
+.gh{font-size:12px;font-weight:800;color:var(--faint);text-transform:uppercase;letter-spacing:.04em;padding:12px 0 2px}
+
+/* grafik */
+.chart svg{width:100%;height:auto;display:block}
+.lg{display:flex;gap:14px;font-size:12px;color:var(--muted);font-weight:700;margin-bottom:6px}
+.lg i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+.age{display:grid;gap:9px}
+.age .r{display:grid;grid-template-columns:78px 1fr auto;white-space:nowrap;gap:10px;align-items:center;font-size:13px;font-weight:700}
+.bar{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--bad)}
+.units{display:flex;height:14px;border-radius:99px;overflow:hidden;margin:4px 0 10px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);font-weight:700}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+table.mt{width:100%;border-collapse:collapse;font-size:13.5px}
+.mt th{font-size:11.5px;color:var(--muted);text-align:right;font-weight:700;padding:6px 4px;border-bottom:1px solid var(--line)}
+.mt th:first-child,.mt td:first-child{text-align:left}
+.mt td{padding:9px 4px;border-bottom:1px solid var(--line);text-align:right;font-weight:600}
+.mt tr:last-child td{border-bottom:0}
+
+/* pastki menyu */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.6) blur(14px);-webkit-backdrop-filter:saturate(1.6) blur(14px);border-top:1px solid var(--line);padding:6px 8px calc(6px + var(--safe-b));display:flex;justify-content:center}
+.tabs .in{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;max-width:560px}
+.tabs button{border:0;background:none;display:grid;justify-items:center;gap:2px;padding:4px 0;font-size:11px;font-weight:700;color:var(--faint);cursor:pointer;position:relative}
+.tabs button svg{width:24px;height:24px}
+.tabs button.on{color:var(--lapis)}
+.tabs .dot{position:absolute;top:0;left:calc(50% + 8px);background:var(--bad);color:#fff;font-size:10px;font-weight:800;border-radius:99px;padding:0 5px;line-height:16px}
+
+/* oyna (pastdan) */
+.sheet-back{position:fixed;inset:0;background:rgba(24,32,43,.35);z-index:40;display:flex;align-items:flex-end;justify-content:center;animation:fi .18s}
+.sheet{background:var(--bg);width:100%;max-width:560px;max-height:88vh;overflow:auto;border-radius:22px 22px 0 0;padding:10px 16px calc(20px + var(--safe-b));animation:up .22s ease-out}
+.sheet .grab{width:40px;height:5px;border-radius:99px;background:#cfd6df;margin:0 auto 12px}
+.sheet h3{font-size:18px;font-weight:800;margin:0}
+@keyframes fi{from{opacity:0}} @keyframes up{from{transform:translateY(40px);opacity:.5}}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:14px;padding:13px 16px;font-weight:800;cursor:pointer;background:var(--surface);box-shadow:var(--sh);width:100%;color:var(--ink)}
+.btn.primary{background:var(--lapis);color:#fff}
+.btn.danger{color:var(--bad)}
+.btn svg{width:18px;height:18px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}
+.kv dt{color:var(--muted);font-weight:600} .kv dd{margin:0;font-weight:700;text-align:right}
+
+/* kirish */
+.login{min-height:100vh;display:grid;align-content:center;padding:calc(20px + var(--safe-t)) 20px calc(20px + var(--safe-b));gap:20px;max-width:420px;margin:0 auto}
+.login .logo{width:72px;height:72px;border-radius:20px;box-shadow:0 12px 26px -10px rgba(23,50,122,.6)}
+.login h1{font-family:var(--f-display);font-weight:500;font-size:26px;letter-spacing:-.02em;margin:0}
+.inp{width:100%;border:1px solid #d3dae3;background:var(--surface);border-radius:14px;padding:13px 14px;font-size:16px;outline:none}
+.inp:focus{border-color:var(--lapis-2);box-shadow:0 0 0 3px rgba(58,99,201,.15)}
+.err{background:var(--bad-soft);color:var(--bad);border-radius:12px;padding:10px 12px;font-weight:700;font-size:14px}
+.install{background:var(--gold-soft);color:#5a3a00;border-radius:16px;padding:12px 14px;font-size:13.5px;display:flex;gap:10px;align-items:flex-start}
+.install b{display:block;margin-bottom:2px}
+.install button{margin-left:auto;border:0;background:none;font-size:18px;color:#8a5a0c;cursor:pointer;padding:0 4px}
+.upd{font-size:12px;color:var(--faint);text-align:center;font-weight:600;margin-top:4px}
+.offline{background:var(--warn-soft);color:var(--warn);font-weight:700;font-size:13px;border-radius:12px;padding:8px 12px;text-align:center}
+</style>
+</head>
+<body>
+
+<div id="login" class="login" hidden>
+  <img class="logo" src="/rahbar/static/icon-192.png" alt="">
+  <div><h1>Magic City</h1><div class="muted b">Rahbar uchun hisobot</div></div>
+  <form id="lf" style="display:grid;gap:12px">
+    <div id="lErr" class="err" hidden></div>
+    <input class="inp" name="login" placeholder="Login" autocomplete="username" autocapitalize="none" autocorrect="off" required>
+    <input class="inp" name="password" type="password" placeholder="Parol" autocomplete="current-password" required>
+    <button class="btn primary" type="submit">Kirish</button>
+  </form>
+  <div id="installL"></div>
+</div>
+
+<div id="app" hidden>
+  <div class="wrap">
+    <div class="head">
+      <div><h1 id="hT">Magic City</h1><div class="sub" id="hS"></div></div>
+      <span class="sp"></span>
+      <button class="iconbtn" id="refBtn" aria-label="Yangilash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/></svg></button>
+      <button class="iconbtn" id="meBtn" aria-label="Profil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4.2 4-6.5 8-6.5s7.2 2.3 8 6.5"/></svg></button>
+    </div>
+    <div id="offline" class="offline" hidden>Internet yo‘q: oxirgi saqlangan ma’lumot ko‘rsatilmoqda</div>
+    <div id="installA"></div>
+    <main id="v" class="stack"></main>
+    <div class="upd" id="upd"></div>
+  </div>
+  <nav class="tabs"><div class="in" id="tabs"></div></nav>
+</div>
+<div id="sheets"></div>
+
+<script>
+(function(){
+"use strict";
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const num = n => Math.round(Number(n)||0).toLocaleString("ru-RU").replace(/ /g," ");
+const som = n => num(n) + " so‘m";
+const mln = n => { n = Number(n)||0; const a = Math.abs(n);
+  if (a >= 1e9) return (n/1e9).toLocaleString("ru-RU",{maximumFractionDigits:2}) + " mlrd";
+  if (a >= 1e6) return (n/1e6).toLocaleString("ru-RU",{maximumFractionDigits:1}) + " mln";
+  return num(n); };
+const dmy = s => { if(!s) return ""; const [y,m,d] = String(s).slice(0,10).split("-"); return `${d}.${m}.${y}`; };
+const MONTHS = ["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
+const MSHORT = ["yan","fev","mar","apr","may","iyn","iyl","avg","sen","okt","noy","dek"];
+const todayISO = () => new Date(Date.now() + 5*3600e3).toISOString().slice(0,10);
+const ym = s => { const [y,m] = s.split("-"); return MONTHS[+m-1] + " " + y; };
+const digits = v => String(v||"").replace(/\D/g,"");
+const addMonth = (s, k) => { let [y,m] = s.split("-").map(Number); m += k; while (m > 12){ m -= 12; y++; } while (m < 1){ m += 12; y--; } return `${y}-${String(m).padStart(2,"0")}`; };
+const store = { get(k){ try { return JSON.parse(localStorage.getItem("mc_r_"+k)); } catch(e){ return null; } },
+                set(k,v){ try { localStorage.setItem("mc_r_"+k, JSON.stringify(v)); } catch(e){} } };
+const PHONE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>';
+
+let ME = null, TAB = "home", MONTH = todayISO().slice(0,7), PAYR = "today", AGE = "";
+
+async function api(method, path, body){
+  const opt = {method, credentials:"same-origin", headers:{"X-MC":"1"}};
+  if (body !== undefined){ opt.headers["Content-Type"]="application/json"; opt.body = JSON.stringify(body); }
+  const r = await fetch(path, opt);
+  if (r.status === 401){ showLogin(); throw new Error("auth"); }
+  const d = await r.json().catch(()=>({}));
+  if (!r.ok) throw new Error(d.error || ("Xato " + r.status));
+  return d;
+}
+
+/* oflayn bo'lsa oxirgi javobni ko'rsatadi */
+async function cached(key, path){
+  try { const d = await api("GET", path); store.set(key, {d, at: Date.now()}); $("#offline").hidden = true; return {d, at: Date.now()}; }
+  catch(e){ if (e.message === "auth") throw e; const c = store.get(key); if (c){ $("#offline").hidden = false; return c; } throw e; }
+}
+
+function sheet(html, onMount){
+  const b = document.createElement("div"); b.className = "sheet-back";
+  b.innerHTML = `<div class="sheet"><div class="grab"></div>${html}</div>`;
+  const close = () => b.remove();
+  b.addEventListener("click", e => { if (e.target === b) close(); });
+  $("#sheets").appendChild(b);
+  onMount && onMount($(".sheet", b), close);
+  return close;
+}
+
+/* ----- iPhone'da o'rnatish ko'rsatmasi ----- */
+function installHint(el){
+  const standalone = window.navigator.standalone || matchMedia("(display-mode: standalone)").matches;
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  let hidden = false; try { hidden = localStorage.getItem("mc_r_noinstall") === "1"; } catch(e){}
+  if (standalone || hidden){ el.innerHTML = ""; return; }
+  const txt = ios
+    ? `Safari'da pastdagi <b style="display:inline">Ulashish</b> tugmasini (kvadrat va yuqoriga strelka) bosing → <b style="display:inline">«Bosh ekranga qo‘shish»</b> (Add to Home Screen).`
+    : `Brauzer menyusidan <b style="display:inline">«Bosh ekranga qo‘shish»</b> yoki «Ilovani o‘rnatish» ni tanlang.`;
+  el.innerHTML = `<div class="install" style="margin-bottom:12px"><div><b>Ilova sifatida o‘rnating</b>${txt} App Store kerak emas.</div><button aria-label="Yopish">✕</button></div>`;
+  $("button", el).onclick = () => { try { localStorage.setItem("mc_r_noinstall","1"); } catch(e){} el.innerHTML = ""; };
+}
+
+/* ----- kirish ----- */
+function showLogin(){ $("#app").hidden = true; $("#login").hidden = false; installHint($("#installL")); }
+$("#lf").addEventListener("submit", async e => {
+  e.preventDefault();
+  const f = e.target, err = $("#lErr"); err.hidden = true;
+  try { await api("POST", "/api/login", {login: f.login.value.trim(), password: f.password.value}); f.reset(); boot(); }
+  catch(x){ if (x.message !== "auth"){ err.textContent = x.message; err.hidden = false; } }
+});
+
+async function boot(){
+  let me;
+  try { me = await api("GET", "/api/me"); store.set("me", me); }
+  catch(e){ if (e.message === "auth") return; me = store.get("me"); if (!me){ showLogin(); return; } }
+  if (!me.user){ showLogin(); return; }
+  ME = me.user;
+  $("#login").hidden = true; $("#app").hidden = false;
+  installHint($("#installA"));
+  tabs(); render();
+}
+
+const TABS = [
+  ["home","Umumiy",'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],
+  ["debt","Qarzdorlar",'<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/>'],
+  ["pay","To‘lovlar",'<rect x="2.5" y="6" width="19" height="13" rx="2"/><path d="M2.5 10.5h19M6.5 15h4"/>'],
+  ["sales","Sotuv",'<path d="M4 21V5l8-3v19M12 21V8l8 3v10M3 21h18"/><path d="M7 8h2M7 12h2M7 16h2M15 13h2M15 17h2"/>'],
+];
+let debtCount = 0;
+function tabs(){
+  $("#tabs").innerHTML = TABS.map(([k,t,ic]) => `<button data-t="${k}" class="${TAB===k?"on":""}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ic}</svg>${t}${k==="debt"&&debtCount?`<span class="dot">${debtCount}</span>`:""}</button>`).join("");
+  $$("#tabs button").forEach(b => b.onclick = () => { TAB = b.dataset.t; tabs(); render(); window.scrollTo({top:0}); });
+}
+
+let busy = false;
+async function render(){
+  if (busy) return; busy = true;
+  $("#refBtn").classList.add("spin");
+  try {
+    if (TAB === "home") await vHome();
+    if (TAB === "debt") await vDebt();
+    if (TAB === "pay") await vPay();
+    if (TAB === "sales") await vSales();
+  } catch(e){ if (e.message !== "auth") $("#v").innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+  $("#refBtn").classList.remove("spin"); busy = false;
+}
+const stamp = at => { const d = new Date(at); $("#upd").textContent = "Yangilangan: " + d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"}); };
+
+function chart(series){
+  const W=340, H=150, P={l:4,r:4,t:8,b:20};
+  const max = Math.max(1, ...series.map(s => Math.max(s.plan, s.paid)));
+  const cw = (W-P.l-P.r)/series.length, bw = Math.max(3, cw*0.3);
+  const y = v => P.t + (H-P.t-P.b)*(1 - v/max);
+  let g = `<line x1="0" x2="${W}" y1="${y(0)}" y2="${y(0)}" stroke="var(--line)"/>`;
+  series.forEach((s,i) => { const cx = P.l + cw*i + cw/2, m = +s.month.split("-")[1];
+    g += `<rect x="${cx-bw-.5}" y="${y(s.plan)}" width="${bw}" height="${y(0)-y(s.plan)}" rx="2" fill="#c9d5f0"/>
+          <rect x="${cx+.5}" y="${y(s.paid)}" width="${bw}" height="${y(0)-y(s.paid)}" rx="2" fill="var(--lapis)"/>
+          <text x="${cx}" y="${H-5}" text-anchor="middle" font-size="9" font-weight="700" fill="var(--faint)">${MSHORT[m-1]}</text>`; });
+  return `<div class="chart"><div class="lg"><span><i style="background:#c9d5f0"></i>Reja</span><span><i style="background:var(--lapis)"></i>Tushum</span></div><svg viewBox="0 0 ${W} ${H}">${g}</svg></div>`;
+}
+
+/* ----- umumiy ----- */
+async function vHome(){
+  const {d, at} = await cached("dash_"+MONTH, "/api/dashboard?month=" + MONTH);
+  debtCount = d.overdue_count; tabs();
+  const t = new Date(d.today + "T00:00:00");
+  $("#hT").textContent = "Magic City";
+  $("#hS").textContent = `${t.getDate()}-${MONTHS[t.getMonth()]}, ${ME.name}`;
+  const pct = d.plan ? Math.round(100*d.plan_covered/d.plan) : 0;
+  const isCur = MONTH === todayISO().slice(0,7);
+  $("#v").innerHTML = `
+  <div class="hero">
+    <div class="m"><button id="mPrev" aria-label="Oldingi oy">‹</button><span>${ym(d.month)}</span><button id="mNext" aria-label="Keyingi oy" ${isCur?"style='visibility:hidden'":""}>›</button></div>
+    <div class="lbl">Oy davomida tushum</div>
+    <div class="big">${mln(d.collected)} <small>so‘m</small></div>
+    <div class="pbar"><i style="width:${Math.min(100,pct)}%"></i></div>
+    <div class="pl"><span>Grafik bo‘yicha: ${mln(d.plan)}</span><span>${pct}% to‘landi</span></div>
+  </div>
+  <div class="tiles">
+    <button class="tile" id="tToday"><span class="l">Bugun tushdi</span><span class="v">${mln(d.today_collected)}</span><span class="s">so‘m</span></button>
+    <button class="tile ${d.overdue_total?"bad":""}" id="tDebt"><span class="l">Muddati o‘tgan</span><span class="v">${mln(d.overdue_total)}</span><span class="s">${d.overdue_count} ta mijoz</span></button>
+    <div class="tile"><span class="l">Kutilayotgan tushum</span><span class="v">${mln(d.receivable)}</span><span class="s">${d.contracts} ta shartnoma</span></div>
+    <div class="tile"><span class="l">Shu oy sotuv</span><span class="v">${d.sales_month.count} ta</span><span class="s">${mln(d.sales_month.sum)} so‘m</span></div>
+  </div>
+  <div class="card"><h2>12 oy</h2>${chart(d.series)}</div>
+  <div class="card"><h2>Yaqin 7 kun to‘lovlari <span class="r">${mln(d.upcoming.reduce((a,r)=>a+r.left,0))}</span></h2>
+    ${d.upcoming.length ? `<div class="list">${d.upcoming.slice(0,8).map(r => row(r.client, `${dmy(r.due_date)} · uy ${esc(r.unit)}`, num(r.left), r.state==="today"?`<span class="badge warn">bugun</span>`:"", r.phone, r.contract_id)).join("")}</div>` : `<div class="empty">Yaqin kunlarda to‘lov yo‘q</div>`}
+  </div>`;
+  $("#mPrev").onclick = () => { MONTH = addMonth(MONTH, -1); render(); };
+  $("#mNext").onclick = () => { MONTH = addMonth(MONTH, 1); render(); };
+  $("#tDebt").onclick = () => { TAB = "debt"; tabs(); render(); };
+  $("#tToday").onclick = () => { TAB = "pay"; PAYR = "today"; tabs(); render(); };
+  bindRows(); stamp(at);
+}
+
+function row(title, sub, amount, extra, phone, cid){
+  return `<div class="row" data-c="${cid||""}"><div class="main"><div class="t">${esc(title)}</div><div class="d">${sub}</div></div>
+    <div class="amt">${amount}${extra?`<small>${extra}</small>`:""}</div>
+    ${phone?`<a class="call" href="tel:+${digits(phone)}" aria-label="Qo‘ng‘iroq">${PHONE}</a>`:""}</div>`;
+}
+function bindRows(){
+  $$(".row[data-c]").forEach(r => r.addEventListener("click", e => { if (e.target.closest("a")) return; if (r.dataset.c) openContract(+r.dataset.c); }));
+}
+
+/* ----- qarzdorlar ----- */
+async function vDebt(){
+  const {d, at} = await cached("debt", "/api/dues?kind=overdue");
+  const by = {};
+  d.rows.forEach(r => { const b = (by[r.contract_id] ||= {...r, sum:0, days:0, n:0}); b.sum += r.left; b.days = Math.max(b.days, r.days); b.n++; });
+  let list = Object.values(by).sort((a,b) => b.days - a.days || b.sum - a.sum);
+  debtCount = list.length; tabs();
+  const buckets = [["","Hammasi",()=>true],["30","1–30",x=>x.days<=30],["60","31–60",x=>x.days>30&&x.days<=60],["90","61–90",x=>x.days>60&&x.days<=90],["90+","90+",x=>x.days>90]];
+  const f = buckets.find(b => b[0] === AGE) || buckets[0];
+  const shown = list.filter(f[2]);
+  $("#hT").textContent = "Qarzdorlar"; $("#hS").textContent = `${list.length} ta mijoz`;
+  $("#v").innerHTML = `
+  <div class="card"><div class="sum-line"><span class="muted b">Muddati o‘tgan jami</span><span class="v red">${mln(d.total)}</span></div></div>
+  <div class="seg">${buckets.map(b=>`<button data-a="${b[0]}" class="${b[0]===AGE?"on":""}">${b[1]}</button>`).join("")}</div>
+  <div class="card">${shown.length ? `<div class="list">${shown.map(r => row(r.client, `uy ${esc(r.unit)} · ${r.n} oy to‘lanmagan`, `<span class="red">${num(r.sum)}</span>`, `<span class="badge ${r.days>30?"bad":"warn"}">${r.days} kun</span>`, r.phone, r.contract_id)).join("")}</div>` : `<div class="empty">Qarzdor yo‘q 🎉</div>`}</div>`;
+  $$("[data-a]").forEach(b => b.onclick = () => { AGE = b.dataset.a; render(); });
+  bindRows(); stamp(at);
+}
+
+/* ----- to'lovlar ----- */
+async function vPay(){
+  const t = todayISO();
+  const from = PAYR === "today" ? t : PAYR === "week" ? new Date(Date.parse(t) - 6*864e5).toISOString().slice(0,10) : t.slice(0,8) + "01";
+  const {d, at} = await cached("pay_"+PAYR, `/api/payments?from=${from}&to=${t}`);
+  $("#hT").textContent = "To‘lovlar"; $("#hS").textContent = `${d.payments.length} ta to‘lov`;
+  const groups = {};
+  d.payments.forEach(p => (groups[p.paid_at] ||= []).push(p));
+  $("#v").innerHTML = `
+  <div class="seg">${[["today","Bugun"],["week","7 kun"],["month","Shu oy"]].map(([k,v])=>`<button data-p="${k}" class="${k===PAYR?"on":""}">${v}</button>`).join("")}</div>
+  <div class="card"><div class="sum-line"><span class="muted b">Jami tushum</span><span class="v">${mln(d.total)}</span></div>
+    ${Object.keys(d.by_method).length ? `<div class="legend" style="margin-top:8px">${Object.entries(d.by_method).map(([k,v])=>`<span>${{cash:"Naqd",card:"Karta",bank:"Bank",other:"Boshqa"}[k]||k}: ${mln(v)}</span>`).join("")}</div>`:""}</div>
+  <div class="card">${d.payments.length ? Object.keys(groups).map(day => `<div class="gh">${dmy(day)} · ${mln(groups[day].reduce((a,p)=>a+p.amount,0))}</div>
+    <div class="list">${groups[day].map(p => row(p.client, `uy ${esc(p.unit_id)} · ${esc(p.created_by_name||"")}`, num(p.amount), "", null, p.contract_id)).join("")}</div>`).join("") : `<div class="empty">To‘lov yo‘q</div>`}</div>`;
+  $$("[data-p]").forEach(b => b.onclick = () => { PAYR = b.dataset.p; render(); });
+  bindRows(); stamp(at);
+}
+
+/* ----- sotuv ----- */
+async function vSales(){
+  const [{d, at}, {d: u}] = await Promise.all([cached("dash_"+MONTH, "/api/dashboard?month=" + MONTH), cached("units", "/api/units")]);
+  $("#hT").textContent = "Sotuv"; $("#hS").textContent = ym(d.month);
+  const U = d.units, tot = U.free + U.held + U.sold || 1;
+  const free = u.units.filter(x => x.status === "free");
+  const byRooms = [1,2,3,4].map(r => [r, free.filter(x => x.rooms === r).length, u.units.filter(x=>x.rooms===r).length]);
+  const blocks = [...new Set(u.units.map(x => x.block))].sort();
+  const ageMax = Math.max(1, ...Object.values(d.overdue_buckets));
+  $("#v").innerHTML = `
+  <div class="tiles">
+    <div class="tile"><span class="l">Shu oy shartnoma</span><span class="v">${d.sales_month.count} ta</span><span class="s">${mln(d.sales_month.sum)} so‘m</span></div>
+    <div class="tile"><span class="l">Yangi mijozlar</span><span class="v">${d.leads_month}</span><span class="s">bot va ofisdan</span></div>
+  </div>
+  <div class="card"><h2>Uylar <span class="r">${U.sold} / ${tot} sotilgan</span></h2>
+    <div class="units"><i style="width:${100*U.sold/tot}%;background:#9aa6b4"></i><i style="width:${100*U.held/tot}%;background:#e9b878"></i><i style="width:${100*U.free/tot}%;background:var(--gold)"></i></div>
+    <div class="legend"><span><i style="background:#9aa6b4"></i>Sotilgan ${U.sold}</span><span><i style="background:#e9b878"></i>Band ${U.held}</span><span><i style="background:var(--gold)"></i>Bo‘sh ${U.free}</span></div>
+    <table class="mt" style="margin-top:12px"><tr><th>Bo‘sh uylar</th>${blocks.map(b=>`<th>${b}-blok</th>`).join("")}<th>Jami</th></tr>
+      ${byRooms.map(([r,n]) => `<tr><td>${r} xonali</td>${blocks.map(b=>`<td>${free.filter(x=>x.rooms===r&&x.block===b).length}</td>`).join("")}<td class="b">${n}</td></tr>`).join("")}</table>
+  </div>
+  <div class="card"><h2>Qarz necha kunga kechikkan</h2>
+    <div class="age">${Object.entries(d.overdue_buckets).map(([k,v])=>`<div class="r"><span>${k} kun</span><div class="bar"><i style="width:${100*v/ageMax}%"></i></div><span>${mln(v)}</span></div>`).join("")}</div></div>
+  ${d.managers.length ? `<div class="card"><h2>Menejerlar · ${MONTHS[+d.month.split("-")[1]-1]}</h2><table class="mt">
+    <tr><th>Ism</th><th>Mijoz</th><th>Shartn.</th><th>Sotuv</th></tr>
+    ${d.managers.map(m=>`<tr><td>${esc(m.name)}</td><td>${m.clients_month}</td><td>${m.contracts_month}</td><td>${mln(m.sales_month)}</td></tr>`).join("")}</table></div>` : ""}`;
+  stamp(at);
+}
+
+/* ----- shartnoma tafsiloti ----- */
+async function openContract(id){
+  sheet(`<div id="cd"><div class="empty">Yuklanmoqda…</div></div>`, async (s, close) => {
+    try {
+      const r = await api("GET", "/api/contracts/" + id);
+      const c = r.contract, p = c.total ? Math.min(100, Math.round(100*c.paid/c.total)) : 0;
+      const pays = r.payments.filter(x => !x.deleted_at).slice(0, 6);
+      $("#cd", s).innerHTML = `
+        <div style="display:grid;gap:12px">
+          <div><h3>${esc(c.client_name)}</h3><div class="muted b" style="font-size:13.5px">uy ${esc(c.unit_id)} · ${c.rooms} xona · ${String(c.area).replace(".",",")} m² · ${esc(c.number)}</div></div>
+          ${c.overdue_amount ? `<div class="err">Muddati o‘tgan: ${som(c.overdue_amount)} · ${c.overdue_days} kun</div>` : ""}
+          <div class="card"><dl class="kv">
+            <dt>Shartnoma summasi</dt><dd>${som(c.total)}</dd>
+            <dt>To‘langan</dt><dd>${som(c.paid)} (${p}%)</dd>
+            <dt>Qolgan</dt><dd>${som(c.remaining)}</dd>
+            <dt>Keyingi to‘lov</dt><dd>${c.next_due ? `${dmy(c.next_due.due_date)}, ${num(c.next_due.left)}` : "—"}</dd>
+            <dt>Muddat</dt><dd>${c.months} oy, ${dmy(c.contract_date)} dan</dd>
+            <dt>Menejer</dt><dd>${esc(c.manager_name||"—")}</dd></dl></div>
+          <div class="card"><h2>Oxirgi to‘lovlar</h2>${pays.length ? `<div class="list">${pays.map(x => `<div class="row" style="cursor:default"><div class="main"><div class="t">${num(x.amount)}</div><div class="d">${dmy(x.paid_at)} · ${esc(x.created_by_name||"")}</div></div></div>`).join("")}</div>` : `<div class="empty">To‘lov yo‘q</div>`}</div>
+          ${c.client_phone ? `<a class="btn primary" href="tel:+${digits(c.client_phone)}">${PHONE} Qo‘ng‘iroq qilish</a>` : ""}
+          <button class="btn" id="cClose">Yopish</button>
+        </div>`;
+      $("#cClose", s).onclick = close;
+    } catch(e){ $("#cd", s).innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+  });
+}
+
+/* ----- profil ----- */
+$("#meBtn").onclick = () => sheet(`
+  <div style="display:grid;gap:12px">
+    <div><h3>${esc(ME.name)}</h3><div class="muted b" style="font-size:13.5px">${{admin:"Administrator",director:"Rahbar",manager:"Menejer"}[ME.role]||""}</div></div>
+    <div class="card" style="font-size:14px">Telegram'ni ulasangiz, har kuni ertalab bot orqali qisqa hisobot keladi. Botga <b>/hisobot</b> yozib istalgan vaqtda olish mumkin.</div>
+    <button class="btn primary" id="tgL">Telegram'ni ulash</button>
+    <a class="btn" href="/admin">To‘liq boshqaruv paneli</a>
+    <button class="btn danger" id="out">Chiqish</button>
+  </div>`, (s) => {
+    $("#tgL", s).onclick = async () => { try { const r = await api("POST", "/api/me/tg-link"); location.href = r.url; } catch(e){ alert(e.message); } };
+    $("#out", s).onclick = async () => { try { await api("POST", "/api/logout"); } catch(e){} try { Object.keys(localStorage).filter(k=>k.startsWith("mc_r_")&&k!=="mc_r_noinstall").forEach(k=>localStorage.removeItem(k)); } catch(e){} location.reload(); };
+  });
+
+$("#refBtn").onclick = () => render();
+document.addEventListener("visibilitychange", () => { if (!document.hidden && ME) render(); });
+setInterval(() => { if (!document.hidden && ME) render(); }, 5*60e3);
+
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("/rahbar/sw.js", {scope:"/rahbar/"}).catch(()=>{});
+boot();
+})();
+</script>
+</body>
+</html>

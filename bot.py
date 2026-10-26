@@ -6,7 +6,8 @@ Ikki rejim:
     bot webhook bilan ishlaydi va shu serverning oʻzi Mini App sahifasini "/" da beradi.
   * Lokal: BASE_URL yoʻq boʻlsa, polling rejimi; WEBAPP_URL ni alohida bering.
 
-Muhit oʻzgaruvchilari: BOT_TOKEN, MANAGER_CHAT_ID, (BASE_URL yoki WEBAPP_URL), PORT.
+Muhit oʻzgaruvchilari: BOT_TOKEN, MANAGER_CHAT_ID, (BASE_URL yoki WEBAPP_URL), PORT,
+DATABASE_URL (PostgreSQL: admin panel uchun), ADMIN_PASSWORD (birinchi admin paroli).
 """
 import asyncio
 import hashlib
@@ -22,6 +23,11 @@ from aiogram.filters import Command, CommandStart, CommandObject
 from aiogram.types import (
     KeyboardButton, Message, ReplyKeyboardMarkup, WebAppInfo,
 )
+
+from mc import db as mcdb
+from mc import web as mcweb
+from mc.api import consume_tg_link, upsert_bot_client
+from mc.reminders import link_client, my_payments_text
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
 _RAILWAY = os.environ.get("RAILWAY_PUBLIC_DOMAIN")  # Railway domen beradi, "https://" siz
@@ -49,6 +55,17 @@ async def notify(bot: Bot, text: str):
         logging.exception("Menejerlar guruhiga yuborib bo'lmadi, ariza: %s", text)
 
 
+async def safe(coro):
+    """Bazaga yozishdagi xato mijozga javob ketishiga to'sqinlik qilmasin."""
+    try:
+        return await coro
+    except Exception:
+        logging.exception("Bazaga yozib bo'lmadi")
+
+
+MY_PAYMENTS = "💳 Mening toʻlovlarim"
+
+
 def main_kb() -> ReplyKeyboardMarkup:
     # Mini ilova klaviatura tugmasi orqali ochilsa, tg.sendData() ariza yubora oladi
     return ReplyKeyboardMarkup(
@@ -57,6 +74,7 @@ def main_kb() -> ReplyKeyboardMarkup:
             [KeyboardButton(text="🏢 Kvartira tanlash va hisoblash", web_app=WebAppInfo(url=WEBAPP_URL))],
             [KeyboardButton(text="📞 Raqamimni yuborish", request_contact=True),
              KeyboardButton(text="📍 Manzil")],
+            [KeyboardButton(text=MY_PAYMENTS)],
         ],
     )
 
@@ -64,11 +82,32 @@ def main_kb() -> ReplyKeyboardMarkup:
 @dp.message(CommandStart())
 async def start(m: Message, command: CommandObject):
     ref = command.args or ""
+    u = m.from_user
+    if ref.startswith("staff_"):
+        # Xodim (rahbar, admin) admin paneldagi "Telegram'ga ulash" havolasi orqali keldi
+        staff = await consume_tg_link(ref[6:], u.id)
+        if staff:
+            await m.answer(f"✅ {staff['name']}, Telegram ulandi. Har kuni ertalab shu yerga hisobot keladi.\n"
+                           "Hozirgi holatni ko'rish: /hisobot")
+        else:
+            await m.answer("Havola eskirgan. Paneldan yangi havola oling.")
+        return
+    if ref.startswith("c_"):
+        # Mijoz ofisda berilgan havola orqali shartnomasini Telegram'ga uladi
+        cl = await link_client(ref[2:], u.id, u.username)
+        if cl:
+            await m.answer(f"✅ {cl['full_name']}, shartnomangiz Telegram'ga ulandi.\n"
+                           "Endi toʻlov kvitansiyalari va eslatmalar shu yerga keladi.", reply_markup=main_kb())
+            return
     if ref.startswith("ref_"):
         await notify(m.bot,
             f"🔗 Taklif havolasi orqali yangi foydalanuvchi: {m.from_user.full_name} "
             f"(id {m.from_user.id}), taklif qilgan: {ref[4:]}",
         )
+        ref_by = ref[4:]
+        if ref_by.isdigit() and int(ref_by) != u.id:
+            await safe(upsert_bot_client(u.id, u.full_name, u.username, ref_by=int(ref_by),
+                                         note="Taklif havolasi orqali keldi"))
     await m.answer(
         f"Assalomu alaykum, {m.from_user.first_name}! 👋\n\n"
         "Magic City turar-joy majmuasi, Kattaqoʻrgʻon.\n"
@@ -94,6 +133,10 @@ async def webapp_lead(m: Message):
         f"📅 {d.get('want')}, {d.get('time')}\n"
         f"🧮 {calc_txt}",
     )
+    await safe(upsert_bot_client(
+        u.id, d.get("name") or u.full_name, u.username, d.get("phone"),
+        interest=f"{d.get('interest')} · {calc_txt}",
+        note=f"Mini App arizasi: {d.get('want')}, {d.get('time')}"))
     await m.answer("✅ Arizangiz qabul qilindi. Menejer tez orada qoʻngʻiroq qiladi.", reply_markup=main_kb())
 
 
@@ -102,7 +145,33 @@ async def contact(m: Message):
     await notify(m.bot,
         f"📞 Qoʻngʻiroq soʻraldi: {m.contact.first_name} {m.contact.phone_number} (id {m.from_user.id})",
     )
+    u = m.from_user
+    if m.contact.user_id in (None, u.id):  # o'zining raqami
+        await safe(upsert_bot_client(u.id, u.full_name, u.username, m.contact.phone_number,
+                                     note="Qoʻngʻiroq soʻradi"))
     await m.answer("Rahmat! Menejer siz bilan bogʻlanadi.", reply_markup=main_kb())
+
+
+@dp.message(F.text == MY_PAYMENTS)
+async def my_payments(m: Message):
+    text = await safe(my_payments_text(m.from_user.id))
+    if text:
+        await m.answer(text, reply_markup=main_kb())
+    else:
+        await m.answer("Sizning nomingizga shartnoma topilmadi.\n\n"
+                       "Shartnoma tuzgan boʻlsangiz, menejerdan «Telegram'ga ulash» havolasini soʻrang: "
+                       "havolani bossangiz, toʻlovlaringiz shu yerda koʻrinadi.", reply_markup=main_kb())
+
+
+@dp.message(Command("hisobot"))
+async def staff_report(m: Message):
+    if not mcdb.pool:
+        return
+    staff = await mcdb.pool.fetchrow("SELECT id FROM users WHERE tg_id=$1 AND active", m.from_user.id)
+    if not staff:
+        return
+    from mc.report import send_daily
+    await send_daily(m.bot, force_to=m.chat.id)
 
 
 @dp.message(F.text == "📍 Manzil")
@@ -138,6 +207,7 @@ def run_webhook():
     app.router.add_get("/health", health)
     # three.js va boshqa kutubxonalar (three.min.js.gz bo'lsa, aiohttp siqilgan holda beradi)
     app.router.add_static("/vendor", WEBAPP_FILE.parent / "vendor")
+    mcweb.setup(app, bot)  # admin panel (/admin), rahbar ilovasi (/rahbar), API va baza
     SimpleRequestHandler(dispatcher=dp, bot=bot, secret_token=WEBHOOK_SECRET).register(app, path=WEBHOOK_PATH)
     setup_application(app, dp, bot=bot)
     app.on_startup.append(on_startup)

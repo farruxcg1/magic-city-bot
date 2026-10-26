@@ -484,6 +484,7 @@ const reload = () => route();
 
 /* ===================== bosh sahifa ===================== */
 function barChart(series){
+  if (!series.some(s => s.plan || s.paid)) return `<div class="empty">Shartnoma va to‘lovlar kiritilgach, oylik tushum shu yerda ko‘rinadi</div>`;
   const W=720, H=230, P={l:44,r:8,t:10,b:28};
   const max = Math.max(1, ...series.map(s => Math.max(s.plan, s.paid)));
   const step = Math.pow(10, Math.floor(Math.log10(max))); const top = Math.ceil(max/step)*step;
